@@ -213,7 +213,14 @@ local function showSurvivalIcon(frame, showeffects)
 	end
 end
 
-
+local function crhIsAddonUseful()
+	local specID = GetSpecialization();
+	if ((specID ~= 2) and (specID ~= 3)) then
+		return false;
+	end
+	
+	return true;
+end
 
 local function hideEventIcon(frame)
 	if(frame:IsVisible() and not frame.fading) then
@@ -224,8 +231,7 @@ local function hideEventIcon(frame)
 end
 
 function CatRotationHelperUpdateEverything()
-	-- ToDo
-	if(GetSpecialization() ~= 2) then
+	if(not crhIsAddonUseful()) then
 		return
 	end
 	
@@ -1472,8 +1478,7 @@ function CatRotationHelperOnEvent (self, event, ...)
 	--elseif(event == "UNIT_ATTACK_POWER" or event == "UNIT_ATTACK_SPEED" or event == "COMBAT_RATING_UPDATE") then
 
 	elseif(event == "PLAYER_TALENT_UPDATE") then
-		-- ToDo
-		if(GetSpecialization() == 2) then
+		if(crhIsAddonUseful()) then
 			self:RegisterEvent("UNIT_AURA");
 			self:RegisterEvent("PLAYER_TARGET_CHANGED");
 			self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
