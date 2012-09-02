@@ -18,7 +18,7 @@ local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
 local CRH_SPELLID_TIGERS_FURY			= 5217;
 local CRH_SPELLID_THRASH				= 77758;
 local CRH_SPELLID_BARKSKIN				= 22812;
-local CRH_SPELLID_MANGLE				= 33876;
+local CRH_SPELLID_MANGLE_BEAR			= 33878;
 local CRH_SPELLID_FERAL_CHARGE			= 49376;
 local CRH_SPELLID_FRENZIED_REGENERATION	= 22842;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
@@ -514,6 +514,22 @@ local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
 	crhUpdateFrameWithExpiration(frames[a_FrameID], crhGetBuffExpiration(a_SpellID))
 end
 
+local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
+	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
+	if (spellStart == nil) then
+		-- Forced reset; skill could be ready ahead of cd due to proc
+		CatRotationFrameStopCounter(frames[a_FrameID]);
+		return;
+	end
+
+	-- global cooldown check
+	if (spellDuration < 1.6) then
+		return;
+	end
+	
+	CatRotationHelperUpdateFrame(frames[a_FrameID], spellStart + spellDuration)
+end
+
 function CatRotationFrameSetMainScale()
 	for i=1, #frames do
 		frames[i]:SetScale(crhScale);
@@ -806,10 +822,7 @@ function CatRotationHelperCheckCatDebuffs()
 end
 
 function CatRotationHelperCheckCatCooldown()
-	local spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_TIGERS_FURY);
-	if(spellStart ~= nil and spellDuration > 1.0) then
-		CatRotationHelperUpdateFrame(frames[CRH_FRAME_TIGERSFURY], spellStart + spellDuration)
-	end
+	crhUpdateFrameFromSkill(CRH_FRAME_TIGERSFURY, CRH_SPELLID_TIGERS_FURY);
 end
 
 ------------------------------
@@ -849,19 +862,8 @@ function CatRotationHelperCheckBearDebuffs()
 end
 
 function CatRotationHelperCheckBearCooldown()
-
-	local spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_THRASH);
-	if(spellStart ~= nil and spellDuration > 1.6) then
-		CatRotationHelperUpdateFrame(frames[CRH_FRAME_THRASH], spellStart + spellDuration)
-	end
-
-	spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MANGLE);
-	if(spellStart ~= nil and spellDuration > 1.6) then
-		CatRotationHelperUpdateFrame(frames[CRH_FRAME_BEAR_MANGLE], spellStart + spellDuration)
-	else
-		--Berserker proc
-		CatRotationFrameStopCounter(frames[CRH_FRAME_BEAR_MANGLE]);
-	end
+	crhUpdateFrameFromSkill(CRH_FRAME_THRASH, CRH_SPELLID_THRASH);
+	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
 end
 
 local function crhTargetHasFaerieFire()
