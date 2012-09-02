@@ -24,7 +24,7 @@ local CRH_SPELLID_FRENZIED_REGENERATION	= 22842;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_RAKE					= 59881;
 local CRH_SPELLID_RIP					= 1079;
-local CRH_SPELLID_LACERATE				= 94384;
+local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_STAMPEDE				= 78892;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
@@ -816,43 +816,36 @@ end
 -- Bear - Main Frame Checks --
 ------------------------------
 
+local function crhUpdateLacerate()
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", crhSpellName(CRH_SPELLID_LACERATE), nil, "PLAYER|HARMFUL");
+	if (name == nil) then
+		CatRotationFrameStopCounter(frames[CRH_FRAME_LACERATE]);
+		CatRotationHelperLacerateCounter:Hide();
+		CatRotationHelperSetBearCP(0);
+		return;
+	end
+	
+	CatRotationHelperUpdateFrame(frames[CRH_FRAME_LACERATE], expTime);
+
+	-- stop possible cp animation when lacerate is refreshed
+	local i = 1;
+	for i=1, #crhBearFrames do
+		frames[crhBearFrames[i]].cpframe:SetAlpha(1)
+		frames[crhBearFrames[i]].cpframe:SetScale(1)
+	end
+
+	-- setup lacerate warning
+	CatRotationHelperLacerateCounter:Show()
+	CatRotationHelperLacerateCounter.expTime = expTime
+
+	-- set cp effects
+	CatRotationHelperSetBearCP(stacks);
+end
+
 function CatRotationHelperCheckBearDebuffs()
 	crhUpdateFrameFromDebuff(CRH_FRAME_WEAKBLOWS, CRH_SPELLID_WEAKENED_BLOWS);
 	crhUpdateFrameFromDebuff(CRH_FRAME_BEAR_WEAKARMOR, CRH_SPELLID_WEAKENED_ARMOR, 3);
-
-	-- Lacerate: Check for own debuffs only
-	local i = 1;
-	local name, rank, icon, stacks, debuffType, duration, expTime, isMine
-
-	repeat
-		name, rank, icon, stacks, debuffType, duration, expTime, isMine = UnitDebuff("target",i)
-
-		if( name == crhSpellName(CRH_SPELLID_LACERATE) and isMine == "player") then
-			CatRotationHelperUpdateFrame(frames[CRH_FRAME_LACERATE], expTime);
-
-			-- stop possible cp animation when lacerate is refreshed
-			for i=1, #crhBearFrames do
-				frames[crhBearFrames[i]].cpframe:SetAlpha(1)
-				frames[crhBearFrames[i]].cpframe:SetScale(1)
-			end
-
-			-- setup lacerate warning
-			CatRotationHelperLacerateCounter:Show()
-			CatRotationHelperLacerateCounter.expTime = expTime
-
-			-- set cp effects
-			CatRotationHelperSetBearCP(stacks)
-
-			return
-		end
-
-		i = i + 1;
-	until (name == nil)
-
-	-- no Lacerate debuff found
-    CatRotationFrameStopCounter(frames[CRH_FRAME_LACERATE])
-	CatRotationHelperLacerateCounter:Hide()
-	CatRotationHelperSetBearCP(0)
+	crhUpdateLacerate();
 end
 
 function CatRotationHelperCheckBearCooldown()
