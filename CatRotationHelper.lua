@@ -1,4 +1,5 @@
 local CRH_FRAME_TIGERSFURY, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_BEAR_WEAKARMOR, CRH_FRAME_THRASH, CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_WEAKBLOWS = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+-- @@@@ Replace frenzied with might of ursoc
 local BARKSKIN, SURVINSTINCTS, FRENZIEDREG = 1, 2, 3;
 
 -- change order of icons here
@@ -75,11 +76,11 @@ end
 
 local textures = {
 	GetImagePath("TigersFury.tga"),
-	GetImagePath("FaerieFire.tga"),
+	GetImagePath("WeakenedArmor.tga"),
 	GetImagePath("SavageRoar.tga"),
 	GetImagePath("Rake.tga"),
 	GetImagePath("Rip.tga"),
-	GetImagePath("FaerieFire.tga"), -- @@@@ needs new icon
+	GetImagePath("WeakenedArmor.tga"),
 	GetImagePath("Thrash.tga"),
 	GetImagePath("Mangle.tga"),
 	GetImagePath("Lacerate.tga"),
