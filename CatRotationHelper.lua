@@ -84,20 +84,20 @@ local textures = {
 	GetImagePath("Thrash.tga"),
 	GetImagePath("Mangle.tga"),
 	GetImagePath("Lacerate.tga"),
-	GetImagePath("DemoRoar.tga")
+	GetImagePath("WeakenedBlows.tga")
 }
 
 local blueTextures = {
 	GetImagePath("TigersFury-Blue.tga"),
-	GetImagePath("FaerieFire-Blue.tga"),
+	GetImagePath("WeakenedArmor-Blue.tga"),
 	GetImagePath("SavageRoar-Blue.tga"),
 	GetImagePath("Rake-Blue.tga"),
 	GetImagePath("Rip-Blue.tga"),
-	GetImagePath("FaerieFire-Blue.tga"),
+	GetImagePath("WeakenedArmor-Blue.tga"),
 	GetImagePath("Thrash-Blue.tga"),
 	GetImagePath("Mangle-Blue.tga"),
 	GetImagePath("Lacerate-Blue.tga"),
-	GetImagePath("DemoRoar-Blue.tga")
+	GetImagePath("WeakenedBlows-Blue.tga")
 }
 
 local survivalTextures = {
