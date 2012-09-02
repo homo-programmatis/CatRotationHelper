@@ -872,16 +872,16 @@ function CatRotationHelperCheckBearCooldown()
 	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
 end
 
-local function crhTargetHasFaerieFire()
-	if (crhGetDebuffExpiration(CRH_SPELLID_FAERIE_FIRE)) then
-		return true;
+local function crhTargetNeedFaerieFire()
+	if (0 ~= crhGetDebuffExpiration(CRH_SPELLID_FAERIE_FIRE)) then
+		return false;
 	end
 
-	if (crhGetDebuffExpiration(CRH_SPELLID_FAERIE_SWARM)) then
-		return true;
+	if (0 ~= crhGetDebuffExpiration(CRH_SPELLID_FAERIE_SWARM)) then
+		return false;
 	end
 
-	return false
+	return true;
 end
 
 -- Check for Clearcast procs - Bear & Cat
@@ -972,7 +972,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		end
 
 		-- Faerie Fire
-		if(not crhTargetHasFaerieFire() and crhShowCatFaerieFire) then
+		if (crhShowCatFaerieFire and crhTargetNeedFaerieFire()) then
 			if(eventList[2] == nil) then
 				eventEffects[2] = showeffects
 			else
@@ -1073,7 +1073,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		end
 
 		-- Faerie Fire
-		if(not crhTargetHasFaerieFire() and crhShowBearFaerieFire) then
+		if (crhShowBearFaerieFire and crhTargetNeedFaerieFire()) then
 			if(eventList[2] == nil) then
 				eventEffects[2] = showeffects
 			else
