@@ -6,9 +6,35 @@ local crhCatFrames = {TIGERSFURY, SAVAGEROAR, MANGLE, RAKE, RIP}
 local crhBearFrames = {BEARMANGLE, DEMOROAR, LACERATE, THRASH, PULVERIZE}
 local crhSurvivalFrames = {FRENZIEDREG, SURVINSTINCTS, BARKSKIN}
 
+-- spellIDs
+local CRH_SPELLID_FAERIE_FIRE 			= 770;
+local CRH_SPELLID_SUNDER_ARMOR 			= 58567;
+local CRH_SPELLID_EXPOSE_ARMOR 			= 8647;
+local CRH_SPELLID_BERSERK 				= 50334;
+local CRH_SPELLID_SAVAGE_ROAR			= 52610;
+local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
+local CRH_SPELLID_ENRAGE				= 5229;
+local CRH_SPELLID_MAUL					= 6807;
+local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
+local CRH_SPELLID_TIGERS_FURY			= 5217;
+local CRH_SPELLID_THRASH				= 77758;
+local CRH_SPELLID_BARKSKIN				= 22812;
+local CRH_SPELLID_MANGLE				= 33876;
+local CRH_SPELLID_FERAL_CHARGE			= 49376;
+local CRH_SPELLID_FRENZIED_REGENERATION	= 22842;
+local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
+local CRH_SPELLID_RAKE					= 59881;
+local CRH_SPELLID_RIP					= 1079;
+local CRH_SPELLID_LACERATE				= 94384;
+local CRH_SPELLID_PULVERIZE				= 80313; --TODO: spell removed
+local CRH_SPELLID_CLEARCAST				= 16870;
+local CRH_SPELLID_STAMPEDE				= 78892;
+local CRH_SPELLID_	= ;
+local CRH_SPELLID_	= ;
+
 -- spellIDs of mangle-like debuffs
 local mangleSkills = {
-	33876, -- Mangle (Cat)
+	CRH_SPELLID_MANGLE, -- Mangle (Cat)
 	--33878, -- Mangle (Bear) apparently has the same debuff as Mangle (Cat) now, so dont need to check it.
 	         -- This could MAYBE screw up with some localizations ...
 	46857, -- Trauma (Warrior)
@@ -756,7 +782,7 @@ end
 
 function CatRotationHelperCheckCatBuffs()
 	-- Savage Roar
-	local name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(52610)); -- Savage Roar
+	local name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_SAVAGE_ROAR));
 	if(name) then
 		CatRotationHelperUpdateFrame(frames[SAVAGEROAR], expTime);
 	else
@@ -783,7 +809,7 @@ function CatRotationHelperCheckCatDebuffs()
 	-- end
 
 	-- Faery Fire -> Weakened Armor debuff
-	name, rank, icon, stacks, debuffType, duration, expTime = UnitDebuff("target", crhSpellName(113746));
+	name, rank, icon, stacks, debuffType, duration, expTime = UnitDebuff("target", crhSpellName(CRH_SPELLID_WEAKENED_ARMOR));
 	if (name) then
 		CatRotationHelperUpdateFrame(frames[MANGLE], expTime);
 		name = nil;
@@ -799,10 +825,10 @@ function CatRotationHelperCheckCatDebuffs()
 
 	repeat
 		name, rank, icon, stacks, debuffType, duration, expTime, isMine = UnitDebuff("target",i);
-		if( name == crhSpellName(59881) and isMine == "player") then -- Rake
+		if( name == crhSpellName(CRH_SPELLID_RAKE) and isMine == "player") then
 			CatRotationHelperUpdateFrame(frames[RAKE], expTime);
 			rakeupdate = true;
-		elseif( name == crhSpellName(1079) and isMine == "player") then -- Rip
+		elseif( name == crhSpellName(CRH_SPELLID_RIP) and isMine == "player") then
 			CatRotationHelperUpdateFrame(frames[RIP], expTime);
 			ripupdate = true;
 		end
@@ -820,7 +846,7 @@ function CatRotationHelperCheckCatDebuffs()
 end
 
 function CatRotationHelperCheckCatCooldown()
-	local spellStart, spellDuration = GetSpellCooldown(5217);  -- Tigers Fury
+	local spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_TIGERS_FURY);
 	if(spellStart ~= nil and spellDuration > 1.0) then
 		CatRotationHelperUpdateFrame(frames[TIGERSFURY], spellStart + spellDuration)
 	end
@@ -855,7 +881,7 @@ function CatRotationHelperCheckBearDebuffs()
 	repeat
 		name, rank, icon, stacks, debuffType, duration, expTime, isMine = UnitDebuff("target",i)
 
-		if( name == crhSpellName(94384) and isMine == "player") then -- Lacerate
+		if( name == crhSpellName(CRH_SPELLID_LACERATE) and isMine == "player") then
 			CatRotationHelperUpdateFrame(frames[LACERATE], expTime);
 
 			-- stop possible cp animation when lacerate is refreshed
@@ -885,12 +911,12 @@ end
 
 function CatRotationHelperCheckBearCooldown()
 
-	local spellStart, spellDuration = GetSpellCooldown(77758);  -- Thrash
+	local spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_THRASH);
 	if(spellStart ~= nil and spellDuration > 1.6) then
 		CatRotationHelperUpdateFrame(frames[THRASH], spellStart + spellDuration)
 	end
 
-	spellStart, spellDuration = GetSpellCooldown(33878);  -- Mangle (Bear)
+	spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MANGLE);
 	if(spellStart ~= nil and spellDuration > 1.6) then
 		CatRotationHelperUpdateFrame(frames[BEARMANGLE], spellStart + spellDuration)
 	else
@@ -901,7 +927,7 @@ end
 
 function CatRotationHelperCheckBearBuffs()
 	-- Pulverize
-	local name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(80313)); -- Pulverize
+	local name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_PULVERIZE));
 	if(name) then
 		CatRotationHelperUpdateFrame(frames[PULVERIZE], expTime);
 	else
@@ -911,7 +937,7 @@ end
 
 -- Check for Clearcast procs - Bear & Cat
 function CatRotationHelperCheckClearcast()
-	name = UnitBuff("player", crhSpellName(16870)); -- Clearcast
+	name = UnitBuff("player", crhSpellName(CRH_SPELLID_CLEARCAST));
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
 			for i=1, #frames do
@@ -953,23 +979,18 @@ function CatRotationHelperCheckClearcast()
 	end
 end
 
-local function crhTargetHasDebuff(name, stacks)
-	local buffName, rank, icon, count = UnitDebuff("target", name)
-	return (buffName ~= nil and count >= stacks)
-end
-
 local function CatRotationHelperIsArmorDebuffApplied()
-	local buffName, rank, icon, count = UnitDebuff("target", crhSpellName(770)) -- Faerie Fire
+	local buffName, rank, icon, count = UnitDebuff("target", crhSpellName(CRH_SPELLID_FAERIE_FIRE)) -- Faerie Fire
 	if(buffName ~= nil and count == 3) then
 		return true
 	end
 	
-	buffName, rank, icon, count = UnitDebuff("target", crhSpellName(58567)) -- Sunder Armor
+	buffName, rank, icon, count = UnitDebuff("target", crhSpellName(CRH_SPELLID_SUNDER_ARMOR)) -- Sunder Armor
 	if(buffName ~= nil and count == 3) then
 		return true
 	end
 	
-	buffName = UnitDebuff("target", crhSpellName(8647)) -- Expose Armor
+	buffName = UnitDebuff("target", crhSpellName(CRH_SPELLID_EXPOSE_ARMOR)) -- Expose Armor
 	if(buffName ~= nil) then
 		return true
 	end
@@ -984,7 +1005,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate
 		
 		-- Berserk
-		spellStart, spellDuration = GetSpellCooldown(50334);  -- Berserk
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
 		if(spellStart ~= nil and crhShowCatBerserk) then
 			if(spellDuration < 1.6) then
 				if(eventList[1] == nil) then
@@ -1005,7 +1026,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				repeat
 					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
 
-					if( spellId == 50334 ) then -- Berserk
+					if (spellId == CRH_SPELLID_BERSERK) then
 						eventList[1] = GetImagePath("Berserk.tga")
 						eventTimers[1] = expTime
 					end
@@ -1037,7 +1058,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		
 		
 		-- Feral Charge
-		spellStart, spellDuration = GetSpellCooldown(49376);  -- Feral Charge
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FERAL_CHARGE);
 		if(crhShowFeralCharge and spellStart ~= nil) then
 			if(spellDuration < 1.6) then
 				if(eventList[3] == nil) then
@@ -1052,7 +1073,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				eventEffects[3] = nil
 				CatRotationHelperCdCounter:Show()
 				
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(78892)); -- Stampede
+				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_STAMPEDE));
 				if(name) then
 					-- buff running, show timer
 					eventList[3] = GetImagePath("FeralCharge.tga")
@@ -1071,7 +1092,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		
 		
 		-- Predator's Swiftness
-		name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(69369)); -- Predator's Swiftness
+		name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_PREDATORS_SWIFTNESS));
 		if(name and crhShowPredatorsSwiftness) then
 			if(eventList[4] == nil) then
 				eventEffects[4] = showeffects
@@ -1090,7 +1111,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate
 		
 		-- Berserk
-		spellStart, spellDuration = GetSpellCooldown(50334);  -- Berserk
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
 		if(spellStart ~= nil and crhShowBearBerserk) then
 			if(spellDuration < 1.6) then
 				if(eventList[1] == nil) then
@@ -1112,7 +1133,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				repeat
 					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
 
-					if( spellId == 50334 ) then -- Berserk
+					if (spellId == CRH_SPELLID_BERSERK) then
 						eventList[1] = GetImagePath("Berserk.tga")
 						eventTimers[1] = expTime
 					end
@@ -1143,7 +1164,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		end
 
 		-- Enrage
-		spellStart, spellDuration = GetSpellCooldown(5229);  -- Enrage
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_ENRAGE);
 		if(crhShowEnrage and spellStart ~= nil) then
 			if(spellStart == 0) then
 				if(eventList[3] == nil) then
@@ -1158,7 +1179,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				CatRotationHelperCdCounter:Show()
 				eventEffects[3] = nil
 				
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(5229)); -- Enrage
+				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_ENRAGE));
 				if(name) then
 					-- buff running, show timer
 					eventList[3] = GetImagePath("Enrage.tga")
@@ -1177,7 +1198,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 
 
 		-- Maul
-		spellStart, spellDuration = GetSpellCooldown(6807);  -- Maul
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MAUL);
 		if(crhShowMaul and spellStart ~= nil and spellStart == 0) then
 			if(eventList[4] == nil) then
 				eventEffects[4] = showeffects
@@ -1235,7 +1256,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime
 		
 		-- Barkskin
-		spellStart, spellDuration = GetSpellCooldown(crhSpellName(22812));  -- Barkskin
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BARKSKIN);
 		if(spellStart ~= nil) then
 			if(spellDuration == 0) then
 				showSurvivalIcon(survival[BARKSKIN],showeffects)
@@ -1243,7 +1264,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 				survivalCdTimers[1] = spellDuration + spellStart
 				CatRotationHelperCdCounter:Show()
 
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(22812)); -- Barkskin
+				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_BARKSKIN));
 				if(name) then
 					-- buff running, show timer
 					showEventIcon(survival[BARKSKIN])
@@ -1257,7 +1278,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 		end
 
 		-- Survival Instincts
-		spellStart, spellDuration = GetSpellCooldown(61336);  -- Survival Instincts
+		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_SURVIVAL_INSTINCTS);
 		if(spellStart ~= nil) then
 			if(spellDuration == 0) then
 				showSurvivalIcon(survival[SURVINSTINCTS],showeffects)
@@ -1265,7 +1286,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 				survivalCdTimers[2] = spellDuration + spellStart
 				CatRotationHelperCdCounter:Show()
 
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(61336)); -- Survival Instincts
+				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_SURVIVAL_INSTINCTS));
 				if(name) then
 					-- buff running, show timer
 					showEventIcon(survival[SURVINSTINCTS])
@@ -1280,7 +1301,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 
 		-- Frenzied Regeneration
 		if(inBearForm) then
-			spellStart, spellDuration = GetSpellCooldown(22842);  -- Frenzied Regeneration
+			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FRENZIED_REGENERATION);
 			if(spellStart ~= nil) then
 				if(spellDuration < 1.6) then
 					showSurvivalIcon(survival[FRENZIEDREG],showeffects)			
@@ -1288,7 +1309,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 					survivalCdTimers[3] = spellDuration + spellStart
 					CatRotationHelperCdCounter:Show()
 
-					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(22842)); -- Frenzied Regeneration
+					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_FRENZIED_REGENERATION));
 					if(name) then
 						-- buff running, show timer
 						showEventIcon(survival[FRENZIEDREG])
