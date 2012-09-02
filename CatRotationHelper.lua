@@ -29,16 +29,6 @@ local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_STAMPEDE				= 78892;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 
--- spellIDs of demo roar-like debuffs
-local demoSkills = {
-	1160, -- Demoralizing Shout (Warrior)
-	99, -- Demoralizing Roar (Druid)
-	26017, -- Vindication (Paladin)
-	702, -- Curse of Weakness (Warlock)
-	24423, -- Demoralizing Screech (Hunter Pet)
-	--50256, -- Demoralizing Roar (Hunter Pet)
-}
-
 local frames = {
 	CreateFrame("Frame", nil, UIParent),
 	CreateFrame("Frame", nil, UIParent),
