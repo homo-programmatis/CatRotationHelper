@@ -67,36 +67,40 @@ survivalCdTimers = {
 --	nil, -- Frenzied Regeneration
 }
 
+local function GetImagePath(a_ImageName)
+	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
+end
+
 local textures = {
-	"Interface\\AddOns\\CatRotationHelper\\TigersFury.tga",
-	"Interface\\AddOns\\CatRotationHelper\\FaerieFire.tga",
-	"Interface\\AddOns\\CatRotationHelper\\SavageRoar.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Rake.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Rip.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Pulverize.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Thrash.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Mangle.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Lacerate.tga",
-	"Interface\\AddOns\\CatRotationHelper\\DemoRoar.tga"
+	GetImagePath("TigersFury.tga"),
+	GetImagePath("FaerieFire.tga"),
+	GetImagePath("SavageRoar.tga"),
+	GetImagePath("Rake.tga"),
+	GetImagePath("Rip.tga"),
+	GetImagePath("Pulverize.tga"),
+	GetImagePath("Thrash.tga"),
+	GetImagePath("Mangle.tga"),
+	GetImagePath("Lacerate.tga"),
+	GetImagePath("DemoRoar.tga")
 }
 
 local blueTextures = {
-	"Interface\\AddOns\\CatRotationHelper\\TigersFury-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\FaerieFire-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\SavageRoar-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Rake-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Rip-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Pulverize-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Thrash-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Mangle-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\Lacerate-Blue.tga",
-	"Interface\\AddOns\\CatRotationHelper\\DemoRoar-Blue.tga"
+	GetImagePath("TigersFury-Blue.tga"),
+	GetImagePath("FaerieFire-Blue.tga"),
+	GetImagePath("SavageRoar-Blue.tga"),
+	GetImagePath("Rake-Blue.tga"),
+	GetImagePath("Rip-Blue.tga"),
+	GetImagePath("Pulverize-Blue.tga"),
+	GetImagePath("Thrash-Blue.tga"),
+	GetImagePath("Mangle-Blue.tga"),
+	GetImagePath("Lacerate-Blue.tga"),
+	GetImagePath("DemoRoar-Blue.tga")
 }
 
 local survivalTextures = {
-	"Interface\\AddOns\\CatRotationHelper\\Barkskin.tga",
-	"Interface\\AddOns\\CatRotationHelper\\SurvivalInstincts.tga",
-	"Interface\\AddOns\\CatRotationHelper\\FrenziedReg.tga"
+	GetImagePath("Barkskin.tga"),
+	GetImagePath("SurvivalInstincts.tga"),
+	GetImagePath("FrenziedReg.tga")
 }
 
 --                      r    g    b    a
@@ -289,10 +293,10 @@ function CatRotationHelperUnlock()
 	end
 
 	-- show static event frames
-	eventList[1] = "Interface\\AddOns\\CatRotationHelper\\Berserk.tga"
-	eventList[2] = "Interface\\AddOns\\CatRotationHelper\\FaerieFire.tga"
-	eventList[3] = "Interface\\AddOns\\CatRotationHelper\\FeralCharge.tga"
-	eventList[4] = "Interface\\AddOns\\CatRotationHelper\\PredatoryStrikes.tga"
+	eventList[1] = GetImagePath("Berserk.tga")
+	eventList[2] = GetImagePath("FaerieFire.tga")
+	eventList[3] = GetImagePath("FeralCharge.tga")
+	eventList[4] = GetImagePath("PredatoryStrikes.tga")
 
 	for i=1, #events do
 		events[i]:Show()
@@ -340,7 +344,7 @@ function CatRotationHelperLock()
 		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe:Hide();
-		frame.cpicon:SetTexture("Interface\\AddOns\\CatRotationHelper\\Cp.tga")
+		frame.cpicon:SetTexture(GetImagePath("Cp.tga"))
 	end
 
 	for i=1, #events do
@@ -911,7 +915,7 @@ function CatRotationHelperCheckClearcast()
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
 			for i=1, #frames do
-				frames[i].cpicon:SetTexture("Interface\\AddOns\\CatRotationHelper\\Cp-Blue.tga")
+				frames[i].cpicon:SetTexture(GetImagePath("Cp-Blue.tga"))
 				frames[i].icon:SetTexture(blueTextures[i])
 				frames[i].overlay.icon:SetTexture(blueTextures[i])
 
@@ -930,7 +934,7 @@ function CatRotationHelperCheckClearcast()
 	else
 		if(clearCast) then
 			for i=1,#frames do
-				frames[i].cpicon:SetTexture("Interface\\AddOns\\CatRotationHelper\\Cp.tga")
+				frames[i].cpicon:SetTexture(GetImagePath("Cp.tga"))
 				frames[i].icon:SetTexture(textures[i])
 				frames[i].overlay.icon:SetTexture(textures[i])
 
@@ -988,7 +992,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				else
 					eventEffects[1] = nil
 				end
-				eventList[1] = "Interface\\AddOns\\CatRotationHelper\\Berserk.tga"
+				eventList[1] = GetImagePath("Berserk.tga")
 				eventTimers[1] = nil
 			else
 				eventList[1] = nil
@@ -1002,7 +1006,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
 
 					if( spellId == 50334 ) then -- Berserk
-						eventList[1] = "Interface\\AddOns\\CatRotationHelper\\Berserk.tga"
+						eventList[1] = GetImagePath("Berserk.tga")
 						eventTimers[1] = expTime
 					end
 
@@ -1023,7 +1027,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 			else
 				eventEffects[2] = nil
 			end
-			eventList[2] = "Interface\\AddOns\\CatRotationHelper\\FaerieFire.tga"
+			eventList[2] = GetImagePath("FaerieFire.tga")
 			eventTimers[2] = nil
 		else
 			eventList[2] = nil
@@ -1041,7 +1045,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				else
 					eventEffects[3] = nil
 				end
-				eventList[3] = "Interface\\AddOns\\CatRotationHelper\\FeralCharge.tga"
+				eventList[3] = GetImagePath("FeralCharge.tga")
 				eventTimers[3] = nil
 			else
 				eventCdTimers[2] = spellDuration + spellStart
@@ -1051,7 +1055,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(78892)); -- Stampede
 				if(name) then
 					-- buff running, show timer
-					eventList[3] = "Interface\\AddOns\\CatRotationHelper\\FeralCharge.tga"
+					eventList[3] = GetImagePath("FeralCharge.tga")
 					eventTimers[3] = expTime
 				else
 					eventList[3] = nil
@@ -1074,7 +1078,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 			else
 				eventEffects[4] = nil
 			end
-			eventList[4] = "Interface\\AddOns\\CatRotationHelper\\PredatoryStrikes.tga"
+			eventList[4] = GetImagePath("PredatoryStrikes.tga")
 			eventTimers[4] = expTime
 		else
 			eventList[4] = nil
@@ -1094,7 +1098,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				else
 					eventEffects[1] = nil
 				end
-				eventList[1] = "Interface\\AddOns\\CatRotationHelper\\Berserk.tga"
+				eventList[1] = GetImagePath("Berserk.tga")
 				eventTimers[1] = nil
 			else
 				eventList[1] = nil
@@ -1109,7 +1113,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
 
 					if( spellId == 50334 ) then -- Berserk
-						eventList[1] = "Interface\\AddOns\\CatRotationHelper\\Berserk.tga"
+						eventList[1] = GetImagePath("Berserk.tga")
 						eventTimers[1] = expTime
 					end
 
@@ -1130,7 +1134,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 			else
 				eventEffects[2] = nil
 			end
-			eventList[2] = "Interface\\AddOns\\CatRotationHelper\\FaerieFire.tga"
+			eventList[2] = GetImagePath("FaerieFire.tga")
 			eventTimers[2] = nil
 		else
 			eventList[2] = nil
@@ -1147,7 +1151,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				else
 					eventEffects[3] = nil
 				end
-				eventList[3] = "Interface\\AddOns\\CatRotationHelper\\Enrage.tga"
+				eventList[3] = GetImagePath("Enrage.tga")
 				eventTimers[3] = nil
 			else
 				eventCdTimers[3] = spellDuration + spellStart
@@ -1157,7 +1161,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(5229)); -- Enrage
 				if(name) then
 					-- buff running, show timer
-					eventList[3] = "Interface\\AddOns\\CatRotationHelper\\Enrage.tga"
+					eventList[3] = GetImagePath("Enrage.tga")
 					eventTimers[3] = expTime
 				else
 					eventList[3] = nil
@@ -1180,7 +1184,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 			else
 				eventEffects[4] = nil
 			end
-			eventList[4] = "Interface\\AddOns\\CatRotationHelper\\Maul.tga"
+			eventList[4] = GetImagePath("Maul.tga")
 			eventTimers[4] = nil
 		else
 			eventCdTimers[4] = spellDuration + spellStart
@@ -1306,12 +1310,12 @@ end
 function CatRotationHelperOnLoad(self)
 	-- load addon on druids only
 	local class = select(2, UnitClass("player"))
-	if(class == "DRUID") then
-		self:SetScript("OnEvent", CatRotationHelperOnEvent)
-	else
+	if(class ~= "DRUID") then
 		return;
 	end
 
+	self:SetScript("OnEvent", CatRotationHelperOnEvent)
+	
 	self:SetBackdropColor(0, 0, 0);
 	self:RegisterForClicks("RightButtonUp")
 	self:RegisterForDrag("LeftButton")
@@ -1359,7 +1363,7 @@ function CatRotationHelperOnLoad(self)
 		frame.cpframe:Hide();
 
 		frame.cpicon = frame.cpframe:CreateTexture(nil,"BACKGROUND")
-		frame.cpicon:SetTexture("Interface\\AddOns\\CatRotationHelper\\Cp.tga")
+		frame.cpicon:SetTexture(GetImagePath("Cp.tga"))
 		frame.cpicon:SetAllPoints(frame.cpframe)
 
 		frame.icon = frame:CreateTexture(nil,"ARTWORK")

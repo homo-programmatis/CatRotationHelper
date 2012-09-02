@@ -635,12 +635,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
     <Frame name="CatRotationHelperEventAlert" virtual="true">
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parentInnerGlow" parentKey="innerGlow" file="Interface\AddOns\CatRotationHelper\Effect.tga" alpha="0" setAllPoints="true">
+                <Texture name="$parentInnerGlow" parentKey="innerGlow" file="Interface\AddOns\CatRotationHelper\Images\Effect.tga" alpha="0" setAllPoints="true">
                     <Anchors>
                         <Anchor point="CENTER"/>
                     </Anchors>
                 </Texture>
-                <Texture name="$parentOuterGlow" parentKey="outerGlow" file="Interface\AddOns\CatRotationHelper\Effect.tga" alpha="0" setAllPoints="true">
+                <Texture name="$parentOuterGlow" parentKey="outerGlow" file="Interface\AddOns\CatRotationHelper\Images\Effect.tga" alpha="0" setAllPoints="true">
                     <Anchors>
                         <Anchor point="CENTER"/>
                     </Anchors>
