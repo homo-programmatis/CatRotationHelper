@@ -153,18 +153,27 @@ local function crhSpellName(id)
 	return name
 end
 
-local function crhGetDebuffExpiration(a_SpellID)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitDebuff("target", crhSpellName(a_SpellID));
+local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
+	local filter = "HARMFUL";
+	if (a_MyOnly) then
+		filter = "PLAYER|" .. filter;
+	end
+	
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", crhSpellName(a_SpellID), nil, filter);
 	if (not name) then
+		return 0;
+	end
+	
+	if (a_Stacks and (stacks ~= a_Stacks)) then
 		return 0;
 	end
 	
 	return expTime;
 end
 
-local function crhGetDebuffStacksExpiration(a_SpellID, a_Stacks)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitDebuff("target", crhSpellName(a_SpellID));
-	if ((not name) or (stacks ~= a_Stacks)) then
+local function crhGetBuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", crhSpellName(a_SpellID));
+	if (not name) then
 		return 0;
 	end
 	
@@ -478,23 +487,31 @@ function CatRotationHelperUpdateFrame(self, endTime)
 end
 
 function CatRotationFrameStopCounter(self)
-	if(self.counting) then
-		self.counting = false
-		self.countframe:Hide();
-		self.countframe.endTime = nil;
-
-		self.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
-
-		self.overlay.animOut:Play()
+	if (not self.counting) then
+		return;
 	end
+
+	self.counting = false
+	self.countframe:Hide();
+	self.countframe.endTime = nil;
+	self.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
+	self.overlay.animOut:Play()
 end
 
-local function crhUpdateDebuffFrame(a_Self, a_Expiration)
-	if (a_Expiration) then
+local function crhUpdateFrameWithExpiration(a_Self, a_Expiration)
+	if (a_Expiration ~= 0) then
 		CatRotationHelperUpdateFrame(a_Self, a_Expiration);
 	else
 		CatRotationFrameStopCounter(a_Self);
 	end
+end
+
+local function crhUpdateFrameFromDebuff(a_FrameID, a_SpellID, a_Stacks, a_MyOnly)
+	crhUpdateFrameWithExpiration(frames[a_FrameID], crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly))
+end
+
+local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
+	crhUpdateFrameWithExpiration(frames[a_FrameID], crhGetBuffExpiration(a_SpellID))
 end
 
 function CatRotationFrameSetMainScale()
@@ -779,53 +796,13 @@ end
 -----------------------------
 
 function CatRotationHelperCheckCatBuffs()
-	-- Savage Roar
-	local name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_SAVAGE_ROAR));
-	if(name) then
-		CatRotationHelperUpdateFrame(frames[CRH_FRAME_SAVAGEROAR], expTime);
-	else
-		CatRotationFrameStopCounter(frames[CRH_FRAME_SAVAGEROAR]);
-	end
+	crhUpdateFrameFromBuff(CRH_FRAME_SAVAGEROAR, CRH_SPELLID_SAVAGE_ROAR);
 end
 
 function CatRotationHelperCheckCatDebuffs()
-	local name, rank, icon, stacks, debuffType, duration, expTime, isMine;
-
-	-- Faery Fire -> Weakened Armor debuff
-	name, rank, icon, stacks, debuffType, duration, expTime = UnitDebuff("target", crhSpellName(CRH_SPELLID_WEAKENED_ARMOR));
-	if (name) then
-		CatRotationHelperUpdateFrame(frames[CRH_FRAME_CAT_WEAKARMOR], expTime);
-		name = nil;
-	else
-		CatRotationFrameStopCounter(frames[CRH_FRAME_CAT_WEAKARMOR]);
-	end
-	
-	
-	-- Rip & Rake: Check for own debuffs only
-	local rakeupdate, ripupdate;
-
-	local i = 1
-
-	repeat
-		name, rank, icon, stacks, debuffType, duration, expTime, isMine = UnitDebuff("target",i);
-		if( name == crhSpellName(CRH_SPELLID_RAKE) and isMine == "player") then
-			CatRotationHelperUpdateFrame(frames[CRH_FRAME_RAKE], expTime);
-			rakeupdate = true;
-		elseif( name == crhSpellName(CRH_SPELLID_RIP) and isMine == "player") then
-			CatRotationHelperUpdateFrame(frames[CRH_FRAME_RIP], expTime);
-			ripupdate = true;
-		end
-
-		i = i + 1;
-	until (name == nil)
-
-	if(rakeupdate ~= true) then
-    	CatRotationFrameStopCounter(frames[CRH_FRAME_RAKE]);
-	end
-
-	if(ripupdate ~= true) then
-    	CatRotationFrameStopCounter(frames[CRH_FRAME_RIP]);
-	end
+	crhUpdateFrameFromDebuff(CRH_FRAME_CAT_WEAKARMOR, CRH_SPELLID_WEAKENED_ARMOR, 3);
+	crhUpdateFrameFromDebuff(CRH_FRAME_RAKE, CRH_SPELLID_RAKE, nil, true);
+	crhUpdateFrameFromDebuff(CRH_FRAME_RIP, CRH_SPELLID_RIP, nil, true);
 end
 
 function CatRotationHelperCheckCatCooldown()
@@ -840,8 +817,8 @@ end
 ------------------------------
 
 function CatRotationHelperCheckBearDebuffs()
-	crhUpdateDebuffFrame(frames[CRH_FRAME_WEAKBLOWS], crhGetDebuffExpiration(CRH_SPELLID_WEAKENED_BLOWS))
-	crhUpdateDebuffFrame(frames[CRH_FRAME_BEAR_WEAKARMOR], crhGetDebuffStacksExpiration(CRH_SPELLID_WEAKENED_ARMOR, 3));
+	crhUpdateFrameFromDebuff(CRH_FRAME_WEAKBLOWS, CRH_SPELLID_WEAKENED_BLOWS);
+	crhUpdateFrameFromDebuff(CRH_FRAME_BEAR_WEAKARMOR, CRH_SPELLID_WEAKENED_ARMOR, 3);
 
 	-- Lacerate: Check for own debuffs only
 	local i = 1;
