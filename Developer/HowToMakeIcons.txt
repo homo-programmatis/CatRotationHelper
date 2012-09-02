@@ -1,0 +1,21 @@
+Normal icons
+============
+1.  Download "CascExplorer"
+2.  On wowhead.com, find skill and its icon name
+3.  Use CascExplorer to extract skill icon (from Interface\ICONS subfolder)
+4.  Convert skill icon from .blp to some stadard format (I used XnView for that)
+5.  Open Gimp
+6.  Load skill icon
+7.  Ctrl+C
+8.  Load "Composed.xcf"
+9.  Ctrl+V
+10. Gimp | Main menu | File | Export as...
+11. Save resulting icon as .tga
+
+Blue icons
+============
+1.  Make normal icon as described above
+2.  Gimp | Main menu | Colors | Colorify... (near bottom)
+3.  Custom color | R=0, G=110, B=255
+4.  Gimp | Main menu | File | Export as...
+5.  Save resulting icon as .tga
