@@ -79,7 +79,7 @@ local textures = {
 	GetImagePath("SavageRoar.tga"),
 	GetImagePath("Rake.tga"),
 	GetImagePath("Rip.tga"),
-	GetImagePath("FaerieFire.tga"),
+	GetImagePath("FaerieFire.tga"), -- @@@@ needs new icon
 	GetImagePath("Thrash.tga"),
 	GetImagePath("Mangle.tga"),
 	GetImagePath("Lacerate.tga"),
@@ -1088,38 +1088,42 @@ function CatRotationHelperUpdateEvents(showeffects)
 		end
 
 		-- Enrage
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_ENRAGE);
-		if(crhShowEnrage and spellStart ~= nil) then
-			if(spellStart == 0) then
-				if(eventList[3] == nil) then
-					eventEffects[3] = showeffects
-				else
-					eventEffects[3] = nil
-				end
-				eventList[3] = GetImagePath("Enrage.tga")
-				eventTimers[3] = nil
-			else
-				eventCdTimers[3] = spellDuration + spellStart
-				CatRotationHelperCdCounter:Show()
-				eventEffects[3] = nil
-				
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_ENRAGE));
-				if(name) then
-					-- buff running, show timer
-					eventList[3] = GetImagePath("Enrage.tga")
-					eventTimers[3] = expTime
-				else
-					eventList[3] = nil
-					eventTimers[3] = nil
-				end
-	
-			end
-		else
+		if (not IsPlayerSpell(CRH_SPELLID_ENRAGE)) then
+			-- @@@@ Clean up spec changes in a better way
 			eventList[3] = nil
-			eventTimers[3] = nil
-			eventEffects[3] = nil
+		else
+			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_ENRAGE);
+			if(crhShowEnrage and spellStart ~= nil) then
+				if(spellStart == 0) then
+					if(eventList[3] == nil) then
+						eventEffects[3] = showeffects
+					else
+						eventEffects[3] = nil
+					end
+					eventList[3] = GetImagePath("Enrage.tga")
+					eventTimers[3] = nil
+				else
+					eventCdTimers[3] = spellDuration + spellStart
+					CatRotationHelperCdCounter:Show()
+					eventEffects[3] = nil
+					
+					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_ENRAGE));
+					if(name) then
+						-- buff running, show timer
+						eventList[3] = GetImagePath("Enrage.tga")
+						eventTimers[3] = expTime
+					else
+						eventList[3] = nil
+						eventTimers[3] = nil
+					end
+		
+				end
+			else
+				eventList[3] = nil
+				eventTimers[3] = nil
+				eventEffects[3] = nil
+			end
 		end
-
 
 		-- Maul
 		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MAUL);
