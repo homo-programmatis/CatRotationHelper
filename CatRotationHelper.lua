@@ -7,9 +7,6 @@ local crhBearFrames = {BEARMANGLE, DEMOROAR, LACERATE, THRASH, PULVERIZE}
 local crhSurvivalFrames = {FRENZIEDREG, SURVINSTINCTS, BARKSKIN}
 
 -- spellIDs
-local CRH_SPELLID_FAERIE_FIRE 			= 770;
-local CRH_SPELLID_SUNDER_ARMOR 			= 58567;
-local CRH_SPELLID_EXPOSE_ARMOR 			= 8647;
 local CRH_SPELLID_BERSERK 				= 50334;
 local CRH_SPELLID_SAVAGE_ROAR			= 52610;
 local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
@@ -29,8 +26,6 @@ local CRH_SPELLID_LACERATE				= 94384;
 local CRH_SPELLID_PULVERIZE				= 80313; --TODO: spell removed
 local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_STAMPEDE				= 78892;
-local CRH_SPELLID_	= ;
-local CRH_SPELLID_	= ;
 
 -- spellIDs of mangle-like debuffs
 local mangleSkills = {
@@ -980,18 +975,8 @@ function CatRotationHelperCheckClearcast()
 end
 
 local function CatRotationHelperIsArmorDebuffApplied()
-	local buffName, rank, icon, count = UnitDebuff("target", crhSpellName(CRH_SPELLID_FAERIE_FIRE)) -- Faerie Fire
+	local buffName, rank, icon, count = UnitDebuff("target", crhSpellName(CRH_SPELLID_WEAKENED_ARMOR))
 	if(buffName ~= nil and count == 3) then
-		return true
-	end
-	
-	buffName, rank, icon, count = UnitDebuff("target", crhSpellName(CRH_SPELLID_SUNDER_ARMOR)) -- Sunder Armor
-	if(buffName ~= nil and count == 3) then
-		return true
-	end
-	
-	buffName = UnitDebuff("target", crhSpellName(CRH_SPELLID_EXPOSE_ARMOR)) -- Expose Armor
-	if(buffName ~= nil) then
 		return true
 	end
 	
