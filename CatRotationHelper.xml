@@ -1,0 +1,843 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
+	<Script file="CatRotationHelper.lua"/>
+
+	<Frame name="CatRotationHelperPanel">
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormalLarge" text="CatRotationHelper">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="10" y="-15"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+
+			<Button name="CatRotationHelperOptionsUnlock" inherits="OptionsButtonTemplate" text="Move/Rotate Frames">
+				<Size>
+					<AbsDimension x="150" y="21"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-45"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick function="CatRotationHelperUnlock"/>
+				</Scripts>
+			</Button>
+
+			<CheckButton name="CatRotationHelperOptionsClearcast" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-75"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhEnableClearcast = true
+						else
+							crhEnableClearcast = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowCat" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-120"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowCat = true
+							CatRotationHelperOptionsShowCp:Enable()
+							CatRotationHelperOptionsShowCatFaerieFire:Enable()
+							CatRotationHelperOptionsShowCatBerserk:Enable()
+							CatRotationHelperOptionsShowPredatorsSwiftness:Enable()
+							CatRotationHelperOptionsShowFeralCharge:Enable()
+							CatRotationHelperOptionsShowCatSurvival:Enable()
+						else
+							crhShowCat = false
+							CatRotationHelperOptionsShowCp:Disable()
+							CatRotationHelperOptionsShowCatFaerieFire:Disable()
+							CatRotationHelperOptionsShowCatBerserk:Disable()
+							CatRotationHelperOptionsShowPredatorsSwiftness:Disable()
+							CatRotationHelperOptionsShowFeralCharge:Disable()
+							CatRotationHelperOptionsShowCatSurvival:Disable()
+						end
+
+						CatRotationHelperUpdateEverything()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowCp" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-150"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhCp = true
+
+							CatRotationHelperHeader:RegisterEvent("UNIT_COMBO_POINTS");
+							CatRotationHelperSetCatCP(GetComboPoints("player"));
+						else
+							CatRotationHelperSetCatCP(0);
+							CatRotationHelperHeader:UnregisterEvent("UNIT_COMBO_POINTS");
+
+							crhCp = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowCatFaerieFire" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-180"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowCatFaerieFire = true
+						else
+							crhShowCatFaerieFire = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowCatBerserk" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-210"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowCatBerserk = true
+						else
+							crhShowCatBerserk = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowPredatorsSwiftness" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-240"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowPredatorsSwiftness = true
+						else
+							crhShowPredatorsSwiftness = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowFeralCharge" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-270"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowFeralCharge = true
+						else
+							crhShowFeralCharge = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowCatSurvival" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-300"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowCatSurvival = true
+						else
+							crhShowCatSurvival = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+
+			<CheckButton name="CatRotationHelperOptionsShowBear" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="10" y="-120"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowBear = true
+							CatRotationHelperOptionsShowLacerateCounter:Enable()
+							CatRotationHelperOptionsShowBearBerserk:Enable()
+							CatRotationHelperOptionsShowBearFaerieFire:Enable()
+							CatRotationHelperOptionsShowMaul:Enable()
+							CatRotationHelperOptionsShowEnrage:Enable()
+							CatRotationHelperOptionsShowBearSurvival:Enable()
+						else
+							crhShowBear = false
+							CatRotationHelperOptionsShowLacerateCounter:Disable()
+							CatRotationHelperOptionsShowBearBerserk:Disable()
+							CatRotationHelperOptionsShowBearFaerieFire:Disable()
+							CatRotationHelperOptionsShowMaul:Disable()
+							CatRotationHelperOptionsShowEnrage:Disable()
+							CatRotationHelperOptionsShowBearSurvival:Disable()
+						end
+
+						CatRotationHelperUpdateEverything()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowLacerateCounter" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-150"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhLacCounter = true
+
+							CatRotationHelperCheckBearDebuffs();
+						else
+							CatRotationHelperSetBearCP(0);
+							crhLacCounter = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowBearBerserk" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-180"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowBearBerserk = true
+						else
+							crhShowBearBerserk = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowBearFaerieFire" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-210"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowBearFaerieFire = true
+						else
+							crhShowBearFaerieFire = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowMaul" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-240"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowMaul = true
+						else
+							crhShowMaul = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowEnrage" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-270"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowEnrage = true
+						else
+							crhShowEnrage = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CatRotationHelperOptionsShowBearSurvival" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="15" y="-300"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							crhShowBearSurvival = true
+						else
+							crhShowBearSurvival = false
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+
+
+
+
+			<Slider name="CatRotationHelperScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
+				<Anchors>
+					<Anchor point="CENTER" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-345"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentValue" inherits="GameFontHighlightSmall">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnValueChanged>
+						local scale = math.floor(self:GetValue()*100+0.5)/100
+						crhScale = scale
+						CatRotationFrameSetMainScale()
+						CatRotationHelperScaleSliderValue:SetText(scale)
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="CatRotationHelperEventScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
+				<Anchors>
+					<Anchor point="CENTER" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="-100" y="-400"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentValue" inherits="GameFontHighlightSmall">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnValueChanged>
+						local scale = math.floor(self:GetValue()*100+0.5)/100
+						crhEventScale = scale
+						CatRotationFrameSetEventScale()
+						CatRotationHelperEventScaleSliderValue:SetText(scale)
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Slider name="CatRotationHelperSurvivalScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
+				<Anchors>
+					<Anchor point="CENTER" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="100" y="-400"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentValue" inherits="GameFontHighlightSmall">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnValueChanged>
+						local scale = math.floor(self:GetValue()*100+0.5)/100
+						crhSurvivalScale = scale
+						CatRotationFrameSetSurvivalScale()
+						CatRotationHelperSurvivalScaleSliderValue:SetText(scale)
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				local _,class = UnitClass("player");
+				if(class == "DRUID") then
+					self.name = "CatRotationHelper"
+					InterfaceOptions_AddCategory(self);
+
+					self:RegisterEvent("ADDON_LOADED")
+
+					CatRotationHelperOptionsShowCatText:SetText("Enable Cat Frames")
+
+					CatRotationHelperOptionsShowCpText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowCpText:SetText("Show Combo Points")
+
+					CatRotationHelperOptionsShowLacerateCounterText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowLacerateCounterText:SetText("Show Lacerate counter")
+
+					CatRotationHelperOptionsShowBearText:SetText("Enable Bear Frames")
+
+					CatRotationHelperOptionsClearcastText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsClearcastText:SetText("Show Clearcast procs")
+					CatRotationHelperOptionsClearcast.tooltipText = "Icons turn blue during a Clearcast proc"
+
+					CatRotationHelperOptionsShowCatFaerieFireText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowCatFaerieFireText:SetText("Faerie Fire reminder")
+					CatRotationHelperOptionsShowCatFaerieFire.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
+
+					CatRotationHelperOptionsShowCatBerserkText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowCatBerserkText:SetText("Berserk reminder")
+					CatRotationHelperOptionsShowCatBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
+
+					CatRotationHelperOptionsShowPredatorsSwiftnessText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowPredatorsSwiftnessText:SetText("Show Predator's Swiftness")
+					CatRotationHelperOptionsShowPredatorsSwiftness.tooltipText = "Shows an icon in the Notification Frame during a Predator's Swiftness proc"
+
+					CatRotationHelperOptionsShowFeralChargeText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowFeralChargeText:SetText("Feral Charge (Cat) reminder")
+					CatRotationHelperOptionsShowFeralCharge.tooltipText = "Shows an icon in the Notification Frame when Feral Charge (Cat) is ready"
+
+					CatRotationHelperOptionsShowCatSurvivalText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowCatSurvivalText:SetText("Show Survival Frame")
+					CatRotationHelperOptionsShowCatSurvival.tooltipText = "Show Survival Frame in Cat Form"
+
+					CatRotationHelperOptionsShowBearBerserkText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowBearBerserkText:SetText("Berserk reminder")
+					CatRotationHelperOptionsShowBearBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
+
+					CatRotationHelperOptionsShowBearFaerieFireText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowBearFaerieFireText:SetText("Faerie Fire reminder (Bear)")
+					CatRotationHelperOptionsShowBearFaerieFire.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
+
+					CatRotationHelperOptionsShowMaulText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowMaulText:SetText("Maul reminder")
+					CatRotationHelperOptionsShowMaul.tooltipText = "Shows an icon in the Notification Frame when Maul is ready"
+
+					CatRotationHelperOptionsShowEnrageText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowEnrageText:SetText("Enrage reminder")
+					CatRotationHelperOptionsShowEnrage.tooltipText = "Shows an icon in the Notification Frame when Enrage is ready"
+
+					CatRotationHelperOptionsShowBearSurvivalText:SetTextColor(1,1,1)
+					CatRotationHelperOptionsShowBearSurvivalText:SetText("Show Survival Frame")
+					CatRotationHelperOptionsShowBearSurvival.tooltipText = "Show Survival Frame in Bear Form"
+
+					CatRotationHelperScaleSliderText:SetText("Main Frame scale")
+					CatRotationHelperEventScaleSliderText:SetText("Notification Frame scale")
+					CatRotationHelperSurvivalScaleSliderText:SetText("Survival Frame scale")
+				end
+			</OnLoad>
+			<OnEvent>
+				local arg1 = ...
+
+				if(arg1 ~= "CatRotationHelper") then
+					return
+				end
+
+				if(crhShowCat) then
+					CatRotationHelperOptionsShowCat:SetChecked()
+				else
+					CatRotationHelperOptionsShowCp:Disable()
+					CatRotationHelperOptionsShowCatFaerieFire:Disable()
+					CatRotationHelperOptionsShowCatBerserk:Disable()
+					CatRotationHelperOptionsShowPredatorsSwiftness:Disable()
+					CatRotationHelperOptionsShowFeralCharge:Disable()
+					CatRotationHelperOptionsShowCatSurvival:Disable()
+				end
+
+				if(crhShowBear) then
+					CatRotationHelperOptionsShowBear:SetChecked()
+				else
+					CatRotationHelperOptionsShowLacerateCounter:Disable()
+					CatRotationHelperOptionsShowBearBerserk:Disable()
+					CatRotationHelperOptionsShowMaul:Disable()
+					CatRotationHelperOptionsShowBearFaerieFire:Disable()
+					CatRotationHelperOptionsShowEnrage:Disable()
+					CatRotationHelperOptionsShowBearSurvival:Disable()
+				end
+				if(crhCp) then CatRotationHelperOptionsShowCp:SetChecked() end
+				if(crhLacCounter) then CatRotationHelperOptionsShowLacerateCounter:SetChecked() end
+				if(crhEnableClearcast) then CatRotationHelperOptionsClearcast:SetChecked() end
+
+				if(crhShowCatFaerieFire) then CatRotationHelperOptionsShowCatFaerieFire:SetChecked() end
+				if(crhShowCatBerserk) then CatRotationHelperOptionsShowCatBerserk:SetChecked() end
+				if(crhShowPredatorsSwiftness) then CatRotationHelperOptionsShowPredatorsSwiftness:SetChecked() end
+				if(crhShowFeralCharge) then CatRotationHelperOptionsShowFeralCharge:SetChecked() end
+				if(crhShowBearBerserk) then CatRotationHelperOptionsShowBearBerserk:SetChecked() end
+				if(crhShowBearFaerieFire) then CatRotationHelperOptionsShowBearFaerieFire:SetChecked() end
+				if(crhShowMaul) then CatRotationHelperOptionsShowMaul:SetChecked() end
+				if(crhShowEnrage) then CatRotationHelperOptionsShowEnrage:SetChecked() end
+				if(crhShowBearSurvival) then CatRotationHelperOptionsShowBearSurvival:SetChecked() end
+				if(crhShowCatSurvival) then CatRotationHelperOptionsShowCatSurvival:SetChecked() end
+
+				CatRotationHelperScaleSlider:SetValue(crhScale)
+				CatRotationHelperScaleSliderValue:SetText(math.floor(crhScale*100+0.5)/100)
+				CatRotationHelperEventScaleSlider:SetValue(crhEventScale)
+				CatRotationHelperEventScaleSliderValue:SetText(math.floor(crhEventScale*100+0.5)/100)
+				CatRotationHelperSurvivalScaleSlider:SetValue(crhSurvivalScale)
+				CatRotationHelperSurvivalScaleSliderValue:SetText(math.floor(crhSurvivalScale*100+0.5)/100)
+			</OnEvent>
+		</Scripts>
+	</Frame>
+
+	<Frame name="CatRotationHelperLockFrame" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+		<Size>
+			<AbsDimension x="300" y="92"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOP">
+				<Offset>
+					<AbsDimension x="0" y="-100"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
+					<Size><AbsDimension x="288" y="72"/></Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="12"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Move/Rotate Frames">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-4"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontHighlight" text="Drag frames to move. Right Click to rotate.">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="24" y="-36"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+
+		<Frames>
+			<Button inherits="OptionsButtonTemplate" text="Close">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset><AbsDimension x="-14" y="16"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick function="CatRotationHelperLock" />
+				</Scripts>
+			</Button>
+		</Frames>
+
+	</Frame>
+
+    <Frame name="CatRotationHelperEventAlert" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentInnerGlow" parentKey="innerGlow" file="Interface\AddOns\CatRotationHelper\Effect.tga" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentOuterGlow" parentKey="outerGlow" file="Interface\AddOns\CatRotationHelper\Effect.tga" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentIcon" parentKey="icon" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnHide>
+                if ( self.animIn:IsPlaying() ) then
+                    self.animIn:Stop();
+                end
+                if ( self.animOut:IsPlaying() ) then
+                    self.animOut:Stop();
+                end
+            </OnHide>
+        </Scripts>
+        <Animations>
+            <AnimationGroup parentKey="animIn">
+                <Scale target="$parentInnerGlow" duration="0.3" scaleX="1.5" scaleY="1.5" order="1"/>
+                <Scale target="$parentOuterGlow" duration="0.3" scaleX="0.76" scaleY="0.76" order="1"/>
+                <Scale target="$parentIcon" duration="0.3" scaleX="0.85" scaleY="0.85" order="1"/>
+                <Alpha target="$parentInnerGlow" startDelay="0.3" duration="0.3" change="-0.6" order="1"/>
+                <Alpha target="$parentOuterGlow" startDelay="0.3" duration="0.3" change="-0.6" order="1"/>		
+                <Alpha target="$parentIcon" startDelay="0.3" duration="0.3" change="-0.7" order="1"/>		
+                <Scripts>
+                    <OnPlay>
+                        local frame = self:GetParent();
+                        local frameWidth, frameHeight = frame:GetSize();
+						frame.animOut:Stop()
+                        frame.innerGlow:SetSize(frameWidth * 0.7, frameHeight * 0.7);
+                        frame.innerGlow:SetAlpha(0.6);
+                        frame.outerGlow:SetSize(frameWidth * 1.25, frameHeight * 1.25);
+                        frame.outerGlow:SetAlpha(0.6);
+                        frame.icon:SetSize(frameWidth * 1.05, frameHeight * 1.05);
+                        frame.icon:SetAlpha(0.7);
+                        frame:Show();
+                    </OnPlay>
+                    <OnFinished>
+						self:GetParent():Hide()
+                    </OnFinished>
+					<OnStop>
+						self:GetParent():Hide()				
+					</OnStop>
+                </Scripts>
+            </AnimationGroup>
+            <AnimationGroup parentKey="animOut">
+                <Scale target="$parentOuterGlow" duration="0.3" scaleX="1.3" scaleY="1.3" order="1"/>
+                <Alpha target="$parentOuterGlow" duration="0.3" change="-0.6" order="1"/>		
+                <Scale target="$parentIcon" duration="0.3" scaleX="1.2" scaleY="1.2" order="1"/>
+                <Alpha target="$parentIcon" duration="0.3" change="-0.7" order="1"/>		
+                <Scripts>
+                    <OnPlay>
+                        local frame = self:GetParent();
+                        local frameWidth, frameHeight = frame:GetSize();
+						frame.animIn:Stop()
+                        frame.innerGlow:SetAlpha(0.0);
+                        frame.outerGlow:SetSize(frameWidth * 0.95, frameHeight * 0.95);
+						frame.outerGlow:SetAlpha(0.6);
+                        frame.icon:SetSize(frameWidth * 0.9, frameHeight * 0.9);
+                        frame.icon:SetAlpha(0.7);
+                        frame:Show();
+                    </OnPlay>
+                    <OnFinished>
+						self:GetParent():Hide()
+                    </OnFinished>
+					<OnStop>
+						self:GetParent():Hide()					
+					</OnStop>
+                </Scripts>
+            </AnimationGroup>
+        </Animations>
+    </Frame>
+
+	<Font name="CatRotationHelperDurText" font="Fonts\FRIZQT__.TTF" virtual="true" outline="NORMAL" >
+		<FontHeight>
+			<AbsValue val="14"/>
+		</FontHeight>
+		<Color r="1.0" g="0.82" b="0"/>
+	</Font>
+
+	<Font name="CatRotationHelperDur2Text" font="Fonts\FRIZQT__.TTF" virtual="true" outline="NORMAL" >
+		<FontHeight>
+			<AbsValue val="26"/>
+		</FontHeight>
+		<Color r="1.0" g="0.82" b="0"/>
+	</Font>
+
+	<Button name="CatRotationHelperEvents" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+		<Anchors>
+			<Anchor point="RIGHT" relativeTo="UIParent" relativePoint="CENTER">
+				<Offset>
+					<AbsDimension x="-165" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormal" text="Notification Frame">
+					<Anchors>
+						<Anchor point="BOTTOM" relativePoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
+		<Scripts>
+			<OnDragStart>self:StartMoving()</OnDragStart>
+			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
+			<OnClick function="CatRotationHelperEventsOnClick"/>
+		</Scripts>
+	</Button>
+
+	<Button name="CatRotationHelperSurvival" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+				<Offset>
+					<AbsDimension x="165" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormal" text="Survival Frame">
+					<Anchors>
+						<Anchor point="BOTTOM" relativePoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
+		<Scripts>
+			<OnDragStart>self:StartMoving()</OnDragStart>
+			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
+			<OnClick function="CatRotationHelperSurvivalOnClick"/>
+		</Scripts>
+	</Button>
+
+	<Button name="CatRotationHelperHeader" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+		<Anchors>
+			<Anchor point="TOP" relativeTo="UIParent" relativePoint="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="-100"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormal" text="Main Frame">
+					<Anchors>
+						<Anchor point="BOTTOM" relativePoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
+		<Scripts>
+			<OnDragStart>self:StartMoving()</OnDragStart>
+			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
+			<OnLoad function="CatRotationHelperOnLoad"/>
+			<OnClick function="CatRotationHelperMainOnClick"/>
+		</Scripts>
+	</Button>
+
+	<Frame name="CatRotationHelperFadeFrame" hidden="true">
+		<Scripts>
+			<OnUpdate function="CatRotationHelperFadeFunc"/>
+		</Scripts>
+	</Frame>
+
+	<Frame name="CatRotationHelperLacerateCounter" hidden="true">
+		<Scripts>
+			<OnUpdate function="CatRotationHelperLacerateCounterFunc"/>
+		</Scripts>
+	</Frame>
+
+	<Frame name="CatRotationHelperCdCounter" hidden="true">
+		<Scripts>
+			<OnUpdate function="CatRotationHelperCdCounterFunc"/>
+		</Scripts>
+	</Frame>
+
+
+</Ui>
