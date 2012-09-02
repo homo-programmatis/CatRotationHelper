@@ -1,11 +1,10 @@
 local CRH_FRAME_TIGERSFURY, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_BEAR_WEAKARMOR, CRH_FRAME_THRASH, CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_WEAKBLOWS = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
--- @@@@ Replace frenzied with might of ursoc
-local BARKSKIN, SURVINSTINCTS, FRENZIEDREG = 1, 2, 3;
+local BARKSKIN, SURVINSTINCTS, CRH_FRAME_BEAR_MIGHTOFURSOC = 1, 2, 3;
 
 -- change order of icons here
 local crhCatFrames = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_RAKE, CRH_FRAME_RIP}
-local crhBearFrames = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_WEAKBLOWS, CRH_FRAME_BEAR_WEAKARMOR}
-local crhSurvivalFrames = {FRENZIEDREG, SURVINSTINCTS, BARKSKIN}
+local crhBearFrames = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_WEAKBLOWS, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_BEAR_WEAKARMOR}
+local crhSurvivalFrames = {CRH_FRAME_BEAR_MIGHTOFURSOC, SURVINSTINCTS, BARKSKIN}
 
 -- spellIDs
 local CRH_SPELLID_FAERIE_FIRE			= 770;
@@ -21,7 +20,7 @@ local CRH_SPELLID_THRASH				= 77758;
 local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_MANGLE_BEAR			= 33878;
 local CRH_SPELLID_FERAL_CHARGE			= 102401;
-local CRH_SPELLID_FRENZIED_REGENERATION	= 22842;
+local CRH_SPELLID_MIGHT_OF_URSOC		= 106922;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_RAKE					= 59881;
 local CRH_SPELLID_RIP					= 1079;
@@ -84,26 +83,26 @@ local textures = {
 	GetImagePath("Thrash.tga"),
 	GetImagePath("Mangle.tga"),
 	GetImagePath("Lacerate.tga"),
-	GetImagePath("WeakenedBlows.tga")
+	GetImagePath("DemoRoar.tga")
 }
 
 local blueTextures = {
 	GetImagePath("TigersFury-Blue.tga"),
-	GetImagePath("WeakenedArmor-Blue.tga"),
+	GetImagePath("FaerieFire-Blue.tga"),
 	GetImagePath("SavageRoar-Blue.tga"),
 	GetImagePath("Rake-Blue.tga"),
 	GetImagePath("Rip-Blue.tga"),
-	GetImagePath("WeakenedArmor-Blue.tga"),
+	GetImagePath("FaerieFire-Blue.tga"),
 	GetImagePath("Thrash-Blue.tga"),
 	GetImagePath("Mangle-Blue.tga"),
 	GetImagePath("Lacerate-Blue.tga"),
-	GetImagePath("WeakenedBlows-Blue.tga")
+	GetImagePath("DemoRoar-Blue.tga")
 }
 
 local survivalTextures = {
 	GetImagePath("Barkskin.tga"),
 	GetImagePath("SurvivalInstincts.tga"),
-	GetImagePath("FrenziedReg.tga")
+	GetImagePath("MightOfUrsoc.tga")
 }
 
 --                      r    g    b    a
@@ -1228,25 +1227,25 @@ function CatRotationHelperUpdateSurvival(showeffects)
 			end
 		end
 
-		-- Frenzied Regeneration
+		-- Might of ursoc
 		if(inBearForm) then
-			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FRENZIED_REGENERATION);
+			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MIGHT_OF_URSOC);
 			if(spellStart ~= nil) then
 				if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-					showSurvivalIcon(survival[FRENZIEDREG],showeffects)			
+					showSurvivalIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC],showeffects)			
 				else
 					survivalCdTimers[3] = spellDuration + spellStart
 					CatRotationHelperCdCounter:Show()
 
-					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_FRENZIED_REGENERATION));
+					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_MIGHT_OF_URSOC));
 					if(name) then
 						-- buff running, show timer
-						showEventIcon(survival[FRENZIEDREG])
+						showEventIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC])
 
-						survival[FRENZIEDREG].countframe.endTime = expTime
-						survival[FRENZIEDREG].countframe:Show()
+						survival[CRH_FRAME_BEAR_MIGHTOFURSOC].countframe.endTime = expTime
+						survival[CRH_FRAME_BEAR_MIGHTOFURSOC].countframe:Show()
 					else
-						hideEventIcon(survival[FRENZIEDREG])
+						hideEventIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC])
 					end
 				end
 			end
