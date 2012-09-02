@@ -19,15 +19,16 @@ local CRH_SPELLID_TIGERS_FURY			= 5217;
 local CRH_SPELLID_THRASH				= 77758;
 local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_MANGLE_BEAR			= 33878;
-local CRH_SPELLID_FERAL_CHARGE			= 49376;
+local CRH_SPELLID_FERAL_CHARGE			= 102401;
 local CRH_SPELLID_FRENZIED_REGENERATION	= 22842;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_RAKE					= 59881;
 local CRH_SPELLID_RIP					= 1079;
 local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SPELLID_CLEARCAST				= 16870;
-local CRH_SPELLID_STAMPEDE				= 78892;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
+
+local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
 
 local frames = {
 	CreateFrame("Frame", nil, UIParent),
@@ -528,8 +529,7 @@ local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
 		return;
 	end
 
-	-- global cooldown check
-	if (spellDuration < 1.6) then
+	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
 		return;
 	end
 	
@@ -937,7 +937,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		-- Berserk
 		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
 		if(spellStart ~= nil and crhShowCatBerserk) then
-			if(spellDuration < 1.6) then
+			if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
 				if(eventList[1] == nil) then
 					eventEffects[1] = showeffects
 				else
@@ -986,40 +986,34 @@ function CatRotationHelperUpdateEvents(showeffects)
 			eventEffects[2] = nil
 		end
 		
-		
-		-- Feral Charge
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FERAL_CHARGE);
-		if(crhShowFeralCharge and spellStart ~= nil) then
-			if(spellDuration < 1.6) then
-				if(eventList[3] == nil) then
-					eventEffects[3] = showeffects
-				else
-					eventEffects[3] = nil
-				end
-				eventList[3] = GetImagePath("FeralCharge.tga")
-				eventTimers[3] = nil
-			else
-				eventCdTimers[2] = spellDuration + spellStart
-				eventEffects[3] = nil
-				CatRotationHelperCdCounter:Show()
-				
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_STAMPEDE));
-				if(name) then
-					-- buff running, show timer
+		-- Feral Charge. Probably not learned.
+		if (not IsPlayerSpell(CRH_SPELLID_FERAL_CHARGE)) then
+			-- @@@@ Clean up spec changes in a better way
+			eventList[3] = nil
+		else
+			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FERAL_CHARGE);
+			if(crhShowFeralCharge and spellStart ~= nil) then
+				if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+					if(eventList[3] == nil) then
+						eventEffects[3] = showeffects
+					else
+						eventEffects[3] = nil
+					end
 					eventList[3] = GetImagePath("FeralCharge.tga")
-					eventTimers[3] = expTime
+					eventTimers[3] = nil
 				else
+					eventCdTimers[2] = spellDuration + spellStart
+					eventEffects[3] = nil
+					CatRotationHelperCdCounter:Show()
 					eventList[3] = nil
 					eventTimers[3] = nil
 				end
-	
+			else
+				eventList[3] = nil
+				eventTimers[3] = nil
+				eventEffects[3] = nil
 			end
-		else
-			eventList[3] = nil
-			eventTimers[3] = nil
-			eventEffects[3] = nil
 		end
-		
 		
 		-- Predator's Swiftness
 		name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_PREDATORS_SWIFTNESS));
@@ -1043,7 +1037,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		-- Berserk
 		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
 		if(spellStart ~= nil and crhShowBearBerserk) then
-			if(spellDuration < 1.6) then
+			if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
 				if(eventList[1] == nil) then
 					eventEffects[1] = showeffects
 				else
@@ -1233,7 +1227,7 @@ function CatRotationHelperUpdateSurvival(showeffects)
 		if(inBearForm) then
 			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FRENZIED_REGENERATION);
 			if(spellStart ~= nil) then
-				if(spellDuration < 1.6) then
+				if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
 					showSurvivalIcon(survival[FRENZIEDREG],showeffects)			
 				else
 					survivalCdTimers[3] = spellDuration + spellStart
