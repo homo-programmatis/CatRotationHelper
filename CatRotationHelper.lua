@@ -27,6 +27,7 @@ local CRH_SPELLID_RIP					= 1079;
 local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
+local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
 
 local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
 
@@ -66,13 +67,13 @@ eventCdTimers = {
 --	nil, -- Berserk
 --	nil, -- Feral Charge
 --	nil, -- Enrage
---	nil, -- Maul
+--	nil, -- Savage defense
 }
 
 survivalCdTimers = {
 --	nil, -- Barkskin
 --	nil, -- Survival Instincts
---	nil, -- Frenzied Regeneration
+--	nil, -- Might of ursoc
 }
 
 local function GetImagePath(a_ImageName)
@@ -150,7 +151,7 @@ crhShowCatBerserk = true;
 crhShowFeralCharge = true;
 crhShowBearBerserk = true;
 crhShowPredatorsSwiftness = true;
-crhShowMaul = true;
+crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
 crhShowEnrage = true;
 
@@ -1042,7 +1043,7 @@ function CatRotationHelperUpdateEvents(showeffects)
 		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
 		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
 		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, "Enrage.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowMaul, 4, 4, CRH_SPELLID_MAUL, "Maul.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, "SavageDefense.tga", showeffects);
 	end
 
 	-- second, fill event frames with information

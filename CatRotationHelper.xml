@@ -299,9 +299,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnClick>
 						if(self:GetChecked()) then
-							crhShowMaul = true
+							crhShowSavageDefense = true
 						else
-							crhShowMaul = false
+							crhShowSavageDefense = false
 						end
 					</OnClick>
 				</Scripts>
@@ -543,7 +543,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				if(crhShowFeralCharge) then CatRotationHelperOptionsShowFeralCharge:SetChecked() end
 				if(crhShowBearBerserk) then CatRotationHelperOptionsShowBearBerserk:SetChecked() end
 				if(crhShowBearFaerieFire) then CatRotationHelperOptionsShowBearFaerieFire:SetChecked() end
-				if(crhShowMaul) then CatRotationHelperOptionsShowMaul:SetChecked() end
+				if(crhShowSavageDefense) then CatRotationHelperOptionsShowMaul:SetChecked() end
 				if(crhShowEnrage) then CatRotationHelperOptionsShowEnrage:SetChecked() end
 				if(crhShowBearSurvival) then CatRotationHelperOptionsShowBearSurvival:SetChecked() end
 				if(crhShowCatSurvival) then CatRotationHelperOptionsShowCatSurvival:SetChecked() end
