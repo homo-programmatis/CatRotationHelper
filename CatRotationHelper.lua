@@ -1,10 +1,10 @@
 local CRH_FRAME_TIGERSFURY, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_BEAR_WEAKARMOR, CRH_FRAME_THRASH, CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_WEAKBLOWS = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-local BARKSKIN, SURVINSTINCTS, CRH_FRAME_BEAR_MIGHTOFURSOC = 1, 2, 3;
+local CRH_FRAME_BARKSKIN, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_MIGHTOFURSOC = 1, 2, 3;
 
 -- change order of icons here
 local crhCatFrames = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_RAKE, CRH_FRAME_RIP}
 local crhBearFrames = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_WEAKBLOWS, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_BEAR_WEAKARMOR}
-local crhSurvivalFrames = {CRH_FRAME_BEAR_MIGHTOFURSOC, SURVINSTINCTS, BARKSKIN}
+local crhSurvivalFrames = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
 -- spellIDs
 local CRH_SPELLID_FAERIE_FIRE			= 770;
@@ -172,7 +172,7 @@ local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
 	return expTime;
 end
 
-local function crhGetBuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
+local function crhGetBuffExpiration(a_SpellID)
 	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", crhSpellName(a_SpellID));
 	if (not name) then
 		return 0;
@@ -949,21 +949,15 @@ function CatRotationHelperUpdateEvents(showeffects)
 				eventList[1] = nil
 				eventTimers[1] = nil
 				eventEffects[1] = nil
+				
 				eventCdTimers[1] = spellDuration + spellStart
 				CatRotationHelperCdCounter:Show()
 
-				local i = 1;
-				repeat
-					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
-
-					if (spellId == CRH_SPELLID_BERSERK) then
-						eventList[1] = GetImagePath("Berserk.tga")
-						eventTimers[1] = expTime
-					end
-
-					i = i + 1;
-				until (spellId == nil)
-
+				local expTime = crhGetBuffExpiration(CRH_SPELLID_BERSERK);
+				if (0 ~= expTime) then
+					eventList[1] = GetImagePath("Berserk.tga")
+					eventTimers[1] = expTime
+				end
 			end
 		else
 			eventList[1] = nil
@@ -1002,11 +996,12 @@ function CatRotationHelperUpdateEvents(showeffects)
 					eventList[3] = GetImagePath("FeralCharge.tga")
 					eventTimers[3] = nil
 				else
-					eventCdTimers[2] = spellDuration + spellStart
-					eventEffects[3] = nil
-					CatRotationHelperCdCounter:Show()
 					eventList[3] = nil
 					eventTimers[3] = nil
+					eventEffects[3] = nil
+
+					eventCdTimers[2] = spellDuration + spellStart
+					CatRotationHelperCdCounter:Show()
 				end
 			else
 				eventList[3] = nil
@@ -1053,18 +1048,11 @@ function CatRotationHelperUpdateEvents(showeffects)
 				eventCdTimers[1] = spellDuration + spellStart
 				CatRotationHelperCdCounter:Show()
 
-				local i = 1;
-				repeat
-					name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("player", i);
-
-					if (spellId == CRH_SPELLID_BERSERK) then
-						eventList[1] = GetImagePath("Berserk.tga")
-						eventTimers[1] = expTime
-					end
-
-					i = i + 1;
-				until (spellId == nil)
-
+				local expTime = crhGetBuffExpiration(CRH_SPELLID_BERSERK);
+				if (0 ~= expTime) then
+					eventList[1] = GetImagePath("Berserk.tga")
+					eventTimers[1] = expTime
+				end
 			end
 		else
 			eventList[1] = nil
@@ -1103,20 +1091,18 @@ function CatRotationHelperUpdateEvents(showeffects)
 					eventList[3] = GetImagePath("Enrage.tga")
 					eventTimers[3] = nil
 				else
+					eventList[3] = nil
+					eventTimers[3] = nil
+					eventEffects[3] = nil
+
 					eventCdTimers[3] = spellDuration + spellStart
 					CatRotationHelperCdCounter:Show()
-					eventEffects[3] = nil
 					
-					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_ENRAGE));
-					if(name) then
-						-- buff running, show timer
+					local expTime = crhGetBuffExpiration(CRH_SPELLID_ENRAGE);
+					if (0 ~= expTime) then
 						eventList[3] = GetImagePath("Enrage.tga")
 						eventTimers[3] = expTime
-					else
-						eventList[3] = nil
-						eventTimers[3] = nil
 					end
-		
 				end
 			else
 				eventList[3] = nil
@@ -1136,14 +1122,13 @@ function CatRotationHelperUpdateEvents(showeffects)
 			eventList[4] = GetImagePath("Maul.tga")
 			eventTimers[4] = nil
 		else
-			eventCdTimers[4] = spellDuration + spellStart
-			CatRotationHelperCdCounter:Show()
-
 			eventList[4] = nil
 			eventTimers[4] = nil
 			eventEffects[4] = nil
-		end
 
+			eventCdTimers[4] = spellDuration + spellStart
+			CatRotationHelperCdCounter:Show()
+		end
 	end
 
 	-- second, fill event frames with information
@@ -1175,85 +1160,48 @@ function CatRotationHelperUpdateEvents(showeffects)
 		hideEventIcon(events[j])
 		j = j + 1
 	end
+end
 
+local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
+	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
+	
+	-- Unknown legacy safety code
+	if (spellStart == nil) then
+		return;
+	end
+	
+	-- Spell ready
+	if (spellDuration == 0) then
+		showSurvivalIcon(survival[a_FrameID], a_ShowEffects)
+		return;
+	end
+
+	-- Prevent blinking on GCD
+	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+		return;
+	end
+
+	survivalCdTimers[a_FrameID] = spellDuration + spellStart
+	CatRotationHelperCdCounter:Show()
+
+	local expTime = crhGetBuffExpiration(a_SpellID);
+	if (0 ~= expTime) then
+		showEventIcon(survival[a_FrameID])
+		survival[a_FrameID].countframe.endTime = expTime
+		survival[a_FrameID].countframe:Show()
+	else
+		hideEventIcon(survival[a_FrameID])
+	end
 end
 
 -- Survival Frame - Bear & Cat
 function CatRotationHelperUpdateSurvival(showeffects)
-	if( (crhShowCatSurvival and inCatForm) or (crhShowBearSurvival and inBearForm) ) then
-		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime
-		
-		-- Barkskin
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BARKSKIN);
-		if(spellStart ~= nil) then
-			if(spellDuration == 0) then
-				showSurvivalIcon(survival[BARKSKIN],showeffects)
-			else
-				survivalCdTimers[1] = spellDuration + spellStart
-				CatRotationHelperCdCounter:Show()
-
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_BARKSKIN));
-				if(name) then
-					-- buff running, show timer
-					showEventIcon(survival[BARKSKIN])
-
-					survival[BARKSKIN].countframe.endTime = expTime
-					survival[BARKSKIN].countframe:Show()
-				else
-					hideEventIcon(survival[BARKSKIN])
-				end
-			end
-		end
-
-		-- Survival Instincts
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_SURVIVAL_INSTINCTS);
-		if(spellStart ~= nil) then
-			if(spellDuration == 0) then
-				showSurvivalIcon(survival[SURVINSTINCTS],showeffects)
-			else
-				survivalCdTimers[2] = spellDuration + spellStart
-				CatRotationHelperCdCounter:Show()
-
-				name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_SURVIVAL_INSTINCTS));
-				if(name) then
-					-- buff running, show timer
-					showEventIcon(survival[SURVINSTINCTS])
-
-					survival[SURVINSTINCTS].countframe.endTime = expTime
-					survival[SURVINSTINCTS].countframe:Show()
-				else
-					hideEventIcon(survival[SURVINSTINCTS])
-				end
-			end
-		end
-
-		-- Might of ursoc
-		if(inBearForm) then
-			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MIGHT_OF_URSOC);
-			if(spellStart ~= nil) then
-				if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-					showSurvivalIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC],showeffects)			
-				else
-					survivalCdTimers[3] = spellDuration + spellStart
-					CatRotationHelperCdCounter:Show()
-
-					name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_MIGHT_OF_URSOC));
-					if(name) then
-						-- buff running, show timer
-						showEventIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC])
-
-						survival[CRH_FRAME_BEAR_MIGHTOFURSOC].countframe.endTime = expTime
-						survival[CRH_FRAME_BEAR_MIGHTOFURSOC].countframe:Show()
-					else
-						hideEventIcon(survival[CRH_FRAME_BEAR_MIGHTOFURSOC])
-					end
-				end
-			end
-		end
-
+	if ((crhShowCatSurvival and inCatForm) or (crhShowBearSurvival and inBearForm)) then
+		crhUpdateSurvivalFrame(CRH_FRAME_BARKSKIN, CRH_SPELLID_BARKSKIN, showeffects);
+		crhUpdateSurvivalFrame(CRH_FRAME_SURVINSTINCTS, CRH_SPELLID_SURVIVAL_INSTINCTS, showeffects);
+		crhUpdateSurvivalFrame(CRH_FRAME_MIGHTOFURSOC, CRH_SPELLID_MIGHT_OF_URSOC, showeffects);
 	end
 end
-
 
 -- OnLoad: Create Frames
 function CatRotationHelperOnLoad(self)
