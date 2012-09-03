@@ -944,17 +944,15 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	end
 	
 	-- If buff is active show its timer, whether or not spell is on cd
---	if (a_BuffId) then
---		local expTime = crhGetBuffExpiration(a_BuffId);
---		if (0 ~= expTime) then
---			ChatFrame1:AddMessage("@@@@ now=" .. GetTime() .. " id=" .. a_BuffId .. " exp=" .. expTime);
---			eventList[a_FrameID] = GetImagePath(a_Image)
---			eventTimers[a_FrameID] = expTime
---			eventEffects[a_FrameID] = nil
---			eventCdTimers[a_CooldownID] = expTime
---			CatRotationHelperCdCounter:Show()
---		end
---	end
+	if (a_BuffId) then
+		local expTime = crhGetBuffExpiration(a_BuffId);
+		if (0 ~= expTime) then
+			eventList[a_FrameID] = GetImagePath(a_Image)
+			eventTimers[a_FrameID] = expTime
+			eventEffects[a_FrameID] = nil
+			return;
+		end
+	end
 
 	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
 	
@@ -984,14 +982,6 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	if (a_CooldownID) then
 		eventCdTimers[a_CooldownID] = spellDuration + spellStart
 		CatRotationHelperCdCounter:Show()
-	end
-
-	if (a_BuffId) then
-		local expTime = crhGetBuffExpiration(a_BuffId);
-		if (0 ~= expTime) then
-			eventList[a_FrameID] = GetImagePath(a_Image)
-			eventTimers[a_FrameID] = expTime
-		end
 	end
 end
 
