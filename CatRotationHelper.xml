@@ -489,8 +489,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					CatRotationHelperOptionsShowBearFaerieFire.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
 
 					CatRotationHelperOptionsShowMaulText:SetTextColor(1,1,1)
-					CatRotationHelperOptionsShowMaulText:SetText("Maul reminder")
-					CatRotationHelperOptionsShowMaul.tooltipText = "Shows an icon in the Notification Frame when Maul is ready"
+					CatRotationHelperOptionsShowMaulText:SetText("Savage Defense reminder")
+					CatRotationHelperOptionsShowMaul.tooltipText = "Shows an icon in the Notification Frame when Savage Defense is ready"
 
 					CatRotationHelperOptionsShowEnrageText:SetTextColor(1,1,1)
 					CatRotationHelperOptionsShowEnrageText:SetText("Enrage reminder")
