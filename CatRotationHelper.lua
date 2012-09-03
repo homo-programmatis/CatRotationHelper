@@ -7,27 +7,27 @@ local crhBearFrames = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRA
 local crhSurvivalFrames = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
 -- spellIDs
+local CRH_SPELLID_BARKSKIN				= 22812;
+local CRH_SPELLID_BERSERK 				= 106952;
+local CRH_SPELLID_CLEARCAST				= 16870;
+local CRH_SPELLID_ENRAGE				= 5229;
 local CRH_SPELLID_FAERIE_FIRE			= 770;
 local CRH_SPELLID_FAERIE_SWARM			= 102355;
-local CRH_SPELLID_BERSERK 				= 106952;
-local CRH_SPELLID_SAVAGE_ROAR			= 52610;
-local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
-local CRH_SPELLID_ENRAGE				= 5229;
-local CRH_SPELLID_MAUL					= 6807;
-local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
-local CRH_SPELLID_TIGERS_FURY			= 5217;
-local CRH_SPELLID_THRASH				= 77758;
-local CRH_SPELLID_BARKSKIN				= 22812;
-local CRH_SPELLID_MANGLE_BEAR			= 33878;
 local CRH_SPELLID_FERAL_CHARGE			= 102401;
+local CRH_SPELLID_LACERATE				= 33745;
+local CRH_SPELLID_MANGLE_BEAR			= 33878;
 local CRH_SPELLID_MIGHT_OF_URSOC		= 106922;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_RAKE					= 59881;
 local CRH_SPELLID_RIP					= 1079;
-local CRH_SPELLID_LACERATE				= 33745;
-local CRH_SPELLID_CLEARCAST				= 16870;
-local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
+local CRH_SPELLID_SAVAGE_DEFENSE_BUFF	= 132402;
+local CRH_SPELLID_SAVAGE_ROAR			= 52610;
+local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
+local CRH_SPELLID_THRASH				= 77758;
+local CRH_SPELLID_TIGERS_FURY			= 5217;
+local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
+local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 
 local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
 
@@ -929,12 +929,25 @@ local function crhResetNotificationFrame(a_FrameID)
 	eventEffects[a_FrameID] = nil
 end
 
-local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, a_SpellID, a_Image, a_ShowEffects)
+local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, a_SpellID, a_BuffId, a_Image, a_ShowEffects)
 	if ((not a_IsEnabled) or (not IsPlayerSpell(a_SpellID))) then
 		crhResetNotificationFrame(a_FrameID);
 		return;
 	end
 	
+	-- If buff is active show its timer, whether or not spell is on cd
+--	if (a_BuffId) then
+--		local expTime = crhGetBuffExpiration(a_BuffId);
+--		if (0 ~= expTime) then
+--			ChatFrame1:AddMessage("@@@@ now=" .. GetTime() .. " id=" .. a_BuffId .. " exp=" .. expTime);
+--			eventList[a_FrameID] = GetImagePath(a_Image)
+--			eventTimers[a_FrameID] = expTime
+--			eventEffects[a_FrameID] = nil
+--			eventCdTimers[a_CooldownID] = expTime
+--			CatRotationHelperCdCounter:Show()
+--		end
+--	end
+
 	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
 	
 	-- Unknown legacy safety code
@@ -942,7 +955,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 		crhResetNotificationFrame(a_FrameID);
 		return;
 	end
-	
+
 	-- If spell is ready show notification
 	if (0 == spellStart) then
 		if(eventList[a_FrameID] == nil) then
@@ -970,11 +983,12 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 		CatRotationHelperCdCounter:Show()
 	end
 
-	-- If the spell grants buff (ex Berserk, Enrage) - show timer
-	local expTime = crhGetBuffExpiration(a_SpellID);
-	if (0 ~= expTime) then
-		eventList[a_FrameID] = GetImagePath(a_Image)
-		eventTimers[a_FrameID] = expTime
+	if (a_BuffId) then
+		local expTime = crhGetBuffExpiration(a_BuffId);
+		if (0 ~= expTime) then
+			eventList[a_FrameID] = GetImagePath(a_Image)
+			eventTimers[a_FrameID] = expTime
+		end
 	end
 end
 
@@ -1035,15 +1049,15 @@ end
 function CatRotationHelperUpdateEvents(showeffects)
 	-- first, update eventList table
 	if (inCatForm) then
-		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
 		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, "FeralCharge.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", showeffects);
 		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", showeffects);
 	elseif (inBearForm) then
-		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
 		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, "Enrage.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, "SavageDefense.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, CRH_SPELLID_ENRAGE, "Enrage.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", showeffects);
 	end
 
 	-- second, fill event frames with information
