@@ -9,7 +9,7 @@ local crhSurvivalFrames = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_
 -- spellIDs
 local CRH_SPELLID_FAERIE_FIRE			= 770;
 local CRH_SPELLID_FAERIE_SWARM			= 102355;
-local CRH_SPELLID_BERSERK 				= 50334;
+local CRH_SPELLID_BERSERK 				= 106952;
 local CRH_SPELLID_SAVAGE_ROAR			= 52610;
 local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
 local CRH_SPELLID_ENRAGE				= 5229;
@@ -29,6 +29,12 @@ local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 
 local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
+
+local CRH_FAERIE_FIRE_SPELLID_LIST		=
+{
+	CRH_SPELLID_FAERIE_FIRE,
+	CRH_SPELLID_FAERIE_SWARM
+}
 
 local frames = {
 	CreateFrame("Frame", nil, UIParent),
@@ -872,18 +878,6 @@ function CatRotationHelperCheckBearCooldown()
 	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
 end
 
-local function crhTargetNeedFaerieFire()
-	if (0 ~= crhGetDebuffExpiration(CRH_SPELLID_FAERIE_FIRE)) then
-		return false;
-	end
-
-	if (0 ~= crhGetDebuffExpiration(CRH_SPELLID_FAERIE_SWARM)) then
-		return false;
-	end
-
-	return true;
-end
-
 -- Check for Clearcast procs - Bear & Cat
 function CatRotationHelperCheckClearcast()
 	name = UnitBuff("player", crhSpellName(CRH_SPELLID_CLEARCAST));
@@ -928,207 +922,127 @@ function CatRotationHelperCheckClearcast()
 	end
 end
 
+local function crhResetNotificationFrame(a_FrameID)
+	eventList[a_FrameID] = nil
+	eventTimers[a_FrameID] = nil
+	eventEffects[a_FrameID] = nil
+end
+
+local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, a_SpellID, a_Image, a_ShowEffects)
+	if ((not a_IsEnabled) or (not IsPlayerSpell(a_SpellID))) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
+	
+	-- Unknown legacy safety code
+	if (not spellStart) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	-- If spell is ready show notification
+	if (0 == spellStart) then
+		if(eventList[a_FrameID] == nil) then
+			eventEffects[a_FrameID] = a_ShowEffects
+		else
+			eventEffects[a_FrameID] = nil
+		end
+		
+		eventList[a_FrameID] = GetImagePath(a_Image)
+		eventTimers[a_FrameID] = nil
+		return;
+	end
+	
+	-- Prevent blinking on GCD
+	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+		return;
+	end
+	
+	eventList[a_FrameID] = nil
+	eventTimers[a_FrameID] = nil
+	eventEffects[a_FrameID] = nil
+	
+	if (a_CooldownID) then
+		eventCdTimers[a_CooldownID] = spellDuration + spellStart
+		CatRotationHelperCdCounter:Show()
+	end
+
+	-- If the spell grants buff (ex Berserk, Enrage) - show timer
+	local expTime = crhGetBuffExpiration(a_SpellID);
+	if (0 ~= expTime) then
+		eventList[a_FrameID] = GetImagePath(a_Image)
+		eventTimers[a_FrameID] = expTime
+	end
+end
+
+local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Image, a_ShowEffects)
+	if (not a_IsEnabled) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	local expTime = crhGetBuffExpiration(a_SpellID);
+	if (0 == expTime) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	-- On proc, show notification
+	if (eventList[a_FrameID] == nil) then
+		eventEffects[a_FrameID] = a_ShowEffects
+	else
+		eventEffects[a_FrameID] = nil
+	end
+	
+	eventList[a_FrameID] = GetImagePath(a_Image)
+	eventTimers[a_FrameID] = expTime
+end
+
+local function crhUpdateNotificationDebuff(a_IsEnabled, a_FrameID, a_SpellID_List, a_Image, a_ShowEffects)
+	if (not a_IsEnabled) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	local expTime = 0;
+	for i = 1, #a_SpellID_List do
+		local currExpTime = crhGetDebuffExpiration(a_SpellID_List[i]);
+		expTime = max(expTime, currExpTime);
+	end
+	
+	-- Has debuff, no notification needed
+	if (0 ~= expTime) then
+		crhResetNotificationFrame(a_FrameID);
+		return;
+	end
+	
+	-- No debuff, show notification
+	if (eventList[a_FrameID] == nil) then
+		eventEffects[a_FrameID] = a_ShowEffects
+	else
+		eventEffects[a_FrameID] = nil
+	end
+	
+	eventList[a_FrameID] = GetImagePath(a_Image)
+	eventTimers[a_FrameID] = nil
+end
+
+
 -- Event Frame - Bear & Cat
 function CatRotationHelperUpdateEvents(showeffects)
 	-- first, update eventList table
-	if(inCatForm) then
-		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate
-		
-		-- Berserk
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
-		if(spellStart ~= nil and crhShowCatBerserk) then
-			if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-				if(eventList[1] == nil) then
-					eventEffects[1] = showeffects
-				else
-					eventEffects[1] = nil
-				end
-				eventList[1] = GetImagePath("Berserk.tga")
-				eventTimers[1] = nil
-			else
-				eventList[1] = nil
-				eventTimers[1] = nil
-				eventEffects[1] = nil
-				
-				eventCdTimers[1] = spellDuration + spellStart
-				CatRotationHelperCdCounter:Show()
-
-				local expTime = crhGetBuffExpiration(CRH_SPELLID_BERSERK);
-				if (0 ~= expTime) then
-					eventList[1] = GetImagePath("Berserk.tga")
-					eventTimers[1] = expTime
-				end
-			end
-		else
-			eventList[1] = nil
-			eventTimers[1] = nil
-			eventEffects[1] = nil
-		end
-
-		-- Faerie Fire
-		if (crhShowCatFaerieFire and crhTargetNeedFaerieFire()) then
-			if(eventList[2] == nil) then
-				eventEffects[2] = showeffects
-			else
-				eventEffects[2] = nil
-			end
-			eventList[2] = GetImagePath("FaerieFire.tga")
-			eventTimers[2] = nil
-		else
-			eventList[2] = nil
-			eventTimers[2] = nil
-			eventEffects[2] = nil
-		end
-		
-		-- Feral Charge. Probably not learned.
-		if (not IsPlayerSpell(CRH_SPELLID_FERAL_CHARGE)) then
-			-- @@@@ Clean up spec changes in a better way
-			eventList[3] = nil
-		else
-			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_FERAL_CHARGE);
-			if(crhShowFeralCharge and spellStart ~= nil) then
-				if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-					if(eventList[3] == nil) then
-						eventEffects[3] = showeffects
-					else
-						eventEffects[3] = nil
-					end
-					eventList[3] = GetImagePath("FeralCharge.tga")
-					eventTimers[3] = nil
-				else
-					eventList[3] = nil
-					eventTimers[3] = nil
-					eventEffects[3] = nil
-
-					eventCdTimers[2] = spellDuration + spellStart
-					CatRotationHelperCdCounter:Show()
-				end
-			else
-				eventList[3] = nil
-				eventTimers[3] = nil
-				eventEffects[3] = nil
-			end
-		end
-		
-		-- Predator's Swiftness
-		name, rank, icon, count, debuffType, duration, expTime = UnitBuff("player", crhSpellName(CRH_SPELLID_PREDATORS_SWIFTNESS));
-		if(name and crhShowPredatorsSwiftness) then
-			if(eventList[4] == nil) then
-				eventEffects[4] = showeffects
-			else
-				eventEffects[4] = nil
-			end
-			eventList[4] = GetImagePath("PredatoryStrikes.tga")
-			eventTimers[4] = expTime
-		else
-			eventList[4] = nil
-			eventTimers[4] = nil
-			eventEffects[4] = nil
-		end
-
-	elseif(inBearForm) then
-		local spellStart, spellDuration, name, rank, icon, count, debuffType, duration, expTime, unitCaster, isStealable, shouldConsolidate
-		
-		-- Berserk
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_BERSERK);
-		if(spellStart ~= nil and crhShowBearBerserk) then
-			if(spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-				if(eventList[1] == nil) then
-					eventEffects[1] = showeffects
-				else
-					eventEffects[1] = nil
-				end
-				eventList[1] = GetImagePath("Berserk.tga")
-				eventTimers[1] = nil
-			else
-				eventList[1] = nil
-				eventTimers[1] = nil
-				eventEffects[1] = nil
-
-				eventCdTimers[1] = spellDuration + spellStart
-				CatRotationHelperCdCounter:Show()
-
-				local expTime = crhGetBuffExpiration(CRH_SPELLID_BERSERK);
-				if (0 ~= expTime) then
-					eventList[1] = GetImagePath("Berserk.tga")
-					eventTimers[1] = expTime
-				end
-			end
-		else
-			eventList[1] = nil
-			eventTimers[1] = nil
-			eventEffects[1] = nil
-		end
-
-		-- Faerie Fire
-		if (crhShowBearFaerieFire and crhTargetNeedFaerieFire()) then
-			if(eventList[2] == nil) then
-				eventEffects[2] = showeffects
-			else
-				eventEffects[2] = nil
-			end
-			eventList[2] = GetImagePath("FaerieFire.tga")
-			eventTimers[2] = nil
-		else
-			eventList[2] = nil
-			eventTimers[2] = nil
-			eventEffects[2] = nil
-		end
-
-		-- Enrage
-		if (not IsPlayerSpell(CRH_SPELLID_ENRAGE)) then
-			-- @@@@ Clean up spec changes in a better way
-			eventList[3] = nil
-		else
-			spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_ENRAGE);
-			if(crhShowEnrage and spellStart ~= nil) then
-				if(spellStart == 0) then
-					if(eventList[3] == nil) then
-						eventEffects[3] = showeffects
-					else
-						eventEffects[3] = nil
-					end
-					eventList[3] = GetImagePath("Enrage.tga")
-					eventTimers[3] = nil
-				else
-					eventList[3] = nil
-					eventTimers[3] = nil
-					eventEffects[3] = nil
-
-					eventCdTimers[3] = spellDuration + spellStart
-					CatRotationHelperCdCounter:Show()
-					
-					local expTime = crhGetBuffExpiration(CRH_SPELLID_ENRAGE);
-					if (0 ~= expTime) then
-						eventList[3] = GetImagePath("Enrage.tga")
-						eventTimers[3] = expTime
-					end
-				end
-			else
-				eventList[3] = nil
-				eventTimers[3] = nil
-				eventEffects[3] = nil
-			end
-		end
-
-		-- Maul
-		spellStart, spellDuration = GetSpellCooldown(CRH_SPELLID_MAUL);
-		if(crhShowMaul and spellStart ~= nil and spellStart == 0) then
-			if(eventList[4] == nil) then
-				eventEffects[4] = showeffects
-			else
-				eventEffects[4] = nil
-			end
-			eventList[4] = GetImagePath("Maul.tga")
-			eventTimers[4] = nil
-		else
-			eventList[4] = nil
-			eventTimers[4] = nil
-			eventEffects[4] = nil
-
-			eventCdTimers[4] = spellDuration + spellStart
-			CatRotationHelperCdCounter:Show()
-		end
+	if (inCatForm) then
+		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
+		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, "FeralCharge.tga", showeffects);
+		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", showeffects);
+	elseif (inBearForm) then
+		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
+		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, "Enrage.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowMaul, 4, 4, CRH_SPELLID_MAUL, "Maul.tga", showeffects);
 	end
 
 	-- second, fill event frames with information
