@@ -473,8 +473,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					CatRotationHelperOptionsShowPredatorsSwiftness.tooltipText = "Shows an icon in the Notification Frame during a Predator's Swiftness proc"
 
 					CatRotationHelperOptionsShowFeralChargeText:SetTextColor(1,1,1)
-					CatRotationHelperOptionsShowFeralChargeText:SetText("Feral Charge (Cat) reminder")
-					CatRotationHelperOptionsShowFeralCharge.tooltipText = "Shows an icon in the Notification Frame when Feral Charge (Cat) is ready"
+					CatRotationHelperOptionsShowFeralChargeText:SetText("Wild Charge reminder")
+					CatRotationHelperOptionsShowFeralCharge.tooltipText = "Shows an icon in the Notification Frame when Wild Charge is ready"
 
 					CatRotationHelperOptionsShowCatSurvivalText:SetTextColor(1,1,1)
 					CatRotationHelperOptionsShowCatSurvivalText:SetText("Show Survival Frame")
@@ -485,7 +485,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					CatRotationHelperOptionsShowBearBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
 
 					CatRotationHelperOptionsShowBearFaerieFireText:SetTextColor(1,1,1)
-					CatRotationHelperOptionsShowBearFaerieFireText:SetText("Faerie Fire reminder (Bear)")
+					CatRotationHelperOptionsShowBearFaerieFireText:SetText("Faerie Fire reminder")
 					CatRotationHelperOptionsShowBearFaerieFire.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
 
 					CatRotationHelperOptionsShowMaulText:SetTextColor(1,1,1)

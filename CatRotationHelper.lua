@@ -1171,7 +1171,7 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	end
 	
 	-- Spell ready
-	if (spellDuration == 0) then
+	if (spellStart == 0) then
 		showSurvivalIcon(survival[a_FrameID], a_ShowEffects)
 		return;
 	end
