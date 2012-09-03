@@ -929,6 +929,14 @@ local function crhResetNotificationFrame(a_FrameID)
 	eventEffects[a_FrameID] = nil
 end
 
+local function crhSetNotificationEffects(a_FrameID, a_ShowEffects)
+	if (eventList[a_FrameID] == nil) then
+		eventEffects[a_FrameID] = a_ShowEffects
+	else
+		eventEffects[a_FrameID] = nil
+	end
+end
+
 local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, a_SpellID, a_BuffId, a_Image, a_ShowEffects)
 	if ((not a_IsEnabled) or (not IsPlayerSpell(a_SpellID))) then
 		crhResetNotificationFrame(a_FrameID);
@@ -958,12 +966,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 
 	-- If spell is ready show notification
 	if (0 == spellStart) then
-		if(eventList[a_FrameID] == nil) then
-			eventEffects[a_FrameID] = a_ShowEffects
-		else
-			eventEffects[a_FrameID] = nil
-		end
-		
+		crhSetNotificationEffects(a_FrameID, a_ShowEffects);
 		eventList[a_FrameID] = GetImagePath(a_Image)
 		eventTimers[a_FrameID] = nil
 		return;
@@ -1005,12 +1008,7 @@ local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Im
 	end
 	
 	-- On proc, show notification
-	if (eventList[a_FrameID] == nil) then
-		eventEffects[a_FrameID] = a_ShowEffects
-	else
-		eventEffects[a_FrameID] = nil
-	end
-	
+	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
 	eventList[a_FrameID] = GetImagePath(a_Image)
 	eventTimers[a_FrameID] = expTime
 end
@@ -1034,12 +1032,7 @@ local function crhUpdateNotificationDebuff(a_IsEnabled, a_FrameID, a_SpellID_Lis
 	end
 	
 	-- No debuff, show notification
-	if (eventList[a_FrameID] == nil) then
-		eventEffects[a_FrameID] = a_ShowEffects
-	else
-		eventEffects[a_FrameID] = nil
-	end
-	
+	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
 	eventList[a_FrameID] = GetImagePath(a_Image)
 	eventTimers[a_FrameID] = nil
 end
