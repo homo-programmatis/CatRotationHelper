@@ -1143,10 +1143,6 @@ function CatRotationHelperOnLoad(self)
 	survFrame:RegisterForDrag("LeftButton")
 	survFrame:SetClampedToScreen(true)
 
-
-	SlashCmdList["CRH"] = CatRotationHelperCommand;
-	SLASH_CRH1 = "/crh";
-
 	-- setup frames
 	for i=1, #frames do
 		local frame = frames[i]
