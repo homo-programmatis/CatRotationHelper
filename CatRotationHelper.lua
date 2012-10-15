@@ -208,14 +208,14 @@ local function showEventIcon(frame)
 	end
 end
 
-local function showSurvivalIcon(frame, showeffects)
+local function showSurvivalIcon(frame, a_ShowEffects)
 	if(not frame:IsVisible() or frame.fading) then
 		frame:SetScript("OnUpdate",CatRotationHelperEventFadeFunc)
 		frame:Show()
 		frame.fading = false
 		frame.startTime = GetTime()
 		
-		if(showeffects) then
+		if(a_ShowEffects) then
 			frame.overlay.animIn:Play()
 		end	
 	end
@@ -1029,18 +1029,18 @@ end
 
 
 -- Event Frame - Bear & Cat
-function CatRotationHelperUpdateEvents(showeffects)
+function CatRotationHelperUpdateEvents(a_ShowEffects)
 	-- first, update eventList table
 	if (inCatForm) then
-		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
-		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", showeffects);
-		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
+		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", a_ShowEffects);
+		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", a_ShowEffects);
 	elseif (inBearForm) then
-		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", showeffects);
-		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, CRH_SPELLID_ENRAGE, "Enrage.tga", showeffects);
-		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", showeffects);
+		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
+		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, CRH_SPELLID_ENRAGE, "Enrage.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", a_ShowEffects);
 	end
 
 	-- second, fill event frames with information
@@ -1107,11 +1107,11 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 end
 
 -- Survival Frame - Bear & Cat
-function CatRotationHelperUpdateSurvival(showeffects)
+function CatRotationHelperUpdateSurvival(a_ShowEffects)
 	if ((crhShowCatSurvival and inCatForm) or (crhShowBearSurvival and inBearForm)) then
-		crhUpdateSurvivalFrame(CRH_FRAME_BARKSKIN, CRH_SPELLID_BARKSKIN, showeffects);
-		crhUpdateSurvivalFrame(CRH_FRAME_SURVINSTINCTS, CRH_SPELLID_SURVIVAL_INSTINCTS, showeffects);
-		crhUpdateSurvivalFrame(CRH_FRAME_MIGHTOFURSOC, CRH_SPELLID_MIGHT_OF_URSOC, showeffects);
+		crhUpdateSurvivalFrame(CRH_FRAME_BARKSKIN, CRH_SPELLID_BARKSKIN, a_ShowEffects);
+		crhUpdateSurvivalFrame(CRH_FRAME_SURVINSTINCTS, CRH_SPELLID_SURVIVAL_INSTINCTS, a_ShowEffects);
+		crhUpdateSurvivalFrame(CRH_FRAME_MIGHTOFURSOC, CRH_SPELLID_MIGHT_OF_URSOC, a_ShowEffects);
 	end
 end
 
