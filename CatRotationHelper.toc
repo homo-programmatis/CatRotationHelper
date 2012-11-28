@@ -1,4 +1,4 @@
-## Interface: 50001
+## Interface: 50100
 ## Title: CatRotationHelper
 ## Notes: CatRotationHelper
 ## SavedVariablesPerCharacter: crhShowBearSurvival, crhShowCatSurvival, crhShowBearFaerieFire, crhShowEnrage, crhShowFeralCharge, crhShowSavageDefense, crhEventAngle, crhSurvivalAngle, crhMainAngle, crhShowCatFaerieFire, crhShowCatBerserk, crhShowBearBerserk, crhShowPredatorsSwiftness, crhScale, crhEventScale, crhSurvivalScale, crhCp, crhLacCounter, crhEnableClearcast, crhShowBear, crhShowCat, crhCounterStartTime
