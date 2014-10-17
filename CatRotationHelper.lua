@@ -155,19 +155,42 @@ crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
 crhShowEnrage = true;
 
---bugfix
-local function crhSpellName(id)
-	local name = GetSpellInfo(id)
-	return name
+local function crhPrintToChat(a_Text)
+	DEFAULT_CHAT_FRAME:AddMessage("|cFF008080CatRotationHelper:|r " .. a_Text);
 end
 
-local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
+local function crhSpellName(a_SpellID)
+	local spellName = GetSpellInfo(a_SpellID);
+
+	if (not spellName) then
+		-- Happens when abilities are removed in new patch
+		crhPrintToChat("Spell not found : " .. a_SpellID);
+	end
+
+	return spellName;
+end
+
+local function crhGetTargetDebuffInfo(a_SpellID, a_MyOnly)
 	local filter = "HARMFUL";
 	if (a_MyOnly) then
 		filter = "PLAYER|" .. filter;
 	end
 	
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", crhSpellName(a_SpellID), nil, filter);
+	local spellName = crhSpellName(a_SpellID);
+	if (not spellName) then
+		return nil;
+	end
+	
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", spellName, nil, filter);
+	if (not name) then
+		return nil;
+	end
+
+	return name, stacks, expTime;
+end
+
+local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
+	local name, stacks, expTime = crhGetTargetDebuffInfo(a_SpellID, a_MyOnly);
 	if (not name) then
 		return 0;
 	end
