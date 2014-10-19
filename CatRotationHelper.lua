@@ -21,6 +21,9 @@ local CRH_SPELLID_TIGERS_FURY			= 5217;
 local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
 local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 
+local CRH_SHAPE_BEAR 					= 1;
+local CRH_SHAPE_CAT						= 2;
+
 local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
 
 local CRH_FAERIE_FIRE_SPELLID_LIST		=
@@ -307,7 +310,7 @@ function CatRotationHelperUpdateEverything()
 		CatRotationHelperHideAll()
 	end
 
-	if(GetShapeshiftForm() == 3 and crhShowCat) then
+	if(GetShapeshiftForm() == CRH_SHAPE_CAT and crhShowCat) then
 		if(inBearForm) then
 			CatRotationHelperHideAll()
 			inBearForm = false
@@ -325,7 +328,7 @@ function CatRotationHelperUpdateEverything()
 			CatRotationHelperUpdateEvents(false)
 		end
 
-	elseif(GetShapeshiftForm() == 1 and crhShowBear) then
+	elseif(GetShapeshiftForm() == CRH_SHAPE_BEAR and crhShowBear) then
 		if(inCatForm) then
 			CatRotationHelperHideAll()
 			inCatForm = false
