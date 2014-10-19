@@ -2,13 +2,11 @@
 local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_BERSERK 				= 106952;
 local CRH_SPELLID_CLEARCAST				= 16870;
-local CRH_SPELLID_ENRAGE				= 5229;
 local CRH_SPELLID_FAERIE_FIRE			= 770;
 local CRH_SPELLID_FAERIE_SWARM			= 102355;
 local CRH_SPELLID_FERAL_CHARGE			= 102401;
 local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SPELLID_MANGLE_BEAR			= 33878;
-local CRH_SPELLID_MIGHT_OF_URSOC		= 106922;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_RAKE					= 59881;
 local CRH_SPELLID_RIP					= 1079;
@@ -18,8 +16,6 @@ local CRH_SPELLID_SAVAGE_ROAR			= 52610;
 local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
 local CRH_SPELLID_THRASH				= 77758;
 local CRH_SPELLID_TIGERS_FURY			= 5217;
-local CRH_SPELLID_WEAKENED_ARMOR		= 113746;
-local CRH_SPELLID_WEAKENED_BLOWS		= 115798;
 
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
@@ -46,12 +42,12 @@ local CRH_FRAME_BEAR_UNUSED4 			= 10;
 
 local CRH_FRAME_BARKSKIN				= 1;
 local CRH_FRAME_SURVINSTINCTS			= 2;
-local CRH_FRAME_MIGHTOFURSOC 			= 3;
+local CRH_FRAME_SURV_UNUSED3 			= 3;
 
 -- change order of icons here
 local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_UNUSED3, CRH_FRAME_RAKE, CRH_FRAME_RIP}
 local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
-local g_CrhFrameOrderSurv = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
+local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
 local g_CrhFramesMain = {};
 local g_CrhFramesEvents = {};
@@ -74,10 +70,10 @@ local function InitFrames()
 	textures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury.tga");
 	blueTextures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury-Blue.tga");
 
-	-- Cat's Weakened Armor
-	g_CrhFramesMain[CRH_FRAME_CAT_WEAKARMOR] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_CAT_WEAKARMOR] = GetImagePath("WeakenedArmor.tga");
-	blueTextures[CRH_FRAME_CAT_WEAKARMOR] = GetImagePath("WeakenedArmor-Blue.tga");
+	-- Cat's Unused3
+	g_CrhFramesMain[CRH_FRAME_CAT_UNUSED3] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_CAT_UNUSED3] = nil;
+	blueTextures[CRH_FRAME_CAT_UNUSED3] = nil;
 
 	-- Cat's Savage Roar
 	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
@@ -94,10 +90,10 @@ local function InitFrames()
 	textures[CRH_FRAME_RIP] = GetImagePath("Rip.tga");
 	blueTextures[CRH_FRAME_RIP] = GetImagePath("Rip-Blue.tga");
 	
-	-- Bear's Weakened Armor
-	g_CrhFramesMain[CRH_FRAME_BEAR_WEAKARMOR] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_WEAKARMOR] = GetImagePath("WeakenedArmor.tga");
-	blueTextures[CRH_FRAME_BEAR_WEAKARMOR] = GetImagePath("WeakenedArmor-Blue.tga");
+	-- Bear's Unused5
+	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED5] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_BEAR_UNUSED5] = nil;
+	blueTextures[CRH_FRAME_BEAR_UNUSED5] = nil;
 	
 	-- Bear's Thrash
 	g_CrhFramesMain[CRH_FRAME_THRASH] = CreateFrame("Frame", nil, UIParent);
@@ -114,10 +110,10 @@ local function InitFrames()
 	textures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate.tga");
 	blueTextures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate-Blue.tga");
 
-	-- Bear's Weakened Blows
-	g_CrhFramesMain[CRH_FRAME_WEAKBLOWS] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_WEAKBLOWS] = GetImagePath("WeakenedBlows.tga");
-	blueTextures[CRH_FRAME_WEAKBLOWS] = GetImagePath("WeakenedArmor-Blue.tga");
+	-- Bear's Unused4
+	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED4] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_BEAR_UNUSED4] = nil;
+	blueTextures[CRH_FRAME_BEAR_UNUSED4] = nil;
 	
 	-- Survival: Barkskin
 	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
@@ -127,9 +123,9 @@ local function InitFrames()
 	g_CrhFramesSurv[CRH_FRAME_SURVINSTINCTS] = CreateFrame("Frame", nil, UIParent);
 	survivalTextures[CRH_FRAME_SURVINSTINCTS] = GetImagePath("SurvivalInstincts.tga");
 
-	-- Survival: Might of Ursoc
-	g_CrhFramesSurv[CRH_FRAME_MIGHTOFURSOC] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_MIGHTOFURSOC] = GetImagePath("MightOfUrsoc.tga");
+	-- Survival: Unused3
+	g_CrhFramesSurv[CRH_FRAME_SURV_UNUSED3] = CreateFrame("Frame", nil, UIParent);
+	survivalTextures[CRH_FRAME_SURV_UNUSED3] = nil;
 	
 	-- Events
 	g_CrhFramesEvents[1] = CreateFrame("Frame", nil, UIParent);
@@ -423,6 +419,14 @@ function CatRotationHelperUnlock()
 
 end
 
+function CrhSetTexture(a_Frame, a_Texture)
+	if (not a_Texture) then
+		return
+	end
+
+	a_Frame:SetTexture(a_Texture)
+end
+
 function CatRotationHelperLock()
 	if(not unlocked) then
 		return
@@ -441,7 +445,7 @@ function CatRotationHelperLock()
 
 		frame:Hide()
 		frame.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
-		frame.icon:SetTexture(textures[i])
+		CrhSetTexture(frame.icon, textures[i]);
 		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe:Hide();
@@ -943,8 +947,8 @@ function CatRotationHelperCheckClearcast()
 		if(not clearCast) then
 			for i=1, #g_CrhFramesMain do
 				g_CrhFramesMain[i].cpicon:SetTexture(GetImagePath("Cp-Blue.tga"))
-				g_CrhFramesMain[i].icon:SetTexture(blueTextures[i])
-				g_CrhFramesMain[i].overlay.icon:SetTexture(blueTextures[i])
+				CrhSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
+				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
 
 				if(g_CrhFramesMain[i].hascp) then
 					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
@@ -962,8 +966,8 @@ function CatRotationHelperCheckClearcast()
 		if(clearCast) then
 			for i=1,#g_CrhFramesMain do
 				g_CrhFramesMain[i].cpicon:SetTexture(GetImagePath("Cp.tga"))
-				g_CrhFramesMain[i].icon:SetTexture(textures[i])
-				g_CrhFramesMain[i].overlay.icon:SetTexture(textures[i])
+				CrhSetTexture(g_CrhFramesMain[i].icon, textures[i]);
+				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
 
 				if(g_CrhFramesMain[i].hascp) then
 					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
@@ -1096,7 +1100,6 @@ function CatRotationHelperUpdateEvents(a_ShowEffects)
 	elseif (inBearForm) then
 		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
 		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
-		crhUpdateNotificationSpell(crhShowEnrage, 3, 3, CRH_SPELLID_ENRAGE, CRH_SPELLID_ENRAGE, "Enrage.tga", a_ShowEffects);
 		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", a_ShowEffects);
 	end
 
@@ -1168,7 +1171,6 @@ function CatRotationHelperUpdateSurvival(a_ShowEffects)
 	if ((crhShowCatSurvival and inCatForm) or (crhShowBearSurvival and inBearForm)) then
 		crhUpdateSurvivalFrame(CRH_FRAME_BARKSKIN, CRH_SPELLID_BARKSKIN, a_ShowEffects);
 		crhUpdateSurvivalFrame(CRH_FRAME_SURVINSTINCTS, CRH_SPELLID_SURVIVAL_INSTINCTS, a_ShowEffects);
-		crhUpdateSurvivalFrame(CRH_FRAME_MIGHTOFURSOC, CRH_SPELLID_MIGHT_OF_URSOC, a_ShowEffects);
 	end
 end
 
@@ -1231,11 +1233,11 @@ function CatRotationHelperOnLoad(self)
 		frame.icon = frame:CreateTexture(nil,"ARTWORK")
 		frame.icon:SetAllPoints(frame)
 		frame.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
-		frame.icon:SetTexture(textures[i])
+		CrhSetTexture(frame.icon, textures[i]);
 
 		-- buff fade/gain effects
 		frame.overlay = CreateFrame("Frame", "CatRotationHelperFrameAlert" .. i, frame, "CatRotationHelperEventAlert")
-		frame.overlay.icon:SetTexture(textures[i])
+		CrhSetTexture(frame.overlay.icon, textures[i]);
 		frame.overlay.icon:SetBlendMode("ADD");
 		frame.overlay:SetSize(24*1.5, 24*1.5)
 		frame.overlay:SetPoint("TOPLEFT", frame, "TOPLEFT", -24*0.25, 24*0.25)
@@ -1304,7 +1306,7 @@ function CatRotationHelperOnLoad(self)
 		event.startTime = nil
 
 		event.overlay = CreateFrame("Frame", "CatRotationHelperSurvivalAlert" .. i, event, "CatRotationHelperEventAlert")
-		event.overlay.icon:SetTexture(survivalTextures[i])
+		CrhSetTexture(event.overlay.icon, survivalTextures[i]);
 		event.overlay.icon:SetBlendMode("ADD");
 		event.overlay:SetSize(28*1.5, 28*1.5)
 		event.overlay:SetPoint("TOPLEFT", event, "TOPLEFT", -28*0.25, 28*0.25)
@@ -1313,7 +1315,7 @@ function CatRotationHelperOnLoad(self)
 		event.icon = event:CreateTexture(nil,"ARTWORK")
 		event.icon:SetAllPoints(event)
 		event.icon:SetVertexColor(upcolor[1], upcolor[2], upcolor[3], upcolor[4]);
-		event.icon:SetTexture(survivalTextures[i])
+		CrhSetTexture(event.icon, survivalTextures[i]);
 
 		event.countframe = CreateFrame("Frame", nil, event);
 		event.countframe:SetScript("OnUpdate", CatRotationFrameEventCounter)
