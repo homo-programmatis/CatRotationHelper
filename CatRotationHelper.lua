@@ -1,11 +1,3 @@
-local CRH_FRAME_TIGERSFURY, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_BEAR_WEAKARMOR, CRH_FRAME_THRASH, CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_WEAKBLOWS = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-local CRH_FRAME_BARKSKIN, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_MIGHTOFURSOC = 1, 2, 3;
-
--- change order of icons here
-local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_WEAKARMOR, CRH_FRAME_RAKE, CRH_FRAME_RIP}
-local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_WEAKBLOWS, CRH_FRAME_BEAR_WEAKARMOR}
-local g_CrhFrameOrderSurv = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
-
 -- spellIDs
 local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_BERSERK 				= 106952;
@@ -37,31 +29,113 @@ local CRH_FAERIE_FIRE_SPELLID_LIST		=
 	CRH_SPELLID_FAERIE_SWARM
 }
 
-local g_CrhFramesMain = {
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent)
-}
+-- Frame IDs
+local CRH_FRAME_TIGERSFURY				= 1;
+local CRH_FRAME_CAT_UNUSED3				= 2;
+local CRH_FRAME_SAVAGEROAR				= 3;
+local CRH_FRAME_RAKE					= 4;
+local CRH_FRAME_RIP						= 5;
+local CRH_FRAME_BEAR_UNUSED5			= 6;
+local CRH_FRAME_THRASH					= 7;
+local CRH_FRAME_BEAR_MANGLE				= 8;
+local CRH_FRAME_LACERATE				= 9;
+local CRH_FRAME_BEAR_UNUSED4 			= 10;
 
-local g_CrhFramesEvents = {
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent)
-}
+local CRH_FRAME_BARKSKIN				= 1;
+local CRH_FRAME_SURVINSTINCTS			= 2;
+local CRH_FRAME_MIGHTOFURSOC 			= 3;
 
-local g_CrhFramesSurv = {
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent),
-	CreateFrame("Frame", nil, UIParent)
-}
+-- change order of icons here
+local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_UNUSED3, CRH_FRAME_RAKE, CRH_FRAME_RIP}
+local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
+local g_CrhFrameOrderSurv = {CRH_FRAME_MIGHTOFURSOC, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
+
+local g_CrhFramesMain = {};
+local g_CrhFramesEvents = {};
+local g_CrhFramesSurv = {};
+local textures = {};
+local blueTextures = {};
+local survivalTextures = {};
+
+local function crhPrintToChat(a_Text)
+	DEFAULT_CHAT_FRAME:AddMessage("|cFF008080CatRotationHelper:|r " .. a_Text);
+end
+
+local function GetImagePath(a_ImageName)
+	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
+end
+
+local function InitFrames()
+	-- Cat's Tiger's fury
+	g_CrhFramesMain[CRH_FRAME_TIGERSFURY] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury.tga");
+	blueTextures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury-Blue.tga");
+
+	-- Cat's Weakened Armor
+	g_CrhFramesMain[CRH_FRAME_CAT_WEAKARMOR] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_CAT_WEAKARMOR] = GetImagePath("WeakenedArmor.tga");
+	blueTextures[CRH_FRAME_CAT_WEAKARMOR] = GetImagePath("WeakenedArmor-Blue.tga");
+
+	-- Cat's Savage Roar
+	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_SAVAGEROAR] = GetImagePath("SavageRoar.tga");
+	blueTextures[CRH_FRAME_SAVAGEROAR] = GetImagePath("SavageRoar-Blue.tga");
+
+	-- Cat's Rake
+	g_CrhFramesMain[CRH_FRAME_RAKE] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_RAKE] = GetImagePath("Rake.tga");
+	blueTextures[CRH_FRAME_RAKE] = GetImagePath("Rake-Blue.tga");
+
+	-- Cat's Rip
+	g_CrhFramesMain[CRH_FRAME_RIP] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_RIP] = GetImagePath("Rip.tga");
+	blueTextures[CRH_FRAME_RIP] = GetImagePath("Rip-Blue.tga");
+	
+	-- Bear's Weakened Armor
+	g_CrhFramesMain[CRH_FRAME_BEAR_WEAKARMOR] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_BEAR_WEAKARMOR] = GetImagePath("WeakenedArmor.tga");
+	blueTextures[CRH_FRAME_BEAR_WEAKARMOR] = GetImagePath("WeakenedArmor-Blue.tga");
+	
+	-- Bear's Thrash
+	g_CrhFramesMain[CRH_FRAME_THRASH] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_THRASH] = GetImagePath("Thrash.tga");
+	blueTextures[CRH_FRAME_THRASH] = GetImagePath("Thrash-Blue.tga");
+
+	-- Bear's Mangle
+	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_BEAR_MANGLE] = GetImagePath("Mangle.tga");
+	blueTextures[CRH_FRAME_BEAR_MANGLE] = GetImagePath("Mangle-Blue.tga");
+
+	-- Bear's Lacerate
+	g_CrhFramesMain[CRH_FRAME_LACERATE] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate.tga");
+	blueTextures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate-Blue.tga");
+
+	-- Bear's Weakened Blows
+	g_CrhFramesMain[CRH_FRAME_WEAKBLOWS] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_WEAKBLOWS] = GetImagePath("WeakenedBlows.tga");
+	blueTextures[CRH_FRAME_WEAKBLOWS] = GetImagePath("WeakenedArmor-Blue.tga");
+	
+	-- Survival: Barkskin
+	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
+	survivalTextures[CRH_FRAME_BARKSKIN] = GetImagePath("Barkskin.tga");
+
+	-- Survival: Survival instincts
+	g_CrhFramesSurv[CRH_FRAME_SURVINSTINCTS] = CreateFrame("Frame", nil, UIParent);
+	survivalTextures[CRH_FRAME_SURVINSTINCTS] = GetImagePath("SurvivalInstincts.tga");
+
+	-- Survival: Might of Ursoc
+	g_CrhFramesSurv[CRH_FRAME_MIGHTOFURSOC] = CreateFrame("Frame", nil, UIParent);
+	survivalTextures[CRH_FRAME_MIGHTOFURSOC] = GetImagePath("MightOfUrsoc.tga");
+	
+	-- Events
+	g_CrhFramesEvents[1] = CreateFrame("Frame", nil, UIParent);
+	g_CrhFramesEvents[2] = CreateFrame("Frame", nil, UIParent);
+	g_CrhFramesEvents[3] = CreateFrame("Frame", nil, UIParent);
+	g_CrhFramesEvents[4] = CreateFrame("Frame", nil, UIParent);
+end
+
+InitFrames();
 
 eventCdTimers = {
 --	nil, -- Berserk
@@ -74,42 +148,6 @@ survivalCdTimers = {
 --	nil, -- Barkskin
 --	nil, -- Survival Instincts
 --	nil, -- Might of ursoc
-}
-
-local function GetImagePath(a_ImageName)
-	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
-end
-
-local textures = {
-	GetImagePath("TigersFury.tga"),
-	GetImagePath("WeakenedArmor.tga"),
-	GetImagePath("SavageRoar.tga"),
-	GetImagePath("Rake.tga"),
-	GetImagePath("Rip.tga"),
-	GetImagePath("WeakenedArmor.tga"),
-	GetImagePath("Thrash.tga"),
-	GetImagePath("Mangle.tga"),
-	GetImagePath("Lacerate.tga"),
-	GetImagePath("WeakenedBlows.tga")
-}
-
-local blueTextures = {
-	GetImagePath("TigersFury-Blue.tga"),
-	GetImagePath("WeakenedArmor-Blue.tga"),
-	GetImagePath("SavageRoar-Blue.tga"),
-	GetImagePath("Rake-Blue.tga"),
-	GetImagePath("Rip-Blue.tga"),
-	GetImagePath("WeakenedArmor-Blue.tga"),
-	GetImagePath("Thrash-Blue.tga"),
-	GetImagePath("Mangle-Blue.tga"),
-	GetImagePath("Lacerate-Blue.tga"),
-	GetImagePath("WeakenedBlows-Blue.tga")
-}
-
-local survivalTextures = {
-	GetImagePath("Barkskin.tga"),
-	GetImagePath("SurvivalInstincts.tga"),
-	GetImagePath("MightOfUrsoc.tga")
 }
 
 --                      r    g    b    a
@@ -154,10 +192,6 @@ crhShowPredatorsSwiftness = true;
 crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
 crhShowEnrage = true;
-
-local function crhPrintToChat(a_Text)
-	DEFAULT_CHAT_FRAME:AddMessage("|cFF008080CatRotationHelper:|r " .. a_Text);
-end
 
 local function crhSpellName(a_SpellID)
 	local spellName = GetSpellInfo(a_SpellID);
