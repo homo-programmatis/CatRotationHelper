@@ -14,7 +14,8 @@ local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
 local CRH_SPELLID_SAVAGE_DEFENSE_BUFF	= 132402;
 local CRH_SPELLID_SAVAGE_ROAR			= 52610;
 local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
-local CRH_SPELLID_THRASH				= 77758;
+local CRH_SPELLID_THRASH_BEAR			= 77758;
+local CRH_SPELLID_THRASH_CAT			= 106830;
 local CRH_SPELLID_TIGERS_FURY			= 5217;
 
 local CRH_SHAPE_BEAR 					= 1;
@@ -30,12 +31,12 @@ local CRH_FAERIE_FIRE_SPELLID_LIST		=
 
 -- Frame IDs
 local CRH_FRAME_TIGERSFURY				= 1;
-local CRH_FRAME_CAT_UNUSED3				= 2;
+local CRH_FRAME_CAT_THRASH				= 2;
 local CRH_FRAME_SAVAGEROAR				= 3;
 local CRH_FRAME_RAKE					= 4;
 local CRH_FRAME_RIP						= 5;
 local CRH_FRAME_BEAR_UNUSED5			= 6;
-local CRH_FRAME_THRASH					= 7;
+local CRH_FRAME_BEAR_THRASH				= 7;
 local CRH_FRAME_BEAR_MANGLE				= 8;
 local CRH_FRAME_LACERATE				= 9;
 local CRH_FRAME_BEAR_UNUSED4 			= 10;
@@ -45,8 +46,8 @@ local CRH_FRAME_SURVINSTINCTS			= 2;
 local CRH_FRAME_SURV_UNUSED3 			= 3;
 
 -- change order of icons here
-local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_CAT_UNUSED3, CRH_FRAME_RAKE, CRH_FRAME_RIP}
-local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
+local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_CAT_THRASH}
+local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_BEAR_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
 local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
 local g_CrhFramesMain = {};
@@ -70,10 +71,10 @@ local function InitFrames()
 	textures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury.tga");
 	blueTextures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury-Blue.tga");
 
-	-- Cat's Unused3
-	g_CrhFramesMain[CRH_FRAME_CAT_UNUSED3] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_CAT_UNUSED3] = nil;
-	blueTextures[CRH_FRAME_CAT_UNUSED3] = nil;
+	-- Cat's Thrash
+	g_CrhFramesMain[CRH_FRAME_CAT_THRASH] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_CAT_THRASH] = GetImagePath("Thrash.tga");
+	blueTextures[CRH_FRAME_CAT_THRASH] = GetImagePath("Thrash-Blue.tga");
 
 	-- Cat's Savage Roar
 	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
@@ -96,9 +97,9 @@ local function InitFrames()
 	blueTextures[CRH_FRAME_BEAR_UNUSED5] = nil;
 	
 	-- Bear's Thrash
-	g_CrhFramesMain[CRH_FRAME_THRASH] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_THRASH] = GetImagePath("Thrash.tga");
-	blueTextures[CRH_FRAME_THRASH] = GetImagePath("Thrash-Blue.tga");
+	g_CrhFramesMain[CRH_FRAME_BEAR_THRASH] = CreateFrame("Frame", nil, UIParent);
+	textures[CRH_FRAME_BEAR_THRASH] = GetImagePath("Thrash.tga");
+	blueTextures[CRH_FRAME_BEAR_THRASH] = GetImagePath("Thrash-Blue.tga");
 
 	-- Bear's Mangle
 	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
@@ -893,6 +894,7 @@ function CatRotationHelperCheckCatBuffs()
 end
 
 function CatRotationHelperCheckCatDebuffs()
+	crhUpdateFrameFromDebuff(CRH_FRAME_CAT_THRASH, CRH_SPELLID_THRASH_CAT, nil, true);
 	crhUpdateFrameFromDebuff(CRH_FRAME_RAKE, CRH_SPELLID_RAKE, nil, true);
 	crhUpdateFrameFromDebuff(CRH_FRAME_RIP, CRH_SPELLID_RIP, nil, true);
 end
@@ -932,11 +934,11 @@ local function crhUpdateLacerate()
 end
 
 function CatRotationHelperCheckBearDebuffs()
+	crhUpdateFrameFromDebuff(CRH_FRAME_BEAR_THRASH, CRH_SPELLID_THRASH_BEAR, nil, true);
 	crhUpdateLacerate();
 end
 
 function CatRotationHelperCheckBearCooldown()
-	crhUpdateFrameFromSkill(CRH_FRAME_THRASH, CRH_SPELLID_THRASH);
 	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
 end
 
