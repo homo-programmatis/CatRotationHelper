@@ -907,7 +907,7 @@ end
 ------------------------------
 
 local function crhUpdateLacerate()
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", crhSpellName(CRH_SPELLID_LACERATE), nil, "PLAYER|HARMFUL");
+	local name, stacks, expTime = crhGetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
 		CatRotationFrameStopCounter(g_CrhFramesMain[CRH_FRAME_LACERATE]);
 		CatRotationHelperLacerateCounter:Hide();
