@@ -5,5 +5,6 @@
 _Module.lua
 _Helpers.lua
 _FrameCalc.lua
+_FrameDraw.lua
 CatRotationHelper.lua
 CatRotationHelper.xml
