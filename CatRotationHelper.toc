@@ -8,4 +8,5 @@ _Module.lua
 _Constants.lua
 
 # Addon's code
+_Helpers.lua
 CatRotationHelper.xml

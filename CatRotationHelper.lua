@@ -59,39 +59,31 @@ local textures = {};
 local blueTextures = {};
 local survivalTextures = {};
 
-local function crhPrintToChat(a_Text)
-	DEFAULT_CHAT_FRAME:AddMessage("|cFF008080CatRotationHelper:|r " .. a_Text);
-end
-
-local function GetImagePath(a_ImageName)
-	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
-end
-
 local function InitFrames()
 	-- Cat's Tiger's fury
 	g_CrhFramesMain[CRH_FRAME_TIGERSFURY] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury.tga");
-	blueTextures[CRH_FRAME_TIGERSFURY] = GetImagePath("TigersFury-Blue.tga");
+	textures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury.tga");
+	blueTextures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury-Blue.tga");
 
 	-- Cat's Thrash
 	g_CrhFramesMain[CRH_FRAME_CAT_THRASH] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_CAT_THRASH] = GetImagePath("Thrash.tga");
-	blueTextures[CRH_FRAME_CAT_THRASH] = GetImagePath("Thrash-Blue.tga");
+	textures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash.tga");
+	blueTextures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
 
 	-- Cat's Savage Roar
 	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_SAVAGEROAR] = GetImagePath("SavageRoar.tga");
-	blueTextures[CRH_FRAME_SAVAGEROAR] = GetImagePath("SavageRoar-Blue.tga");
+	textures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar.tga");
+	blueTextures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar-Blue.tga");
 
 	-- Cat's Rake
 	g_CrhFramesMain[CRH_FRAME_RAKE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_RAKE] = GetImagePath("Rake.tga");
-	blueTextures[CRH_FRAME_RAKE] = GetImagePath("Rake-Blue.tga");
+	textures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake.tga");
+	blueTextures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake-Blue.tga");
 
 	-- Cat's Rip
 	g_CrhFramesMain[CRH_FRAME_RIP] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_RIP] = GetImagePath("Rip.tga");
-	blueTextures[CRH_FRAME_RIP] = GetImagePath("Rip-Blue.tga");
+	textures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip.tga");
+	blueTextures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip-Blue.tga");
 	
 	-- Bear's Unused5
 	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED5] = CreateFrame("Frame", nil, UIParent);
@@ -100,18 +92,18 @@ local function InitFrames()
 	
 	-- Bear's Thrash
 	g_CrhFramesMain[CRH_FRAME_BEAR_THRASH] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_THRASH] = GetImagePath("Thrash.tga");
-	blueTextures[CRH_FRAME_BEAR_THRASH] = GetImagePath("Thrash-Blue.tga");
+	textures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash.tga");
+	blueTextures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
 
 	-- Bear's Mangle
 	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_MANGLE] = GetImagePath("Mangle.tga");
-	blueTextures[CRH_FRAME_BEAR_MANGLE] = GetImagePath("Mangle-Blue.tga");
+	textures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle.tga");
+	blueTextures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle-Blue.tga");
 
 	-- Bear's Lacerate
 	g_CrhFramesMain[CRH_FRAME_LACERATE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate.tga");
-	blueTextures[CRH_FRAME_LACERATE] = GetImagePath("Lacerate-Blue.tga");
+	textures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate.tga");
+	blueTextures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate-Blue.tga");
 
 	-- Bear's Unused4
 	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED4] = CreateFrame("Frame", nil, UIParent);
@@ -120,11 +112,11 @@ local function InitFrames()
 	
 	-- Survival: Barkskin
 	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_BARKSKIN] = GetImagePath("Barkskin.tga");
+	survivalTextures[CRH_FRAME_BARKSKIN] = g_Module.GetMyImage("Barkskin.tga");
 
 	-- Survival: Survival instincts
 	g_CrhFramesSurv[CRH_FRAME_SURVINSTINCTS] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_SURVINSTINCTS] = GetImagePath("SurvivalInstincts.tga");
+	survivalTextures[CRH_FRAME_SURVINSTINCTS] = g_Module.GetMyImage("SurvivalInstincts.tga");
 
 	-- Survival: Unused3
 	g_CrhFramesSurv[CRH_FRAME_SURV_UNUSED3] = CreateFrame("Frame", nil, UIParent);
@@ -194,24 +186,13 @@ crhShowPredatorsSwiftness = true;
 crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
 
-local function crhSpellName(a_SpellID)
-	local spellName = GetSpellInfo(a_SpellID);
-
-	if (not spellName) then
-		-- Happens when abilities are removed in new patch
-		crhPrintToChat("Spell not found : " .. a_SpellID);
-	end
-
-	return spellName;
-end
-
 local function crhGetTargetDebuffInfo(a_SpellID, a_MyOnly)
 	local filter = "HARMFUL";
 	if (a_MyOnly) then
 		filter = "PLAYER|" .. filter;
 	end
 	
-	local spellName = crhSpellName(a_SpellID);
+	local spellName = g_Module.GetSpellName(a_SpellID);
 	if (not spellName) then
 		return nil;
 	end
@@ -238,7 +219,7 @@ local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
 end
 
 local function crhGetBuffExpiration(a_SpellID)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", crhSpellName(a_SpellID));
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Module.GetSpellName(a_SpellID));
 	if (not name) then
 		return 0;
 	end
@@ -392,10 +373,10 @@ function CatRotationHelperUnlock()
 	end
 
 	-- show static event frames
-	eventList[1] = GetImagePath("Berserk.tga")
-	eventList[2] = GetImagePath("FaerieFire.tga")
-	eventList[3] = GetImagePath("FeralCharge.tga")
-	eventList[4] = GetImagePath("PredatoryStrikes.tga")
+	eventList[1] = g_Module.GetMyImage("Berserk.tga")
+	eventList[2] = g_Module.GetMyImage("FaerieFire.tga")
+	eventList[3] = g_Module.GetMyImage("FeralCharge.tga")
+	eventList[4] = g_Module.GetMyImage("PredatoryStrikes.tga")
 
 	for i=1, #g_CrhFramesEvents do
 		g_CrhFramesEvents[i]:Show()
@@ -451,7 +432,7 @@ function CatRotationHelperLock()
 		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe:Hide();
-		frame.cpicon:SetTexture(GetImagePath("Cp.tga"))
+		frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
 	end
 
 	for i=1, #g_CrhFramesEvents do
@@ -945,11 +926,11 @@ end
 
 -- Check for Clearcast procs - Bear & Cat
 function CatRotationHelperCheckClearcast()
-	name = UnitBuff("player", crhSpellName(CRH_SPELLID_CLEARCAST));
+	name = UnitBuff("player", g_Module.GetSpellName(CRH_SPELLID_CLEARCAST));
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
 			for i=1, #g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(GetImagePath("Cp-Blue.tga"))
+				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
 				CrhSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
 				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
 
@@ -968,7 +949,7 @@ function CatRotationHelperCheckClearcast()
 	else
 		if(clearCast) then
 			for i=1,#g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(GetImagePath("Cp.tga"))
+				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
 				CrhSetTexture(g_CrhFramesMain[i].icon, textures[i]);
 				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
 
@@ -1011,7 +992,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	if (a_BuffId) then
 		local expTime = crhGetBuffExpiration(a_BuffId);
 		if (0 ~= expTime) then
-			eventList[a_FrameID] = GetImagePath(a_Image)
+			eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
 			eventTimers[a_FrameID] = expTime
 			eventEffects[a_FrameID] = nil
 			return;
@@ -1029,7 +1010,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	-- If spell is ready show notification
 	if (0 == spellStart) then
 		crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-		eventList[a_FrameID] = GetImagePath(a_Image)
+		eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
 		eventTimers[a_FrameID] = nil
 		return;
 	end
@@ -1063,7 +1044,7 @@ local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Im
 	
 	-- On proc, show notification
 	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-	eventList[a_FrameID] = GetImagePath(a_Image)
+	eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
 	eventTimers[a_FrameID] = expTime
 end
 
@@ -1087,7 +1068,7 @@ local function crhUpdateNotificationDebuff(a_IsEnabled, a_FrameID, a_SpellID_Lis
 	
 	-- No debuff, show notification
 	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-	eventList[a_FrameID] = GetImagePath(a_Image)
+	eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
 	eventTimers[a_FrameID] = nil
 end
 
@@ -1230,7 +1211,7 @@ function CatRotationHelperOnLoad(self)
 		frame.cpframe:Hide();
 
 		frame.cpicon = frame.cpframe:CreateTexture(nil,"BACKGROUND")
-		frame.cpicon:SetTexture(GetImagePath("Cp.tga"))
+		frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
 		frame.cpicon:SetAllPoints(frame.cpframe)
 
 		frame.icon = frame:CreateTexture(nil,"ARTWORK")
