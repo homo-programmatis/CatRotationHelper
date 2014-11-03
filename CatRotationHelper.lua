@@ -187,47 +187,6 @@ crhShowPredatorsSwiftness = true;
 crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
 
-local function crhGetTargetDebuffInfo(a_SpellID, a_MyOnly)
-	local filter = "HARMFUL";
-	if (a_MyOnly) then
-		filter = "PLAYER|" .. filter;
-	end
-	
-	local spellName = g_Module.GetSpellName(a_SpellID);
-	if (not spellName) then
-		return nil;
-	end
-	
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitAura("target", spellName, nil, filter);
-	if (not name) then
-		return nil;
-	end
-
-	return name, stacks, expTime;
-end
-
-local function crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly)
-	local name, stacks, expTime = crhGetTargetDebuffInfo(a_SpellID, a_MyOnly);
-	if (not name) then
-		return 0;
-	end
-	
-	if (a_Stacks and (stacks ~= a_Stacks)) then
-		return 0;
-	end
-	
-	return expTime;
-end
-
-local function crhGetBuffExpiration(a_SpellID)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Module.GetSpellName(a_SpellID));
-	if (not name) then
-		return 0;
-	end
-	
-	return expTime;
-end
-
 local function CatRotationHelperFormatTime(time)
 	if (time >= 60) then
 		return ceil(time / 60).."m";
@@ -569,11 +528,11 @@ local function crhUpdateFrameWithExpiration(a_Self, a_Expiration)
 end
 
 local function crhUpdateFrameFromDebuff(a_FrameID, a_SpellID, a_Stacks, a_MyOnly)
-	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], crhGetDebuffExpiration(a_SpellID, a_Stacks, a_MyOnly))
+	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
 end
 
 local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
-	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], crhGetBuffExpiration(a_SpellID))
+	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromBuff(a_SpellID))
 end
 
 local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
@@ -891,7 +850,7 @@ end
 ------------------------------
 
 local function crhUpdateLacerate()
-	local name, stacks, expTime = crhGetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
+	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
 		CatRotationFrameStopCounter(g_CrhFramesMain[CRH_FRAME_LACERATE]);
 		CatRotationHelperLacerateCounter:Hide();
@@ -991,7 +950,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	
 	-- If buff is active show its timer, whether or not spell is on cd
 	if (a_BuffId) then
-		local expTime = crhGetBuffExpiration(a_BuffId);
+		local expTime = g_Module.CalcFrameFromBuff(a_BuffId);
 		if (0 ~= expTime) then
 			eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
 			eventTimers[a_FrameID] = expTime
@@ -1037,7 +996,7 @@ local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Im
 		return;
 	end
 	
-	local expTime = crhGetBuffExpiration(a_SpellID);
+	local expTime = g_Module.CalcFrameFromBuff(a_SpellID);
 	if (0 == expTime) then
 		crhResetNotificationFrame(a_FrameID);
 		return;
@@ -1057,7 +1016,7 @@ local function crhUpdateNotificationDebuff(a_IsEnabled, a_FrameID, a_SpellID_Lis
 	
 	local expTime = 0;
 	for i = 1, #a_SpellID_List do
-		local currExpTime = crhGetDebuffExpiration(a_SpellID_List[i]);
+		local currExpTime = g_Module.CalcFrameFromDebuff(a_SpellID_List[i]);
 		expTime = max(expTime, currExpTime);
 	end
 	
@@ -1141,7 +1100,7 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	survivalCdTimers[a_FrameID] = spellDuration + spellStart
 	CatRotationHelperCdCounter:Show()
 
-	local expTime = crhGetBuffExpiration(a_SpellID);
+	local expTime = g_Module.CalcFrameFromBuff(a_SpellID);
 	if (0 ~= expTime) then
 		showEventIcon(g_CrhFramesSurv[a_FrameID])
 		g_CrhFramesSurv[a_FrameID].countframe.endTime = expTime

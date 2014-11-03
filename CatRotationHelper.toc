@@ -4,4 +4,6 @@
 ## SavedVariablesPerCharacter: crhShowBearSurvival, crhShowCatSurvival, crhShowBearFaerieFire, crhShowFeralCharge, crhShowSavageDefense, crhEventAngle, crhSurvivalAngle, crhMainAngle, crhShowCatFaerieFire, crhShowCatBerserk, crhShowBearBerserk, crhShowPredatorsSwiftness, crhScale, crhEventScale, crhSurvivalScale, crhCp, crhLacCounter, crhEnableClearcast, crhShowBear, crhShowCat, crhCounterStartTime
 _Module.lua
 _Helpers.lua
+_FrameCalc.lua
+CatRotationHelper.lua
 CatRotationHelper.xml
