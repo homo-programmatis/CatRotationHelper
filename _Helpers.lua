@@ -19,3 +19,13 @@ end
 function g_Module.GetMyImage(a_ImageName)
 	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
 end
+
+-- Broken as of WoW 6.0.2 (Warlords of Draenor)
+function g_Module.GetGlobalCooldown()
+	local startTime, duration = GetSpellCooldown(61304);
+	if (spellStart == nil) then
+		return 0;
+	end
+	
+	return duration;
+end

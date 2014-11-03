@@ -1,6 +1,8 @@
 local THIS_ADDON_NAME="CatRotationHelper";
 local g_Module = getfenv(0)[THIS_ADDON_NAME];
 
+g_Module.GLOBAL_COOLDOWN_VALUE			= 1.6;
+
 function g_Module.GetTargetDebuffInfo(a_SpellID, a_MyOnly)
 	local filter = "HARMFUL";
 	if (a_MyOnly) then
@@ -40,4 +42,27 @@ function g_Module.CalcFrameFromBuff(a_SpellID)
 	end
 	
 	return expTime;
+end
+
+function g_Module.CalcFrameFromSkill(a_SpellID)
+	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
+	
+	if (spellStart == 0) then
+		-- No cooldown
+		return 0;
+	end
+
+	if (spellStart == nil) then
+		-- Unknown legacy safety code
+		return 0;
+	end
+	
+	if (spellDuration < g_Module.GLOBAL_COOLDOWN_VALUE) then
+		-- If spell's full cooldown is less then GCD, then it's not
+		-- on cooldown really, it's on GCD. Returning 0 here
+		-- is consistent with Buff / Debuff calculation
+		return 0;
+	end
+
+	return spellStart + spellDuration;
 end

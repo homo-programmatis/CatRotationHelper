@@ -24,8 +24,6 @@ local CRH_SPELLID_TIGERS_FURY			= 5217;
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
 
-local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
-
 local CRH_FAERIE_FIRE_SPELLID_LIST		=
 {
 	CRH_SPELLID_FAERIE_FIRE,
@@ -487,18 +485,7 @@ local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
 end
 
 local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
-	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
-	if (spellStart == nil) then
-		-- Forced reset; skill could be ready ahead of cd due to proc
-		g_Module.FrameStopTimer(g_CrhFramesMain[a_FrameID]);
-		return;
-	end
-
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
-		return;
-	end
-	
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], spellStart + spellDuration)
+	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromSkill(a_SpellID))
 end
 
 function CatRotationFrameSetMainScale()
@@ -927,7 +914,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	end
 	
 	-- Prevent blinking on GCD
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+	if (spellDuration < g_Module.GLOBAL_COOLDOWN_VALUE) then
 		return;
 	end
 	
@@ -1044,7 +1031,7 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	end
 
 	-- Prevent blinking on GCD
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+	if (spellDuration < g_Module.GLOBAL_COOLDOWN_VALUE) then
 		return;
 	end
 
