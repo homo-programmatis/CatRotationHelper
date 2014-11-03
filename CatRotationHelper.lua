@@ -476,18 +476,6 @@ function CatRotationHelperShowBear()
 	CatRotationHelperShowByFrame(g_CrhFrameOrderBear);
 end
 
-local function crhUpdateFrameFromDebuff(a_FrameID, a_SpellID, a_Stacks, a_MyOnly)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
-end
-
-local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromBuff(a_SpellID))
-end
-
-local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromSkill(a_SpellID))
-end
-
 function CatRotationFrameSetMainScale()
 	for i=1, #g_CrhFramesMain do
 		g_CrhFramesMain[i]:SetScale(crhScale);
@@ -770,17 +758,17 @@ end
 -----------------------------
 
 function CatRotationHelperCheckCatBuffs()
-	crhUpdateFrameFromBuff(CRH_FRAME_SAVAGEROAR, CRH_SPELLID_SAVAGE_ROAR);
+	g_Module.FrameUpdateFromBuff(g_CrhFramesMain[CRH_FRAME_SAVAGEROAR], CRH_SPELLID_SAVAGE_ROAR);
 end
 
 function CatRotationHelperCheckCatDebuffs()
-	crhUpdateFrameFromDebuff(CRH_FRAME_CAT_THRASH, CRH_SPELLID_THRASH_CAT, nil, true);
-	crhUpdateFrameFromDebuff(CRH_FRAME_RAKE, CRH_SPELLID_RAKE, nil, true);
-	crhUpdateFrameFromDebuff(CRH_FRAME_RIP, CRH_SPELLID_RIP, nil, true);
+	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_CAT_THRASH], CRH_SPELLID_THRASH_CAT, nil, true);
+	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_RAKE], CRH_SPELLID_RAKE, nil, true);
+	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_RIP], CRH_SPELLID_RIP, nil, true);
 end
 
 function CatRotationHelperCheckCatCooldown()
-	crhUpdateFrameFromSkill(CRH_FRAME_TIGERSFURY, CRH_SPELLID_TIGERS_FURY);
+	g_Module.FrameUpdateFromSkill(g_CrhFramesMain[CRH_FRAME_TIGERSFURY], CRH_SPELLID_TIGERS_FURY);
 end
 
 ------------------------------
@@ -814,12 +802,12 @@ local function crhUpdateLacerate()
 end
 
 function CatRotationHelperCheckBearDebuffs()
-	crhUpdateFrameFromDebuff(CRH_FRAME_BEAR_THRASH, CRH_SPELLID_THRASH_BEAR, nil, true);
+	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_BEAR_THRASH], CRH_SPELLID_THRASH_BEAR, nil, true);
 	crhUpdateLacerate();
 end
 
 function CatRotationHelperCheckBearCooldown()
-	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
+	g_Module.FrameUpdateFromSkill(g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE], CRH_SPELLID_MANGLE_BEAR);
 end
 
 -- Check for Clearcast procs - Bear & Cat
