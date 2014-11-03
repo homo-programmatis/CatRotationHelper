@@ -145,10 +145,6 @@ survivalCdTimers = {
 --	nil, -- Might of ursoc
 }
 
---                      r    g    b    a
-local fadedcolor   = {0.35,0.35,0.35,0.70};
-local upcolor      = {1.00,1.00,1.00,1.00};
-
 -- state variables
 local inCatForm = false;
 local inBearForm = false;
@@ -329,7 +325,7 @@ function CatRotationHelperUnlock()
 
 		frame:Show();
 		frame:SetAlpha(1);
-		frame.icon:SetVertexColor(upcolor[1], upcolor[2], upcolor[3], upcolor[4]);
+		g_Module.FrameDrawActive(frame.icon);
 	end
 
 	-- show static event frames
@@ -362,12 +358,20 @@ function CatRotationHelperUnlock()
 
 end
 
-function CrhSetTexture(a_Frame, a_Texture)
+function g_Module.FrameSetTexture(a_Frame, a_Texture)
 	if (not a_Texture) then
 		return
 	end
 
 	a_Frame:SetTexture(a_Texture)
+end
+
+function g_Module.FrameDrawFaded(a_Frame)
+	a_Frame:SetVertexColor(0.35, 0.35, 0.35, 0.70);
+end
+
+function g_Module.FrameDrawActive(a_Frame)
+	a_Frame:SetVertexColor(1.00, 1.00, 1.00, 1.00);
 end
 
 function CatRotationHelperLock()
@@ -387,8 +391,8 @@ function CatRotationHelperLock()
 		local frame = g_CrhFramesMain[i]
 
 		frame:Hide()
-		frame.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
-		CrhSetTexture(frame.icon, textures[i]);
+		g_Module.FrameDrawFaded(frame.icon);
+		g_Module.FrameSetTexture(frame.icon, textures[i]);
 		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe:Hide();
@@ -498,7 +502,7 @@ function CatRotationHelperUpdateFrame(self, endTime)
 		end
 		
 		self.counting = true
-		self.icon:SetVertexColor(upcolor[1], upcolor[2], upcolor[3], upcolor[4])
+		g_Module.FrameDrawActive(self.icon);
 
     	self.countframe.endTime = endTime
     	self.countframe:Show()
@@ -515,7 +519,7 @@ function CatRotationFrameStopCounter(self)
 	self.counting = false
 	self.countframe:Hide();
 	self.countframe.endTime = nil;
-	self.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
+	g_Module.FrameDrawFaded(self.icon);
 	self.overlay.animOut:Play()
 end
 
@@ -891,8 +895,8 @@ function CatRotationHelperCheckClearcast()
 		if(not clearCast) then
 			for i=1, #g_CrhFramesMain do
 				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-				CrhSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
-				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
+				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
+				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
 
 				if(g_CrhFramesMain[i].hascp) then
 					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
@@ -910,8 +914,8 @@ function CatRotationHelperCheckClearcast()
 		if(clearCast) then
 			for i=1,#g_CrhFramesMain do
 				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
-				CrhSetTexture(g_CrhFramesMain[i].icon, textures[i]);
-				CrhSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
+				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, textures[i]);
+				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
 
 				if(g_CrhFramesMain[i].hascp) then
 					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
@@ -1176,12 +1180,12 @@ function CatRotationHelperOnLoad(self)
 
 		frame.icon = frame:CreateTexture(nil,"ARTWORK")
 		frame.icon:SetAllPoints(frame)
-		frame.icon:SetVertexColor(fadedcolor[1], fadedcolor[2], fadedcolor[3], fadedcolor[4]);
-		CrhSetTexture(frame.icon, textures[i]);
+		g_Module.FrameDrawFaded(frame.icon);
+		g_Module.FrameSetTexture(frame.icon, textures[i]);
 
 		-- buff fade/gain effects
 		frame.overlay = CreateFrame("Frame", "CatRotationHelperFrameAlert" .. i, frame, "CatRotationHelperEventAlert")
-		CrhSetTexture(frame.overlay.icon, textures[i]);
+		g_Module.FrameSetTexture(frame.overlay.icon, textures[i]);
 		frame.overlay.icon:SetBlendMode("ADD");
 		frame.overlay:SetSize(24*1.5, 24*1.5)
 		frame.overlay:SetPoint("TOPLEFT", frame, "TOPLEFT", -24*0.25, 24*0.25)
@@ -1217,7 +1221,7 @@ function CatRotationHelperOnLoad(self)
 
 		event.icon = event:CreateTexture(nil,"ARTWORK")
 		event.icon:SetAllPoints(event)
-		event.icon:SetVertexColor(upcolor[1], upcolor[2], upcolor[3], upcolor[4]);
+		g_Module.FrameDrawActive(event.icon);
 
 		event.overlay = CreateFrame("Frame", "CatRotationHelperEventAlert" .. i, event, "CatRotationHelperEventAlert")
 		event.overlay.icon:SetBlendMode("ADD");
@@ -1250,7 +1254,7 @@ function CatRotationHelperOnLoad(self)
 		event.startTime = nil
 
 		event.overlay = CreateFrame("Frame", "CatRotationHelperSurvivalAlert" .. i, event, "CatRotationHelperEventAlert")
-		CrhSetTexture(event.overlay.icon, survivalTextures[i]);
+		g_Module.FrameSetTexture(event.overlay.icon, survivalTextures[i]);
 		event.overlay.icon:SetBlendMode("ADD");
 		event.overlay:SetSize(28*1.5, 28*1.5)
 		event.overlay:SetPoint("TOPLEFT", event, "TOPLEFT", -28*0.25, 28*0.25)
@@ -1258,8 +1262,8 @@ function CatRotationHelperOnLoad(self)
 		
 		event.icon = event:CreateTexture(nil,"ARTWORK")
 		event.icon:SetAllPoints(event)
-		event.icon:SetVertexColor(upcolor[1], upcolor[2], upcolor[3], upcolor[4]);
-		CrhSetTexture(event.icon, survivalTextures[i]);
+		g_Module.FrameDrawActive(event.icon);
+		g_Module.FrameSetTexture(event.icon, survivalTextures[i]);
 
 		event.countframe = CreateFrame("Frame", nil, event);
 		event.countframe:SetScript("OnUpdate", CatRotationFrameEventCounter)
