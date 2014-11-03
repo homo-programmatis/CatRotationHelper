@@ -3,9 +3,9 @@ local g_Module = getfenv(0)[THIS_ADDON_NAME];
 
 g_Module.GLOBAL_COOLDOWN_VALUE			= 1.6;
 
-function g_Module.GetTargetDebuffInfo(a_SpellID, a_MyOnly)
+function g_Module.GetTargetDebuffInfo(a_SpellID, a_CastByMe)
 	local filter = "HARMFUL";
-	if (a_MyOnly) then
+	if (a_CastByMe) then
 		filter = "PLAYER|" .. filter;
 	end
 	
@@ -22,13 +22,13 @@ function g_Module.GetTargetDebuffInfo(a_SpellID, a_MyOnly)
 	return name, stacks, expTime;
 end
 
-function g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly)
-	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(a_SpellID, a_MyOnly);
+function g_Module.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)
+	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(a_SpellID, a_CastByMe);
 	if (not name) then
 		return 0;
 	end
 	
-	if (a_Stacks and (stacks ~= a_Stacks)) then
+	if (a_Stacks and (stacks < a_MinimumStacks)) then
 		return 0;
 	end
 	

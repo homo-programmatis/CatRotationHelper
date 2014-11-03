@@ -7,5 +7,6 @@ _Helpers.lua
 _FrameCalc.lua
 _FrameDraw.lua
 _FrameLogic.lua
+LogicDruid.lua
 CatRotationHelper.lua
 CatRotationHelper.xml

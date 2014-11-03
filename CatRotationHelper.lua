@@ -9,17 +9,10 @@ local CRH_SPELLID_FAERIE_FIRE			= 770;
 local CRH_SPELLID_FAERIE_SWARM			= 102355;
 local CRH_SPELLID_FERAL_CHARGE			= 102401;
 local CRH_SPELLID_LACERATE				= 33745;
-local CRH_SPELLID_MANGLE_BEAR			= 33917;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
-local CRH_SPELLID_RAKE					= 59881;
-local CRH_SPELLID_RIP					= 1079;
 local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
 local CRH_SPELLID_SAVAGE_DEFENSE_BUFF	= 132402;
-local CRH_SPELLID_SAVAGE_ROAR			= 52610;
 local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
-local CRH_SPELLID_THRASH_BEAR			= 77758;
-local CRH_SPELLID_THRASH_CAT			= 106830;
-local CRH_SPELLID_TIGERS_FURY			= 5217;
 
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
@@ -54,60 +47,26 @@ local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CR
 local g_CrhFramesMain = {};
 local g_CrhFramesEvents = {};
 local g_CrhFramesSurv = {};
-local textures = {};
-local blueTextures = {};
 local survivalTextures = {};
 
+local function CreateFrameWithLogic(a_Logic)
+	local frame = CreateFrame("Frame", nil, UIParent);
+	frame.m_CrhLogic = a_Logic;
+	return frame;
+end
+
 local function InitFrames()
-	-- Cat's Tiger's fury
-	g_CrhFramesMain[CRH_FRAME_TIGERSFURY] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury.tga");
-	blueTextures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury-Blue.tga");
+	g_CrhFramesMain[CRH_FRAME_TIGERSFURY] 	= CreateFrameWithLogic(g_Module.LogicDruidCatTigersFury);
+	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] 	= CreateFrameWithLogic(g_Module.LogicDruidCatSavageRoar);
+	g_CrhFramesMain[CRH_FRAME_RAKE] 		= CreateFrameWithLogic(g_Module.LogicDruidCatRake);
+	g_CrhFramesMain[CRH_FRAME_RIP] 			= CreateFrameWithLogic(g_Module.LogicDruidCatRip);
+	g_CrhFramesMain[CRH_FRAME_CAT_THRASH] 	= CreateFrameWithLogic(g_Module.LogicDruidCatThrash);
 
-	-- Cat's Thrash
-	g_CrhFramesMain[CRH_FRAME_CAT_THRASH] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash.tga");
-	blueTextures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
-
-	-- Cat's Savage Roar
-	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar.tga");
-	blueTextures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar-Blue.tga");
-
-	-- Cat's Rake
-	g_CrhFramesMain[CRH_FRAME_RAKE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake.tga");
-	blueTextures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake-Blue.tga");
-
-	-- Cat's Rip
-	g_CrhFramesMain[CRH_FRAME_RIP] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip.tga");
-	blueTextures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip-Blue.tga");
-	
-	-- Bear's Unused5
-	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED5] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_UNUSED5] = nil;
-	blueTextures[CRH_FRAME_BEAR_UNUSED5] = nil;
-	
-	-- Bear's Thrash
-	g_CrhFramesMain[CRH_FRAME_BEAR_THRASH] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash.tga");
-	blueTextures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
-
-	-- Bear's Mangle
-	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle.tga");
-	blueTextures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle-Blue.tga");
-
-	-- Bear's Lacerate
-	g_CrhFramesMain[CRH_FRAME_LACERATE] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate.tga");
-	blueTextures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate-Blue.tga");
-
-	-- Bear's Unused4
-	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED4] = CreateFrame("Frame", nil, UIParent);
-	textures[CRH_FRAME_BEAR_UNUSED4] = nil;
-	blueTextures[CRH_FRAME_BEAR_UNUSED4] = nil;
+	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE]	= CreateFrameWithLogic(g_Module.LogicDruidBearMangle);
+	g_CrhFramesMain[CRH_FRAME_LACERATE]		= CreateFrameWithLogic(g_Module.LogicDruidBearLacerate);
+	g_CrhFramesMain[CRH_FRAME_BEAR_THRASH]	= CreateFrameWithLogic(g_Module.LogicDruidBearThrash);
+	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED4]	= CreateFrameWithLogic(g_Module.LogicUnusedFrame);
+	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED5]	= CreateFrameWithLogic(g_Module.LogicUnusedFrame);
 	
 	-- Survival: Barkskin
 	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
@@ -374,7 +333,7 @@ function CatRotationHelperLock()
 
 		frame:Hide()
 		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, textures[i]);
+		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
 		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 		frame.countframe:Hide();
@@ -395,7 +354,7 @@ end
 -- shows num combo point circles using frames in framesTable
 local function CatRotationHelperSetCPEffects(framesTable, num)
 	for i=1, #framesTable do
-		local frame = g_CrhFramesMain[framesTable[i]]
+		local frame = g_CrhFramesMain[framesTable[i]];
 
 		if(i <= num) then
 			if(not frame.hascp) then
@@ -758,17 +717,17 @@ end
 -----------------------------
 
 function CatRotationHelperCheckCatBuffs()
-	g_Module.FrameUpdateFromBuff(g_CrhFramesMain[CRH_FRAME_SAVAGEROAR], CRH_SPELLID_SAVAGE_ROAR);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_SAVAGEROAR]);
 end
 
 function CatRotationHelperCheckCatDebuffs()
-	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_CAT_THRASH], CRH_SPELLID_THRASH_CAT, nil, true);
-	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_RAKE], CRH_SPELLID_RAKE, nil, true);
-	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_RIP], CRH_SPELLID_RIP, nil, true);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_CAT_THRASH]);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_RAKE]);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_RIP]);
 end
 
 function CatRotationHelperCheckCatCooldown()
-	g_Module.FrameUpdateFromSkill(g_CrhFramesMain[CRH_FRAME_TIGERSFURY], CRH_SPELLID_TIGERS_FURY);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_TIGERSFURY]);
 end
 
 ------------------------------
@@ -778,14 +737,11 @@ end
 local function crhUpdateLacerate()
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
-		g_Module.FrameStopTimer(g_CrhFramesMain[CRH_FRAME_LACERATE]);
 		CatRotationHelperLacerateCounter:Hide();
 		CatRotationHelperSetBearCP(0);
 		return;
 	end
 	
-	g_Module.FrameSetExpiration(g_CrhFramesMain[CRH_FRAME_LACERATE], expTime);
-
 	-- stop possible cp animation when lacerate is refreshed
 	local i = 1;
 	for i=1, #g_CrhFrameOrderBear do
@@ -802,12 +758,13 @@ local function crhUpdateLacerate()
 end
 
 function CatRotationHelperCheckBearDebuffs()
-	g_Module.FrameUpdateFromDebuff(g_CrhFramesMain[CRH_FRAME_BEAR_THRASH], CRH_SPELLID_THRASH_BEAR, nil, true);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_BEAR_THRASH]);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_LACERATE]);
 	crhUpdateLacerate();
 end
 
 function CatRotationHelperCheckBearCooldown()
-	g_Module.FrameUpdateFromSkill(g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE], CRH_SPELLID_MANGLE_BEAR);
+	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE]);
 end
 
 -- Check for Clearcast procs - Bear & Cat
@@ -816,16 +773,18 @@ function CatRotationHelperCheckClearcast()
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
 			for i=1, #g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
+				local frame = g_CrhFramesMain[i];
 
-				if(g_CrhFramesMain[i].hascp) then
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
+				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
+				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.TextureSpecial);
+				g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.TextureSpecial);
+
+				if(frame.hascp) then
+					frame.countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
+					frame.countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
 				else
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
+					frame.countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
+					frame.countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
 				end
 			end
 
@@ -835,16 +794,18 @@ function CatRotationHelperCheckClearcast()
 	else
 		if(clearCast) then
 			for i=1,#g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, textures[i]);
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
+				local frame = g_CrhFramesMain[i];
 
-				if(g_CrhFramesMain[i].hascp) then
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
+				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
+				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
+				g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
+
+				if(frame.hascp) then
+					frame.countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
+					frame.countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
 				else
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
+					frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
+					frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 				end
 
 			end
@@ -1103,11 +1064,11 @@ function CatRotationHelperOnLoad(self)
 		frame.icon = frame:CreateTexture(nil,"ARTWORK")
 		frame.icon:SetAllPoints(frame)
 		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, textures[i]);
+		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
 
 		-- buff fade/gain effects
 		frame.overlay = CreateFrame("Frame", "CatRotationHelperFrameAlert" .. i, frame, "CatRotationHelperEventAlert")
-		g_Module.FrameSetTexture(frame.overlay.icon, textures[i]);
+		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
 		frame.overlay.icon:SetBlendMode("ADD");
 		frame.overlay:SetSize(24*1.5, 24*1.5)
 		frame.overlay:SetPoint("TOPLEFT", frame, "TOPLEFT", -24*0.25, 24*0.25)
