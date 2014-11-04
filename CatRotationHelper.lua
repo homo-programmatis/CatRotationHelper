@@ -190,6 +190,16 @@ local function hideEventIcon(frame)
 	end
 end
 
+local function UpdateFramesByType(a_FrameTable, a_Type)
+	for i = 1, #a_FrameTable do
+		local frame = g_CrhFramesMain[a_FrameTable[i]];
+	
+		if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
+			g_Module.FrameUpdateFromLogic(frame);
+		end
+	end
+end
+
 function CatRotationHelperUpdateEverything()
 	if(not crhIsAddonUseful()) then
 		return
@@ -212,9 +222,7 @@ function CatRotationHelperUpdateEverything()
 
 		if(enemyTarget) then
 			CatRotationHelperShowCat();
-			CatRotationHelperCheckCatBuffs();
-			CatRotationHelperCheckCatDebuffs();
-			CatRotationHelperCheckCatCooldown()
+			UpdateFramesByType(g_CrhFrameOrderCat);
 			CatRotationHelperSetCatCP(GetComboPoints("player"));
 			CatRotationHelperUpdateSurvival(false)
 			CatRotationHelperUpdateEvents(false)
@@ -230,8 +238,8 @@ function CatRotationHelperUpdateEverything()
 
 		if(enemyTarget) then
 			CatRotationHelperShowBear();
-			CatRotationHelperCheckBearDebuffs();
-			CatRotationHelperCheckBearCooldown();
+			UpdateFramesByType(g_CrhFrameOrderBear);
+			crhUpdateLacerate();
 			CatRotationHelperUpdateSurvival(false)
 			CatRotationHelperUpdateEvents(false)
 		end
@@ -712,29 +720,11 @@ function CatRotationHelperHideAll()
 	end
 end
 
------------------------------
--- Cat - Main Frame Checks --
------------------------------
-
-function CatRotationHelperCheckCatBuffs()
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_SAVAGEROAR]);
-end
-
-function CatRotationHelperCheckCatDebuffs()
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_CAT_THRASH]);
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_RAKE]);
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_RIP]);
-end
-
-function CatRotationHelperCheckCatCooldown()
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_TIGERSFURY]);
-end
-
 ------------------------------
 -- Bear - Main Frame Checks --
 ------------------------------
 
-local function crhUpdateLacerate()
+function crhUpdateLacerate()
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
 		CatRotationHelperLacerateCounter:Hide();
@@ -755,16 +745,6 @@ local function crhUpdateLacerate()
 
 	-- set cp effects
 	CatRotationHelperSetBearCP(stacks);
-end
-
-function CatRotationHelperCheckBearDebuffs()
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_BEAR_THRASH]);
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_LACERATE]);
-	crhUpdateLacerate();
-end
-
-function CatRotationHelperCheckBearCooldown()
-	g_Module.FrameUpdateFromLogic(g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE]);
 end
 
 -- Check for Clearcast procs - Bear & Cat
@@ -1177,18 +1157,19 @@ function CatRotationHelperOnEvent (self, event, ...)
 		if(enemyTarget) then
 			if(inCatForm) then
 				if(arg1 == "player") then
-					CatRotationHelperCheckCatBuffs();
+					UpdateFramesByType(g_CrhFrameOrderCat, "Buff");
 					CatRotationHelperCheckClearcast();
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
-					CatRotationHelperCheckCatDebuffs();
+					UpdateFramesByType(g_CrhFrameOrderCat, "Debuff");
 					CatRotationHelperUpdateEvents(true)
 				end
 			elseif(inBearForm) then
 				if(arg1 == "target") then
-					CatRotationHelperCheckBearDebuffs();
+					UpdateFramesByType(g_CrhFrameOrderBear, "Debuff");
 					CatRotationHelperUpdateEvents(true)
+					crhUpdateLacerate();
 				elseif(arg1 == "player") then
 					CatRotationHelperCheckClearcast();
 					CatRotationHelperUpdateSurvival(true)
@@ -1205,11 +1186,11 @@ function CatRotationHelperOnEvent (self, event, ...)
 	elseif(event == "SPELL_UPDATE_COOLDOWN") then
 		if(enemyTarget) then
 			if(inBearForm) then
-				CatRotationHelperCheckBearCooldown()
+				UpdateFramesByType(g_CrhFrameOrderBear, "Skill");
 				CatRotationHelperUpdateSurvival(true)
 				CatRotationHelperUpdateEvents(true)
 			elseif(inCatForm) then
-				CatRotationHelperCheckCatCooldown();
+				UpdateFramesByType(g_CrhFrameOrderCat, "Skill");
 				CatRotationHelperUpdateSurvival(true)
 				CatRotationHelperUpdateEvents(true)
 			end
