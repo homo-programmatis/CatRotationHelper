@@ -220,7 +220,6 @@
 							CatRotationHelperOptionsShowBearBerserk:Enable()
 							CatRotationHelperOptionsShowBearFaerieFire:Enable()
 							CatRotationHelperOptionsShowMaul:Enable()
-							CatRotationHelperOptionsShowEnrage:Enable()
 							CatRotationHelperOptionsShowBearSurvival:Enable()
 						else
 							crhShowBear = false
@@ -228,7 +227,6 @@
 							CatRotationHelperOptionsShowBearBerserk:Disable()
 							CatRotationHelperOptionsShowBearFaerieFire:Disable()
 							CatRotationHelperOptionsShowMaul:Disable()
-							CatRotationHelperOptionsShowEnrage:Disable()
 							CatRotationHelperOptionsShowBearSurvival:Disable()
 						end
 
@@ -316,30 +314,11 @@
 				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelperOptionsShowEnrage" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-270"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowEnrage = true
-						else
-							crhShowEnrage = false
-						end
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-
 			<CheckButton name="CatRotationHelperOptionsShowBearSurvival" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
 						<Offset>
-							<AbsDimension x="15" y="-300"/>
+							<AbsDimension x="15" y="-270"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -502,10 +481,6 @@
 					CatRotationHelperOptionsShowMaulText:SetText("Savage Defense reminder")
 					CatRotationHelperOptionsShowMaul.tooltipText = "Shows an icon in the Notification Frame when Savage Defense is ready"
 
-					CatRotationHelperOptionsShowEnrageText:SetTextColor(1,1,1)
-					CatRotationHelperOptionsShowEnrageText:SetText("Enrage reminder")
-					CatRotationHelperOptionsShowEnrage.tooltipText = "Shows an icon in the Notification Frame when Enrage is ready"
-
 					CatRotationHelperOptionsShowBearSurvivalText:SetTextColor(1,1,1)
 					CatRotationHelperOptionsShowBearSurvivalText:SetText("Show Survival Frame")
 					CatRotationHelperOptionsShowBearSurvival.tooltipText = "Show Survival Frame in Bear Form"
@@ -540,7 +515,6 @@
 					CatRotationHelperOptionsShowBearBerserk:Disable()
 					CatRotationHelperOptionsShowMaul:Disable()
 					CatRotationHelperOptionsShowBearFaerieFire:Disable()
-					CatRotationHelperOptionsShowEnrage:Disable()
 					CatRotationHelperOptionsShowBearSurvival:Disable()
 				end
 				
@@ -555,7 +529,6 @@
 				CatRotationHelperOptionsShowBearBerserk:SetChecked(crhShowBearBerserk)
 				CatRotationHelperOptionsShowBearFaerieFire:SetChecked(crhShowBearFaerieFire)
 				CatRotationHelperOptionsShowMaul:SetChecked(crhShowSavageDefense)
-				CatRotationHelperOptionsShowEnrage:SetChecked(crhShowEnrage)
 				CatRotationHelperOptionsShowBearSurvival:SetChecked(crhShowBearSurvival)
 				CatRotationHelperOptionsShowCatSurvival:SetChecked(crhShowCatSurvival)
 

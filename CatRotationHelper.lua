@@ -191,7 +191,6 @@ crhShowBearBerserk = true;
 crhShowPredatorsSwiftness = true;
 crhShowSavageDefense = true;
 crhShowBearFaerieFire = true;
-crhShowEnrage = true;
 
 local function crhSpellName(a_SpellID)
 	local spellName = GetSpellInfo(a_SpellID);

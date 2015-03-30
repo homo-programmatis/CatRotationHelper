@@ -1,5 +1,5 @@
 ## Interface: 60000
 ## Title: CatRotationHelper
 ## Notes: Shows combo point and cooldown indicators for Cats and Bears
-## SavedVariablesPerCharacter: crhShowBearSurvival, crhShowCatSurvival, crhShowBearFaerieFire, crhShowEnrage, crhShowFeralCharge, crhShowSavageDefense, crhEventAngle, crhSurvivalAngle, crhMainAngle, crhShowCatFaerieFire, crhShowCatBerserk, crhShowBearBerserk, crhShowPredatorsSwiftness, crhScale, crhEventScale, crhSurvivalScale, crhCp, crhLacCounter, crhEnableClearcast, crhShowBear, crhShowCat, crhCounterStartTime
+## SavedVariablesPerCharacter: crhShowBearSurvival, crhShowCatSurvival, crhShowBearFaerieFire, crhShowFeralCharge, crhShowSavageDefense, crhEventAngle, crhSurvivalAngle, crhMainAngle, crhShowCatFaerieFire, crhShowCatBerserk, crhShowBearBerserk, crhShowPredatorsSwiftness, crhScale, crhEventScale, crhSurvivalScale, crhCp, crhLacCounter, crhEnableClearcast, crhShowBear, crhShowCat, crhCounterStartTime
 CatRotationHelper.xml
