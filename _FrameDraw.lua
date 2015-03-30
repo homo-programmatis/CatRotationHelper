@@ -6,7 +6,29 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture)
 		return
 	end
 
-	a_Frame:SetTexture(a_Texture)
+	local testID = 3;
+	
+	if (0 == testID) then
+		-- default texture
+		a_Frame:SetTexture(a_Texture)
+	elseif (1 == testID) then
+		-- working
+		a_Frame:SetTexture("Interface\\ICONS\\Ability_Druid_Berserk");
+		a_Frame:SetMask("Interface\\CharacterFrame\\TempPortraitAlphaMaskSmall.blp");
+	elseif (2 == testID) then
+		-- not working
+		-- also not working even if you add this line to TOC: Images\TempPortraitAlphaMaskSmall.blp
+		a_Frame:SetTexture("Interface\\ICONS\\Ability_Druid_Berserk");
+		a_Frame:SetMask(g_Module.GetMyImage("TempPortraitAlphaMaskSmall.blp"));
+	elseif (3 == testID) then
+		-- crashes (invalid usage of Texture:SetMask)
+		a_Frame:SetTexture("Interface\\ICONS\\Ability_Druid_Berserk");
+
+		local maskTexture = a_Frame:GetParent():CreateTexture();
+		maskTexture:SetTexture("Interface\\CharacterFrame\\TempPortraitAlphaMaskSmall.blp");
+
+		a_Frame:SetMask(maskTexture);
+	end
 end
 
 function g_Module.FrameDrawFaded(a_Frame)

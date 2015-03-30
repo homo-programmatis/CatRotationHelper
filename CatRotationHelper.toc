@@ -10,3 +10,5 @@ _FrameLogic.lua
 LogicDruid.lua
 CatRotationHelper.lua
 CatRotationHelper.xml
+
+Images\TempPortraitAlphaMaskSmall.blp
