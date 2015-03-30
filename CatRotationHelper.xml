@@ -1,5 +1,4 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
-C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 	<Script file="CatRotationHelper.lua"/>
 
 	<Frame name="CatRotationHelperPanel">
@@ -17,7 +16,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Layer>
 		</Layers>
 		<Frames>
-
 			<Button name="CatRotationHelperOptionsUnlock" inherits="OptionsButtonTemplate" text="Move/Rotate Frames">
 				<Size>
 					<AbsDimension x="150" y="21"/>
@@ -52,6 +50,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowCat" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -84,6 +83,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowCp" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -108,6 +108,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowCatFaerieFire" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -126,6 +127,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowCatBerserk" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -144,6 +146,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowPredatorsSwiftness" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -162,6 +165,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowFeralCharge" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -180,6 +184,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowCatSurvival" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -231,6 +236,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowLacerateCounter" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -252,6 +258,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowBearBerserk" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -270,6 +277,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowBearFaerieFire" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -288,6 +296,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowMaul" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -306,6 +315,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowEnrage" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -324,6 +334,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+
 			<CheckButton name="CatRotationHelperOptionsShowBearSurvival" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
@@ -342,9 +353,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-
-
-
 
 			<Slider name="CatRotationHelperScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
 				<Anchors>
@@ -376,6 +384,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnValueChanged>
 				</Scripts>
 			</Slider>
+
 			<Slider name="CatRotationHelperEventScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
 				<Anchors>
 					<Anchor point="CENTER" relativePoint="TOP">
@@ -406,6 +415,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnValueChanged>
 				</Scripts>
 			</Slider>
+
 			<Slider name="CatRotationHelperSurvivalScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
 				<Anchors>
 					<Anchor point="CENTER" relativePoint="TOP">
@@ -513,7 +523,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				end
 
 				if(crhShowCat) then
-					CatRotationHelperOptionsShowCat:SetChecked()
+					CatRotationHelperOptionsShowCat:SetChecked(true)
 				else
 					CatRotationHelperOptionsShowCp:Disable()
 					CatRotationHelperOptionsShowCatFaerieFire:Disable()
@@ -524,7 +534,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				end
 
 				if(crhShowBear) then
-					CatRotationHelperOptionsShowBear:SetChecked()
+					CatRotationHelperOptionsShowBear:SetChecked(true)
 				else
 					CatRotationHelperOptionsShowLacerateCounter:Disable()
 					CatRotationHelperOptionsShowBearBerserk:Disable()
@@ -533,20 +543,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					CatRotationHelperOptionsShowEnrage:Disable()
 					CatRotationHelperOptionsShowBearSurvival:Disable()
 				end
-				if(crhCp) then CatRotationHelperOptionsShowCp:SetChecked() end
-				if(crhLacCounter) then CatRotationHelperOptionsShowLacerateCounter:SetChecked() end
-				if(crhEnableClearcast) then CatRotationHelperOptionsClearcast:SetChecked() end
+				
+				CatRotationHelperOptionsShowCp:SetChecked(crhCp)
+				CatRotationHelperOptionsShowLacerateCounter:SetChecked(crhLacCounter)
+				CatRotationHelperOptionsClearcast:SetChecked(crhEnableClearcast)
 
-				if(crhShowCatFaerieFire) then CatRotationHelperOptionsShowCatFaerieFire:SetChecked() end
-				if(crhShowCatBerserk) then CatRotationHelperOptionsShowCatBerserk:SetChecked() end
-				if(crhShowPredatorsSwiftness) then CatRotationHelperOptionsShowPredatorsSwiftness:SetChecked() end
-				if(crhShowFeralCharge) then CatRotationHelperOptionsShowFeralCharge:SetChecked() end
-				if(crhShowBearBerserk) then CatRotationHelperOptionsShowBearBerserk:SetChecked() end
-				if(crhShowBearFaerieFire) then CatRotationHelperOptionsShowBearFaerieFire:SetChecked() end
-				if(crhShowSavageDefense) then CatRotationHelperOptionsShowMaul:SetChecked() end
-				if(crhShowEnrage) then CatRotationHelperOptionsShowEnrage:SetChecked() end
-				if(crhShowBearSurvival) then CatRotationHelperOptionsShowBearSurvival:SetChecked() end
-				if(crhShowCatSurvival) then CatRotationHelperOptionsShowCatSurvival:SetChecked() end
+				CatRotationHelperOptionsShowCatFaerieFire:SetChecked(crhShowCatFaerieFire)
+				CatRotationHelperOptionsShowCatBerserk:SetChecked(crhShowCatBerserk)
+				CatRotationHelperOptionsShowPredatorsSwiftness:SetChecked(crhShowPredatorsSwiftness)
+				CatRotationHelperOptionsShowFeralCharge:SetChecked(crhShowFeralCharge)
+				CatRotationHelperOptionsShowBearBerserk:SetChecked(crhShowBearBerserk)
+				CatRotationHelperOptionsShowBearFaerieFire:SetChecked(crhShowBearFaerieFire)
+				CatRotationHelperOptionsShowMaul:SetChecked(crhShowSavageDefense)
+				CatRotationHelperOptionsShowEnrage:SetChecked(crhShowEnrage)
+				CatRotationHelperOptionsShowBearSurvival:SetChecked(crhShowBearSurvival)
+				CatRotationHelperOptionsShowCatSurvival:SetChecked(crhShowCatSurvival)
 
 				CatRotationHelperScaleSlider:SetValue(crhScale)
 				CatRotationHelperScaleSliderValue:SetText(math.floor(crhScale*100+0.5)/100)
