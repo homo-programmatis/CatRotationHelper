@@ -298,7 +298,7 @@ function CatRotationHelperUnlock()
 		showBear = false
 
 		for i=1, #g_CrhFrameOrderBear do
-			CatRotationFrameStopCounter(g_CrhFramesMain[g_CrhFrameOrderBear[i]]);
+			g_Module.FrameStopTimer(g_CrhFramesMain[g_CrhFrameOrderBear[i]]);
 			g_CrhFramesMain[g_CrhFrameOrderBear[i]]:Hide()
 		end
 		CatRotationHelperLacerateCounter:Hide()
@@ -309,7 +309,7 @@ function CatRotationHelperUnlock()
 		showCat = false
 
 		for i=1, #g_CrhFrameOrderCat do
-			CatRotationFrameStopCounter(g_CrhFramesMain[g_CrhFrameOrderCat[i]]);
+			g_Module.FrameStopTimer(g_CrhFramesMain[g_CrhFrameOrderCat[i]]);
 		end
 
 		CatRotationHelperSetCatCP(0)
@@ -493,53 +493,50 @@ function CatRotationHelperShowBear()
 	CatRotationHelperShowByFrame(g_CrhFrameOrderBear);
 end
 
-function CatRotationHelperUpdateFrame(self, endTime)
-    if (not self.counting or endTime ~= self.countframe.endTime) then
-    	-- new buff applied
-		if(not self.counting or self.countframe.endTime - GetTime() < 11) then
-			self.overlay.animIn:Play()
-		end
-		
-		self.counting = true
-		g_Module.FrameDrawActive(self.icon);
-
-    	self.countframe.endTime = endTime
-    	self.countframe:Show()
-		self.countframe.dur2text:Show();
-		self.countframe.durtext:SetText("");
-	end
-end
-
-function CatRotationFrameStopCounter(self)
-	if (not self.counting) then
+function g_Module.FrameStopTimer(a_Frame)
+	if (not a_Frame.counting) then
 		return;
 	end
 
-	self.counting = false
-	self.countframe:Hide();
-	self.countframe.endTime = nil;
-	g_Module.FrameDrawFaded(self.icon);
-	self.overlay.animOut:Play()
+	a_Frame.counting = false
+	a_Frame.countframe:Hide();
+	a_Frame.countframe.endTime = nil;
+	g_Module.FrameDrawFaded(a_Frame.icon);
+	a_Frame.overlay.animOut:Play()
 end
 
-local function crhUpdateFrameWithExpiration(a_Self, a_Expiration)
-	if (a_Expiration ~= 0) then
-		CatRotationHelperUpdateFrame(a_Self, a_Expiration);
-	else
-		CatRotationFrameStopCounter(a_Self);
+function g_Module.FrameSetExpiration(a_Frame, a_Expiration)
+	if (a_Expiration == 0) then
+		g_Module.FrameStopTimer(a_Frame);
+		return;
+	end
+	
+    if (not a_Frame.counting or a_Expiration ~= a_Frame.countframe.endTime) then
+    	-- new buff applied
+		if(not a_Frame.counting or a_Frame.countframe.endTime - GetTime() < 11) then
+			a_Frame.overlay.animIn:Play()
+		end
+		
+		a_Frame.counting = true
+		g_Module.FrameDrawActive(a_Frame.icon);
+
+    	a_Frame.countframe.endTime = a_Expiration
+    	a_Frame.countframe:Show()
+		a_Frame.countframe.dur2text:Show();
+		a_Frame.countframe.durtext:SetText("");
 	end
 end
 
 local function crhUpdateFrameFromDebuff(a_FrameID, a_SpellID, a_Stacks, a_MyOnly)
-	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
+	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
 end
 
 local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
-	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromBuff(a_SpellID))
+	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromBuff(a_SpellID))
 end
 
 local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
-	crhUpdateFrameWithExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromSkill(a_SpellID))
+	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromSkill(a_SpellID))
 end
 
 function CatRotationFrameSetMainScale()
@@ -801,7 +798,7 @@ function CatRotationHelperHideAll()
 
 	-- stop running timers
 	for i=1, #framesTable do
-		CatRotationFrameStopCounter(g_CrhFramesMain[framesTable[i]]);
+		g_Module.FrameStopTimer(g_CrhFramesMain[framesTable[i]]);
 	end
 
 	-- general fade animation
@@ -844,13 +841,13 @@ end
 local function crhUpdateLacerate()
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
-		CatRotationFrameStopCounter(g_CrhFramesMain[CRH_FRAME_LACERATE]);
+		g_Module.FrameStopTimer(g_CrhFramesMain[CRH_FRAME_LACERATE]);
 		CatRotationHelperLacerateCounter:Hide();
 		CatRotationHelperSetBearCP(0);
 		return;
 	end
 	
-	CatRotationHelperUpdateFrame(g_CrhFramesMain[CRH_FRAME_LACERATE], expTime);
+	g_Module.FrameSetExpiration(g_CrhFramesMain[CRH_FRAME_LACERATE], expTime);
 
 	-- stop possible cp animation when lacerate is refreshed
 	local i = 1;
@@ -1368,7 +1365,7 @@ function CatRotationFrameCounter(self)
 	local time = self.endTime - GetTime();
 
 	if(time <= 0) then
-		CatRotationFrameStopCounter(self:GetParent());
+		g_Module.FrameStopTimer(self:GetParent());
 	elseif(time <= crhCounterStartTime) then
 		self.durtext:SetText(CatRotationHelperFormatTime(time));
 		self.dur2text:Hide();
