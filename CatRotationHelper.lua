@@ -52,7 +52,9 @@ local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAM
 local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_BEAR_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
 local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
-local g_CrhFramesMain = {};
+local g_FramesCat = {};
+local g_FramesBear = {};
+local g_FramesAll = {};
 local g_CrhFramesEvents = {};
 local g_CrhFramesSurv = {};
 local textures = {};
@@ -61,54 +63,66 @@ local survivalTextures = {};
 
 local function InitFrames()
 	-- Cat's Tiger's fury
-	g_CrhFramesMain[CRH_FRAME_TIGERSFURY] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_TIGERSFURY] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury.tga");
 	blueTextures[CRH_FRAME_TIGERSFURY] = g_Module.GetMyImage("TigersFury-Blue.tga");
 
 	-- Cat's Thrash
-	g_CrhFramesMain[CRH_FRAME_CAT_THRASH] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_CAT_THRASH] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash.tga");
 	blueTextures[CRH_FRAME_CAT_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
 
 	-- Cat's Savage Roar
-	g_CrhFramesMain[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_SAVAGEROAR] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar.tga");
 	blueTextures[CRH_FRAME_SAVAGEROAR] = g_Module.GetMyImage("SavageRoar-Blue.tga");
 
 	-- Cat's Rake
-	g_CrhFramesMain[CRH_FRAME_RAKE] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_RAKE] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake.tga");
 	blueTextures[CRH_FRAME_RAKE] = g_Module.GetMyImage("Rake-Blue.tga");
 
 	-- Cat's Rip
-	g_CrhFramesMain[CRH_FRAME_RIP] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_RIP] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip.tga");
 	blueTextures[CRH_FRAME_RIP] = g_Module.GetMyImage("Rip-Blue.tga");
 	
 	-- Bear's Unused5
-	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED5] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_BEAR_UNUSED5] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_BEAR_UNUSED5] = nil;
 	blueTextures[CRH_FRAME_BEAR_UNUSED5] = nil;
 	
 	-- Bear's Thrash
-	g_CrhFramesMain[CRH_FRAME_BEAR_THRASH] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_BEAR_THRASH] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash.tga");
 	blueTextures[CRH_FRAME_BEAR_THRASH] = g_Module.GetMyImage("Thrash-Blue.tga");
 
 	-- Bear's Mangle
-	g_CrhFramesMain[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_BEAR_MANGLE] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle.tga");
 	blueTextures[CRH_FRAME_BEAR_MANGLE] = g_Module.GetMyImage("Mangle-Blue.tga");
 
 	-- Bear's Lacerate
-	g_CrhFramesMain[CRH_FRAME_LACERATE] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_LACERATE] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate.tga");
 	blueTextures[CRH_FRAME_LACERATE] = g_Module.GetMyImage("Lacerate-Blue.tga");
 
 	-- Bear's Unused4
-	g_CrhFramesMain[CRH_FRAME_BEAR_UNUSED4] = CreateFrame("Frame", nil, UIParent);
+	g_FramesAll[CRH_FRAME_BEAR_UNUSED4] = CreateFrame("Frame", nil, UIParent);
 	textures[CRH_FRAME_BEAR_UNUSED4] = nil;
 	blueTextures[CRH_FRAME_BEAR_UNUSED4] = nil;
+
+	g_FramesCat[1] = g_FramesAll[g_CrhFrameOrderCat[1]];
+	g_FramesCat[2] = g_FramesAll[g_CrhFrameOrderCat[2]];
+	g_FramesCat[3] = g_FramesAll[g_CrhFrameOrderCat[3]];
+	g_FramesCat[4] = g_FramesAll[g_CrhFrameOrderCat[4]];
+	g_FramesCat[5] = g_FramesAll[g_CrhFrameOrderCat[5]];
+
+	g_FramesBear[1] = g_FramesAll[g_CrhFrameOrderBear[1]];
+	g_FramesBear[2] = g_FramesAll[g_CrhFrameOrderBear[2]];
+	g_FramesBear[3] = g_FramesAll[g_CrhFrameOrderBear[3]];
+	g_FramesBear[4] = g_FramesAll[g_CrhFrameOrderBear[4]];
+	g_FramesBear[5] = g_FramesAll[g_CrhFrameOrderBear[5]];
 	
 	-- Survival: Barkskin
 	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
@@ -297,9 +311,9 @@ function CatRotationHelperUnlock()
 	if(showBear) then
 		showBear = false
 
-		for i=1, #g_CrhFrameOrderBear do
-			g_Module.FrameStopTimer(g_CrhFramesMain[g_CrhFrameOrderBear[i]]);
-			g_CrhFramesMain[g_CrhFrameOrderBear[i]]:Hide()
+		for i=1, #g_FramesBear do
+			g_Module.FrameStopTimer(g_FramesBear[i]);
+			g_FramesBear[i]:Hide()
 		end
 		CatRotationHelperLacerateCounter:Hide()
 		CatRotationHelperSetBearCP(0)
@@ -308,8 +322,8 @@ function CatRotationHelperUnlock()
 	elseif(showCat) then
 		showCat = false
 
-		for i=1, #g_CrhFrameOrderCat do
-			g_Module.FrameStopTimer(g_CrhFramesMain[g_CrhFrameOrderCat[i]]);
+		for i=1, #g_FramesCat do
+			g_Module.FrameStopTimer(g_FramesCat[i]);
 		end
 
 		CatRotationHelperSetCatCP(0)
@@ -319,8 +333,8 @@ function CatRotationHelperUnlock()
 	CatRotationHelperFadeFrame:Hide();
 
 	-- show static cat frames
-	for i=1, #g_CrhFrameOrderCat do
-		local frame = g_CrhFramesMain[g_CrhFrameOrderCat[i]]
+	for i=1, #g_FramesCat do
+		local frame = g_FramesCat[i];
 
 		frame:Show();
 		frame:SetAlpha(1);
@@ -370,8 +384,8 @@ function CatRotationHelperLock()
 	unlocked = false;
 	clearCast = false;
 
-	for i=1, #g_CrhFramesMain do
-		local frame = g_CrhFramesMain[i]
+	for i=1, #g_FramesAll do
+		local frame = g_FramesAll[i]
 
 		frame:Hide()
 		g_Module.FrameDrawFaded(frame.icon);
@@ -393,10 +407,10 @@ function CatRotationHelperLock()
 	CatRotationHelperUpdateEverything()
 end
 
--- shows num combo point circles using frames in framesTable
-local function CatRotationHelperSetCPEffects(framesTable, num)
-	for i=1, #framesTable do
-		local frame = g_CrhFramesMain[framesTable[i]]
+-- shows num combo point circles using frames in a_FrameList
+local function CatRotationHelperSetCPEffects(a_FrameList, num)
+	for i=1, #a_FrameList do
+		local frame = a_FrameList[i];
 
 		if(i <= num) then
 			if(not frame.hascp) then
@@ -436,25 +450,25 @@ end
 function CatRotationHelperSetCatCP(num)
 	if(not crhCp) then return; end
 
-	CatRotationHelperSetCPEffects(g_CrhFrameOrderCat, num);
+	CatRotationHelperSetCPEffects(g_FramesCat, num);
 end
 
 function CatRotationHelperSetBearCP(num)
 	if(not crhLacCounter) then return; end
 
-	CatRotationHelperSetCPEffects(g_CrhFrameOrderBear, num);
+	CatRotationHelperSetCPEffects(g_FramesBear, num);
 end
 
 
--- show all frames in frameTable
-local function CatRotationHelperShowByFrame(frameTable)
+-- show all frames in a_FrameList
+local function CatRotationHelperShowByFrame(a_FrameList)
 	--if interrupting previous fade, hide frames
-	for i=1, #g_CrhFramesMain do
-		g_CrhFramesMain[i]:Hide();
+	for i=1, #g_FramesAll do
+		g_FramesAll[i]:Hide();
 	end
 
-	for i=1, #frameTable do
-		g_CrhFramesMain[frameTable[i]]:Show();
+	for i=1, #a_FrameList do
+		a_FrameList[i]:Show();
 	end
 
 	-- fade effect
@@ -467,32 +481,32 @@ function CatRotationHelperShowCat()
 	if(showCat) then return; end
 	showCat = true;
 
-	CatRotationHelperShowByFrame(g_CrhFrameOrderCat);
+	CatRotationHelperShowByFrame(g_FramesCat);
 end
 
 function CatRotationHelperShowBear()
 	if(showBear) then return; end
 	showBear = true;
 
-	CatRotationHelperShowByFrame(g_CrhFrameOrderBear);
+	CatRotationHelperShowByFrame(g_FramesBear);
 end
 
-local function crhUpdateFrameFromDebuff(a_FrameID, a_SpellID, a_Stacks, a_MyOnly)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
+local function crhUpdateFrameFromDebuff(a_Frame, a_SpellID, a_Stacks, a_MyOnly)
+	g_Module.FrameSetExpiration(a_Frame, g_Module.CalcFrameFromDebuff(a_SpellID, a_Stacks, a_MyOnly))
 end
 
-local function crhUpdateFrameFromBuff(a_FrameID, a_SpellID)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromBuff(a_SpellID))
+local function crhUpdateFrameFromBuff(a_Frame, a_SpellID)
+	g_Module.FrameSetExpiration(a_Frame, g_Module.CalcFrameFromBuff(a_SpellID))
 end
 
-local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
-	g_Module.FrameSetExpiration(g_CrhFramesMain[a_FrameID], g_Module.CalcFrameFromSkill(a_SpellID))
+local function crhUpdateFrameFromSkill(a_Frame, a_SpellID)
+	g_Module.FrameSetExpiration(a_Frame, g_Module.CalcFrameFromSkill(a_SpellID))
 end
 
 function CatRotationFrameSetMainScale()
-	for i=1, #g_CrhFramesMain do
-		g_CrhFramesMain[i]:SetScale(crhScale);
-		g_CrhFramesMain[i].parentFrame:SetScale(crhScale);
+	for i=1, #g_FramesAll do
+		g_FramesAll[i]:SetScale(crhScale);
+		g_FramesAll[i].parentFrame:SetScale(crhScale);
 	end
 
 	CatRotationHelperHeader:SetScale(crhScale);
@@ -529,8 +543,8 @@ function CatRotationHelperMainOnClick()
 end
 
 function CatRotationFrameSetMainStyle()
-	for i=1, #g_CrhFramesMain do
-		g_CrhFramesMain[i].parentFrame:ClearAllPoints()
+	for i=1, #g_FramesAll do
+		g_FramesAll[i].parentFrame:ClearAllPoints()
 	end
 
 	local headerFrame = CatRotationHelperHeader;
@@ -539,77 +553,77 @@ function CatRotationFrameSetMainStyle()
 		headerFrame:SetHeight(36)
 		headerFrame:SetWidth(176)
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
+		g_FramesCat[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
+		g_FramesBear[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame, "TOPRIGHT", 5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesCat[2].parentFrame:SetPoint("TOPLEFT", g_FramesCat[1].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesBear[2].parentFrame:SetPoint("TOPLEFT", g_FramesBear[1].parentFrame, "TOPRIGHT", 5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame, "TOPRIGHT", 5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesCat[3].parentFrame:SetPoint("TOPLEFT", g_FramesCat[2].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesBear[3].parentFrame:SetPoint("TOPLEFT", g_FramesBear[2].parentFrame, "TOPRIGHT", 5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame, "TOPRIGHT", 5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesCat[4].parentFrame:SetPoint("TOPLEFT", g_FramesCat[3].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesBear[4].parentFrame:SetPoint("TOPLEFT", g_FramesBear[3].parentFrame, "TOPRIGHT", 5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[5]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame, "TOPRIGHT", 5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[5]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesCat[5].parentFrame:SetPoint("TOPLEFT", g_FramesCat[4].parentFrame, "TOPRIGHT", 5, 0);
+		g_FramesBear[5].parentFrame:SetPoint("TOPLEFT", g_FramesBear[4].parentFrame, "TOPRIGHT", 5, 0);
 
 	elseif(crhMainAngle == 90) then
 		headerFrame:SetHeight(176)
 		headerFrame:SetWidth(36)
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
-		g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
+		g_FramesCat[1].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
+		g_FramesBear[1].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame, "TOPLEFT", 0, 5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesCat[2].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[1].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesBear[2].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[1].parentFrame, "TOPLEFT", 0, 5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame, "TOPLEFT", 0, 5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesCat[3].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[2].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesBear[3].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[2].parentFrame, "TOPLEFT", 0, 5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame, "TOPLEFT", 0, 5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesCat[4].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[3].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesBear[4].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[3].parentFrame, "TOPLEFT", 0, 5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[5]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame, "TOPLEFT", 0, 5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[5]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesCat[5].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[4].parentFrame, "TOPLEFT", 0, 5);
+		g_FramesBear[5].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[4].parentFrame, "TOPLEFT", 0, 5);
 
 	elseif(crhMainAngle == 180) then
 		headerFrame:SetHeight(36)
 		headerFrame:SetWidth(176)
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
-		g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
+		g_FramesCat[1].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
+		g_FramesBear[1].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame, "TOPLEFT", -5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesCat[2].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[1].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesBear[2].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[1].parentFrame, "TOPLEFT", -5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame, "TOPLEFT", -5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesCat[3].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[2].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesBear[3].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[2].parentFrame, "TOPLEFT", -5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame, "TOPLEFT", -5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesCat[4].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[3].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesBear[4].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[3].parentFrame, "TOPLEFT", -5, 0);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[5]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame, "TOPLEFT", -5, 0);
-		g_CrhFramesMain[g_CrhFrameOrderBear[5]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesCat[5].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[4].parentFrame, "TOPLEFT", -5, 0);
+		g_FramesBear[5].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[4].parentFrame, "TOPLEFT", -5, 0);
 
 	else
 		headerFrame:SetHeight(176)
 		headerFrame:SetWidth(36)
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
+		g_FramesCat[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
+		g_FramesBear[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[1]].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[1]].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesCat[2].parentFrame:SetPoint("TOPLEFT", g_FramesCat[1].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesBear[2].parentFrame:SetPoint("TOPLEFT", g_FramesBear[1].parentFrame, "BOTTOMLEFT", 0, -5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[2]].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[2]].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesCat[3].parentFrame:SetPoint("TOPLEFT", g_FramesCat[2].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesBear[3].parentFrame:SetPoint("TOPLEFT", g_FramesBear[2].parentFrame, "BOTTOMLEFT", 0, -5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[3]].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[3]].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesCat[4].parentFrame:SetPoint("TOPLEFT", g_FramesCat[3].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesBear[4].parentFrame:SetPoint("TOPLEFT", g_FramesBear[3].parentFrame, "BOTTOMLEFT", 0, -5);
 
-		g_CrhFramesMain[g_CrhFrameOrderCat[5]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderCat[4]].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_CrhFramesMain[g_CrhFrameOrderBear[5]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesMain[g_CrhFrameOrderBear[4]].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesCat[5].parentFrame:SetPoint("TOPLEFT", g_FramesCat[4].parentFrame, "BOTTOMLEFT", 0, -5);
+		g_FramesBear[5].parentFrame:SetPoint("TOPLEFT", g_FramesBear[4].parentFrame, "BOTTOMLEFT", 0, -5);
 	end
 
 end
@@ -728,27 +742,27 @@ function CatRotationFrameSetSurvivalStyle()
 end
 
 function CatRotationHelperHideAll()
-	local framesTable
+	local frameList
 
 	-- decide what frames to hide
 	if(showBear) then
 		showBear = false
 
-		framesTable = g_CrhFrameOrderBear
+		frameList = g_FramesBear
 		CatRotationHelperLacerateCounter:Hide()
 		CatRotationHelperSetBearCP(0)
 	elseif(showCat) then
 		showCat = false
 
-		framesTable = g_CrhFrameOrderCat
+		frameList = g_FramesCat
 		CatRotationHelperSetCatCP(0)
 	else
 		return
 	end
 
 	-- stop running timers
-	for i=1, #framesTable do
-		g_Module.FrameStopTimer(g_CrhFramesMain[framesTable[i]]);
+	for i=1, #frameList do
+		g_Module.FrameStopTimer(frameList[i]);
 	end
 
 	-- general fade animation
@@ -771,17 +785,17 @@ end
 -----------------------------
 
 function CatRotationHelperCheckCatBuffs()
-	crhUpdateFrameFromBuff(CRH_FRAME_SAVAGEROAR, CRH_SPELLID_SAVAGE_ROAR);
+	crhUpdateFrameFromBuff(g_FramesAll[CRH_FRAME_SAVAGEROAR], CRH_SPELLID_SAVAGE_ROAR);
 end
 
 function CatRotationHelperCheckCatDebuffs()
-	crhUpdateFrameFromDebuff(CRH_FRAME_CAT_THRASH, CRH_SPELLID_THRASH_CAT, nil, true);
-	crhUpdateFrameFromDebuff(CRH_FRAME_RAKE, CRH_SPELLID_RAKE, nil, true);
-	crhUpdateFrameFromDebuff(CRH_FRAME_RIP, CRH_SPELLID_RIP, nil, true);
+	crhUpdateFrameFromDebuff(g_FramesAll[CRH_FRAME_CAT_THRASH], CRH_SPELLID_THRASH_CAT, nil, true);
+	crhUpdateFrameFromDebuff(g_FramesAll[CRH_FRAME_RAKE], CRH_SPELLID_RAKE, nil, true);
+	crhUpdateFrameFromDebuff(g_FramesAll[CRH_FRAME_RIP], CRH_SPELLID_RIP, nil, true);
 end
 
 function CatRotationHelperCheckCatCooldown()
-	crhUpdateFrameFromSkill(CRH_FRAME_TIGERSFURY, CRH_SPELLID_TIGERS_FURY);
+	crhUpdateFrameFromSkill(g_FramesAll[CRH_FRAME_TIGERSFURY], CRH_SPELLID_TIGERS_FURY);
 end
 
 ------------------------------
@@ -791,19 +805,19 @@ end
 local function crhUpdateLacerate()
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
-		g_Module.FrameStopTimer(g_CrhFramesMain[CRH_FRAME_LACERATE]);
+		g_Module.FrameStopTimer(g_FramesAll[CRH_FRAME_LACERATE]);
 		CatRotationHelperLacerateCounter:Hide();
 		CatRotationHelperSetBearCP(0);
 		return;
 	end
 	
-	g_Module.FrameSetExpiration(g_CrhFramesMain[CRH_FRAME_LACERATE], expTime);
+	g_Module.FrameSetExpiration(g_FramesAll[CRH_FRAME_LACERATE], expTime);
 
 	-- stop possible cp animation when lacerate is refreshed
 	local i = 1;
-	for i=1, #g_CrhFrameOrderBear do
-		g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetAlpha(1)
-		g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetScale(1)
+	for i=1, #g_FramesBear do
+		g_FramesBear[i].cpframe:SetAlpha(1)
+		g_FramesBear[i].cpframe:SetScale(1)
 	end
 
 	-- setup lacerate warning
@@ -815,12 +829,12 @@ local function crhUpdateLacerate()
 end
 
 function CatRotationHelperCheckBearDebuffs()
-	crhUpdateFrameFromDebuff(CRH_FRAME_BEAR_THRASH, CRH_SPELLID_THRASH_BEAR, nil, true);
+	crhUpdateFrameFromDebuff(g_FramesAll[CRH_FRAME_BEAR_THRASH], CRH_SPELLID_THRASH_BEAR, nil, true);
 	crhUpdateLacerate();
 end
 
 function CatRotationHelperCheckBearCooldown()
-	crhUpdateFrameFromSkill(CRH_FRAME_BEAR_MANGLE, CRH_SPELLID_MANGLE_BEAR);
+	crhUpdateFrameFromSkill(g_FramesAll[CRH_FRAME_BEAR_MANGLE], CRH_SPELLID_MANGLE_BEAR);
 end
 
 -- Check for Clearcast procs - Bear & Cat
@@ -828,17 +842,19 @@ function CatRotationHelperCheckClearcast()
 	name = UnitBuff("player", g_Module.GetSpellName(CRH_SPELLID_CLEARCAST));
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
-			for i=1, #g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, blueTextures[i]);
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, blueTextures[i]);
+			for i=1, #g_FramesAll do
+				local frame = g_FramesAll[i];
 
-				if(g_CrhFramesMain[i].hascp) then
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
+				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
+				g_Module.FrameSetTexture(frame.icon, blueTextures[i]);
+				g_Module.FrameSetTexture(frame.overlay.icon, blueTextures[i]);
+
+				if(frame.hascp) then
+					frame.countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
+					frame.countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
 				else
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
+					frame.countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
+					frame.countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
 				end
 			end
 
@@ -847,17 +863,19 @@ function CatRotationHelperCheckClearcast()
 
 	else
 		if(clearCast) then
-			for i=1,#g_CrhFramesMain do
-				g_CrhFramesMain[i].cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].icon, textures[i]);
-				g_Module.FrameSetTexture(g_CrhFramesMain[i].overlay.icon, textures[i]);
+			for i=1,#g_FramesAll do
+				local frame = g_FramesAll[i];
 
-				if(g_CrhFramesMain[i].hascp) then
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
+				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
+				g_Module.FrameSetTexture(frame.icon, textures[i]);
+				g_Module.FrameSetTexture(frame.overlay.icon, textures[i]);
+
+				if(frame.hascp) then
+					frame.countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
+					frame.countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
 				else
-					g_CrhFramesMain[i].countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
-					g_CrhFramesMain[i].countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
+					frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
+					frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
 				end
 
 			end
@@ -1086,8 +1104,8 @@ function CatRotationHelperOnLoad(self)
 	survFrame:SetClampedToScreen(true)
 
 	-- setup frames
-	for i=1, #g_CrhFramesMain do
-		local frame = g_CrhFramesMain[i]
+	for i=1, #g_FramesAll do
+		local frame = g_FramesAll[i]
 
 		frame.parentFrame = CreateFrame("Frame", nil, UIParent);
 		frame.parentFrame:SetFrameStrata("LOW");
@@ -1347,14 +1365,14 @@ function CatRotationHelperLacerateCounterFunc(self)
 	local t = mod(remaining,1)
 
 	if(t <= 0.5) then
-		for i=1, #g_CrhFrameOrderBear do
-			g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetAlpha(1.0-t)
-			g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetScale(1.0+0.3*t)
+		for i=1, #g_FramesBear do
+			g_FramesBear[i].cpframe:SetAlpha(1.0-t)
+			g_FramesBear[i].cpframe:SetScale(1.0+0.3*t)
 		end
 	else
-		for i=1, #g_CrhFrameOrderBear do
-			g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetAlpha(t)
-			g_CrhFramesMain[g_CrhFrameOrderBear[i]].cpframe:SetScale(1.3-0.3*t)
+		for i=1, #g_FramesBear do
+			g_FramesBear[i].cpframe:SetAlpha(t)
+			g_FramesBear[i].cpframe:SetScale(1.3-0.3*t)
 		end
 	end
 end
@@ -1371,19 +1389,19 @@ function CatRotationHelperFadeFunc(self)
 		self:Hide();
 
 		if(self.fading) then
-			for i=1, #g_CrhFramesMain do
-				g_CrhFramesMain[i]:Hide();
+			for i=1, #g_FramesAll do
+				g_FramesAll[i]:Hide();
 			end
 		end
 	end
 
 	if(self.fading) then
-		for i=1, #g_CrhFramesMain do
-			g_CrhFramesMain[i]:SetAlpha(1-elapsed*2.5);
+		for i=1, #g_FramesAll do
+			g_FramesAll[i]:SetAlpha(1-elapsed*2.5);
 		end
 	else
-		for i=1, #g_CrhFramesMain do
-			g_CrhFramesMain[i]:SetAlpha(elapsed*2.5);
+		for i=1, #g_FramesAll do
+			g_FramesAll[i]:SetAlpha(elapsed*2.5);
 		end
 	end
 end
