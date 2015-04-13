@@ -25,32 +25,12 @@ local CRH_FAERIE_FIRE_SPELLID_LIST		=
 }
 
 -- Frame IDs
-local CRH_FRAME_TIGERSFURY				= 1;
-local CRH_FRAME_CAT_THRASH				= 2;
-local CRH_FRAME_SAVAGEROAR				= 3;
-local CRH_FRAME_RAKE					= 4;
-local CRH_FRAME_RIP						= 5;
-local CRH_FRAME_BEAR_UNUSED5			= 6;
-local CRH_FRAME_BEAR_THRASH				= 7;
-local CRH_FRAME_BEAR_MANGLE				= 8;
-local CRH_FRAME_LACERATE				= 9;
-local CRH_FRAME_BEAR_UNUSED4 			= 10;
-
 local CRH_FRAME_BARKSKIN				= 1;
 local CRH_FRAME_SURVINSTINCTS			= 2;
 local CRH_FRAME_SURV_UNUSED3 			= 3;
 
 -- change order of icons here
-local g_CrhFrameOrderCat = {CRH_FRAME_TIGERSFURY, CRH_FRAME_SAVAGEROAR, CRH_FRAME_RAKE, CRH_FRAME_RIP, CRH_FRAME_CAT_THRASH}
-local g_CrhFrameOrderBear = {CRH_FRAME_BEAR_MANGLE, CRH_FRAME_LACERATE, CRH_FRAME_BEAR_THRASH, CRH_FRAME_BEAR_UNUSED4, CRH_FRAME_BEAR_UNUSED5}
 local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
-
-local g_FramesCat = {};
-local g_FramesBear = {};
-local g_FramesAll = {};
-local g_CrhFramesEvents = {};
-local g_CrhFramesSurv = {};
-local survivalTextures = {};
 
 local function CreateFrameWithLogic(a_Logic)
 	local frame = CreateFrame("Frame", nil, UIParent);
@@ -58,31 +38,45 @@ local function CreateFrameWithLogic(a_Logic)
 	return frame;
 end
 
+local g_FramesCat =
+{
+	CreateFrameWithLogic(g_Module.LogicDruidCatTigersFury),
+	CreateFrameWithLogic(g_Module.LogicDruidCatSavageRoar),
+	CreateFrameWithLogic(g_Module.LogicDruidCatRake),
+	CreateFrameWithLogic(g_Module.LogicDruidCatRip),
+	CreateFrameWithLogic(g_Module.LogicDruidCatThrash),
+};
+
+local g_FramesBear =
+{
+	CreateFrameWithLogic(g_Module.LogicDruidBearMangle),
+	CreateFrameWithLogic(g_Module.LogicDruidBearLacerate),
+	CreateFrameWithLogic(g_Module.LogicDruidBearThrash),
+	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
+	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
+};
+
+-- Temporary hack for code refactoring
+local g_FramesAll = 
+{
+	g_FramesCat[1],
+	g_FramesCat[2],
+	g_FramesCat[3],
+	g_FramesCat[4],
+	g_FramesCat[5],
+
+	g_FramesBear[1],
+	g_FramesBear[2],
+	g_FramesBear[3],
+	g_FramesBear[4],
+	g_FramesBear[5],
+}
+
+local g_CrhFramesEvents = {};
+local g_CrhFramesSurv = {};
+local survivalTextures = {};
+
 local function InitFrames()
-	g_FramesAll[CRH_FRAME_TIGERSFURY] 	= CreateFrameWithLogic(g_Module.LogicDruidCatTigersFury);
-	g_FramesAll[CRH_FRAME_SAVAGEROAR] 	= CreateFrameWithLogic(g_Module.LogicDruidCatSavageRoar);
-	g_FramesAll[CRH_FRAME_RAKE] 		= CreateFrameWithLogic(g_Module.LogicDruidCatRake);
-	g_FramesAll[CRH_FRAME_RIP] 			= CreateFrameWithLogic(g_Module.LogicDruidCatRip);
-	g_FramesAll[CRH_FRAME_CAT_THRASH] 	= CreateFrameWithLogic(g_Module.LogicDruidCatThrash);
-
-	g_FramesAll[CRH_FRAME_BEAR_MANGLE]	= CreateFrameWithLogic(g_Module.LogicDruidBearMangle);
-	g_FramesAll[CRH_FRAME_LACERATE]		= CreateFrameWithLogic(g_Module.LogicDruidBearLacerate);
-	g_FramesAll[CRH_FRAME_BEAR_THRASH]	= CreateFrameWithLogic(g_Module.LogicDruidBearThrash);
-	g_FramesAll[CRH_FRAME_BEAR_UNUSED4]	= CreateFrameWithLogic(g_Module.LogicUnusedFrame);
-	g_FramesAll[CRH_FRAME_BEAR_UNUSED5]	= CreateFrameWithLogic(g_Module.LogicUnusedFrame);
-
-	g_FramesCat[1] = g_FramesAll[g_CrhFrameOrderCat[1]];
-	g_FramesCat[2] = g_FramesAll[g_CrhFrameOrderCat[2]];
-	g_FramesCat[3] = g_FramesAll[g_CrhFrameOrderCat[3]];
-	g_FramesCat[4] = g_FramesAll[g_CrhFrameOrderCat[4]];
-	g_FramesCat[5] = g_FramesAll[g_CrhFrameOrderCat[5]];
-
-	g_FramesBear[1] = g_FramesAll[g_CrhFrameOrderBear[1]];
-	g_FramesBear[2] = g_FramesAll[g_CrhFrameOrderBear[2]];
-	g_FramesBear[3] = g_FramesAll[g_CrhFrameOrderBear[3]];
-	g_FramesBear[4] = g_FramesAll[g_CrhFrameOrderBear[4]];
-	g_FramesBear[5] = g_FramesAll[g_CrhFrameOrderBear[5]];
-	
 	-- Survival: Barkskin
 	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
 	survivalTextures[CRH_FRAME_BARKSKIN] = g_Module.GetMyImage("Barkskin.tga");
