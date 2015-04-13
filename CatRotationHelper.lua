@@ -762,13 +762,13 @@ function crhUpdateLacerate()
 	CatRotationHelperSetBearCP(stacks);
 end
 
--- Check for Clearcast procs - Bear & Cat
+-- Check for Clearcast procs - cat (has no effect for bear)
 function CatRotationHelperCheckClearcast()
 	name = UnitBuff("player", g_Module.GetSpellName(CRH_SPELLID_CLEARCAST));
 	if(name and crhEnableClearcast) then
 		if(not clearCast) then
-			for i=1, #g_FramesAll do
-				local frame = g_FramesAll[i];
+			for i=1, #g_FramesCat do
+				local frame = g_FramesCat[i];
 
 				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
 				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.TextureSpecial);
@@ -788,8 +788,8 @@ function CatRotationHelperCheckClearcast()
 
 	else
 		if(clearCast) then
-			for i=1,#g_FramesAll do
-				local frame = g_FramesAll[i];
+			for i=1,#g_FramesCat do
+				local frame = g_FramesCat[i];
 
 				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
 				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
@@ -1182,7 +1182,6 @@ function CatRotationHelperOnEvent (self, event, ...)
 			elseif(inBearForm) then
 				if(arg1 == "player") then
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF);
-					CatRotationHelperCheckClearcast();
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then

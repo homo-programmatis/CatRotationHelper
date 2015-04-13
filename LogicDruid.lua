@@ -54,7 +54,6 @@ g_Module.LogicDruidCatRip =
 g_Module.LogicDruidBearMangle =
 {
 	Texture			= g_Module.GetMyImage("Mangle.tga"),
-	TextureSpecial	= g_Module.GetMyImage("Mangle-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 33917,
 };
@@ -62,7 +61,6 @@ g_Module.LogicDruidBearMangle =
 g_Module.LogicDruidBearThrash =
 {
 	Texture			= g_Module.GetMyImage("Thrash.tga"),
-	TextureSpecial	= g_Module.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 77758,
 	CastByMe		= true,
@@ -71,7 +69,6 @@ g_Module.LogicDruidBearThrash =
 g_Module.LogicDruidBearLacerate =
 {
 	Texture			= g_Module.GetMyImage("Lacerate.tga"),
-	TextureSpecial	= g_Module.GetMyImage("Lacerate-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 33745,
 	CastByMe		= true,
