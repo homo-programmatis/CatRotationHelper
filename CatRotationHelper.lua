@@ -1,3 +1,7 @@
+local THIS_ADDON_NAME="CatRotationHelper";
+local g_Module = getfenv(0)[THIS_ADDON_NAME];
+local g_Consts = g_Module.Constants;
+
 -- spellIDs
 local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_BERSERK 				= 106952;
@@ -20,8 +24,6 @@ local CRH_SPELLID_TIGERS_FURY			= 5217;
 
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
-
-local CRH_GLOBAL_COOLDOWN_VALUE			= 1.6;
 
 local CRH_FAERIE_FIRE_SPELLID_LIST		=
 {
@@ -600,7 +602,7 @@ local function crhUpdateFrameFromSkill(a_FrameID, a_SpellID)
 		return;
 	end
 
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+	if (spellDuration < g_Consts.GCD_LENGTH) then
 		return;
 	end
 	
@@ -1033,7 +1035,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	end
 	
 	-- Prevent blinking on GCD
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+	if (spellDuration < g_Consts.GCD_LENGTH) then
 		return;
 	end
 	
@@ -1150,7 +1152,7 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	end
 
 	-- Prevent blinking on GCD
-	if (spellDuration < CRH_GLOBAL_COOLDOWN_VALUE) then
+	if (spellDuration < g_Consts.GCD_LENGTH) then
 		return;
 	end
 
