@@ -18,26 +18,29 @@ function g_Module.FrameDrawActive(a_Frame)
 	a_Frame:SetVertexColor(1.00, 1.00, 1.00, 1.00);
 end
 
-function g_Module.FrameStopTimer(a_Frame)
-	if (not a_Frame.counting) then
-		return;
-	end
-
-	a_Frame.counting = false
-	a_Frame.countframe:Hide();
-	a_Frame.countframe.endTime = nil;
-	g_Module.FrameDrawFaded(a_Frame.icon);
-	a_Frame.overlay.animOut:Play()
-end
-
-function g_Module.FrameSetExpiration(a_Frame, a_Expiration)
-	if (a_Expiration == 0) then
-		g_Module.FrameStopTimer(a_Frame);
+function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
+	local logic = a_Frame.m_CrhLogic;
+	if (nil == logic.Type) then
+		-- Empty frame
 		return;
 	end
 	
-    if (not a_Frame.counting or a_Expiration ~= a_Frame.countframe.endTime) then
-    	-- new buff applied
+	if (g_Consts.STATUS_READY == a_Status) then
+		if (not a_Frame.counting) then
+			return;
+		end
+
+		a_Frame.counting = false
+		a_Frame.countframe:Hide();
+		a_Frame.countframe.endTime = nil;
+		g_Module.FrameDrawFaded(a_Frame.icon);
+		a_Frame.overlay.animOut:Play()
+	elseif (g_Consts.STATUS_COUNTING == a_Status) then
+		if (a_Frame.counting and (a_Expiration == a_Frame.countframe.endTime)) then
+			return;
+		end
+		
+		-- new buff applied
 		if(not a_Frame.counting or a_Frame.countframe.endTime - GetTime() < 11) then
 			a_Frame.overlay.animIn:Play()
 		end
@@ -45,8 +48,8 @@ function g_Module.FrameSetExpiration(a_Frame, a_Expiration)
 		a_Frame.counting = true
 		g_Module.FrameDrawActive(a_Frame.icon);
 
-    	a_Frame.countframe.endTime = a_Expiration
-    	a_Frame.countframe:Show()
+		a_Frame.countframe.endTime = a_Expiration
+		a_Frame.countframe:Show()
 		a_Frame.countframe.dur2text:Show();
 		a_Frame.countframe.durtext:SetText("");
 	end

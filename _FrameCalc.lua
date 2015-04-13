@@ -24,23 +24,23 @@ end
 function g_Module.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(a_SpellID, a_CastByMe);
 	if (not name) then
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 	
 	if (a_MinimumStacks and (stacks < a_MinimumStacks)) then
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 	
-	return expTime;
+	return g_Consts.STATUS_COUNTING, expTime;
 end
 
 function g_Module.CalcFrameFromBuff(a_SpellID)
 	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Module.GetSpellName(a_SpellID));
 	if (not name) then
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 	
-	return expTime;
+	return g_Consts.STATUS_COUNTING, expTime;
 end
 
 function g_Module.CalcFrameFromSkill(a_SpellID)
@@ -48,20 +48,20 @@ function g_Module.CalcFrameFromSkill(a_SpellID)
 	
 	if (spellStart == 0) then
 		-- No cooldown
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 
 	if (spellStart == nil) then
 		-- Unknown legacy safety code
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 	
 	if (spellDuration < g_Consts.GCD_LENGTH) then
 		-- If spell's full cooldown is less then GCD, then it's not
 		-- on cooldown really, it's on GCD. Returning 0 here
 		-- is consistent with Buff / Debuff calculation
-		return 0;
+		return g_Consts.STATUS_READY, nil;
 	end
 
-	return spellStart + spellDuration;
+	return g_Consts.STATUS_COUNTING, spellStart + spellDuration;
 end

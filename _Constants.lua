@@ -19,5 +19,12 @@ end
 
 g_Module.Constants = MakeConstTable
 {
+	LOGIC_TYPE_SKILL	= 1,
+	LOGIC_TYPE_BUFF		= 2,
+	LOGIC_TYPE_DEBUFF	= 3,
+	
+	STATUS_COUNTING		= 1,
+	STATUS_READY		= 2,
+	
 	GCD_LENGTH			= 1.6,
 };

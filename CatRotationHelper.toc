@@ -10,6 +10,8 @@ _Constants.lua
 # Addon's code
 _Helpers.lua
 _FrameCalc.lua
+_FrameLogic.lua
 _FrameUI.lua
+LogicDruid.lua
 CatRotationHelper.lua
 CatRotationHelper.xml
