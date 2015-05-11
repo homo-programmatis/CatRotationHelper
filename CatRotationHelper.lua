@@ -901,8 +901,8 @@ function CatRotationHelperOnLoad(self)
 		FrameSetup(frame, "CatRotationHelper_Cat_" .. i, CatRotationFrameCounter);
 		
 		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
-		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
+		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	-- setup bear
@@ -911,8 +911,8 @@ function CatRotationHelperOnLoad(self)
 		FrameSetup(frame, "CatRotationHelper_Bear_" .. i, CatRotationFrameCounter);
 		
 		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
-		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
+		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	-- setup events

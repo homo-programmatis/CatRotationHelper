@@ -2,12 +2,16 @@ local THIS_ADDON_NAME="CatRotationHelper";
 local g_Module = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Module.Constants;
 
-function g_Module.FrameSetTexture(a_Frame, a_Texture)
+function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	if (not a_Texture) then
 		return
 	end
 
-	a_Frame:SetTexture(a_Texture)
+	if (not a_MakeRound) then
+		a_Frame:SetTexture(a_Texture);
+	else
+		SetPortraitToTexture(a_Frame, a_Texture);
+	end
 end
 
 function g_Module.FrameDrawFaded(a_Frame)
