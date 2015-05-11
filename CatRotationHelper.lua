@@ -993,6 +993,54 @@ function CatRotationHelperUpdateSurvival(a_ShowEffects)
 	end
 end
 
+local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
+	a_Frame.fading = false;
+	a_Frame.startTime = nil;
+	a_Frame.hascp = false;
+	a_Frame.counting = false;
+
+	a_Frame:SetSize(30, 30);
+	a_Frame:Hide();
+
+	a_Frame.parentFrame = CreateFrame("Frame", a_FrameName .. "P", UIParent);
+	a_Frame.parentFrame:SetFrameStrata("LOW");
+	a_Frame.parentFrame:SetSize(30, 30);
+	a_Frame:SetPoint("CENTER", a_Frame.parentFrame, "CENTER", 0, 0);
+
+	a_Frame.cpframe = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
+	a_Frame.cpframe:SetFrameStrata("BACKGROUND");
+	a_Frame.cpframe:SetPoint("CENTER");
+	a_Frame.cpframe:SetSize(30 * 1.13, 30 * 1.13);
+	a_Frame.cpframe.startTime = nil;
+	a_Frame.cpframe:Hide();
+
+	a_Frame.cpicon = a_Frame.cpframe:CreateTexture(nil, "BACKGROUND");
+	a_Frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"));
+	a_Frame.cpicon:SetAllPoints(a_Frame.cpframe);
+
+	a_Frame.icon = a_Frame:CreateTexture(nil, "ARTWORK");
+	a_Frame.icon:SetAllPoints(a_Frame);
+
+	-- buff fade/gain effects
+	local overlayOffs = 30 * 0.20;
+	a_Frame.overlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelperEventAlert");
+	a_Frame.overlay.icon:SetBlendMode("ADD");
+	a_Frame.overlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
+	a_Frame.overlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
+
+	a_Frame.countframe = CreateFrame("Frame", a_FrameName .. "C", a_Frame);
+	a_Frame.countframe:SetScript("OnUpdate", a_OnUpdate);
+	a_Frame.countframe:Hide();
+	a_Frame.countframe.endTime = nil;
+
+	a_Frame.countframe.durtext = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDurText");
+	a_Frame.countframe.durtext:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
+	a_Frame.countframe.dur2text = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDur2Text");
+	a_Frame.countframe.dur2text:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
+	a_Frame.countframe.dur2text:SetText("*");
+	a_Frame.countframe.dur2text:Hide();
+end
+
 -- OnLoad: Create Frames
 function CatRotationHelperOnLoad(self)
 	-- load addon on druids only
@@ -1021,128 +1069,42 @@ function CatRotationHelperOnLoad(self)
 	survFrame:RegisterForDrag("LeftButton")
 	survFrame:SetClampedToScreen(true)
 
-	-- setup frames
-	for i=1, #g_FramesAll do
-		local frame = g_FramesAll[i]
-
-		frame.parentFrame = CreateFrame("Frame", nil, UIParent);
-		frame.parentFrame:SetFrameStrata("LOW");
-		frame.parentFrame:SetWidth(30)
-		frame.parentFrame:SetHeight(30)
-		frame:SetPoint("CENTER", frame.parentFrame, "CENTER", 0, 0);
-
-		frame:SetWidth(30)
-		frame:SetHeight(30)
-		frame:Hide()
-		frame.hascp = false
-		frame.counting = false
-
-		frame.cpframe = CreateFrame("Frame", nil, frame);
-		frame.cpframe:SetFrameStrata("BACKGROUND");
-		frame.cpframe:SetPoint("CENTER");
-		frame.cpframe:SetWidth(34)
-		frame.cpframe:SetHeight(34)
-		frame.cpframe.startTime = nil;
-		frame.cpframe:Hide();
-
-		frame.cpicon = frame.cpframe:CreateTexture(nil,"BACKGROUND")
-		frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
-		frame.cpicon:SetAllPoints(frame.cpframe)
-
-		frame.icon = frame:CreateTexture(nil,"ARTWORK")
-		frame.icon:SetAllPoints(frame)
+	-- setup cat
+	for i=1, #g_FramesCat do
+		local frame = g_FramesCat[i];
+		FrameSetup(frame, "CatRotationHelper_Cat_" .. i, CatRotationFrameCounter);
+		
 		g_Module.FrameDrawFaded(frame.icon);
 		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
-
-		-- buff fade/gain effects
-		frame.overlay = CreateFrame("Frame", "CatRotationHelperFrameAlert" .. i, frame, "CatRotationHelperEventAlert")
 		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
-		frame.overlay.icon:SetBlendMode("ADD");
-		frame.overlay:SetSize(24*1.5, 24*1.5)
-		frame.overlay:SetPoint("TOPLEFT", frame, "TOPLEFT", -24*0.25, 24*0.25)
-		frame.overlay:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 24*0.25, -24*0.25)		
+	end
 
-		frame.countframe = CreateFrame("Frame", nil, frame);
-		frame.countframe:SetScript("OnUpdate", CatRotationFrameCounter)
-		frame.countframe:Hide();
-		frame.countframe.endTime = nil;
-
-		frame.countframe.durtext = frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDurText")
-		frame.countframe.durtext:SetPoint("CENTER", frame, "CENTER", 0, 0);
-		frame.countframe.dur2text = frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDur2Text")
-		frame.countframe.dur2text:SetPoint("CENTER", frame, "CENTER", 0, -5);
-		frame.countframe.dur2text:SetText("*");
-		frame.countframe.dur2text:Hide();
+	-- setup bear
+	for i=1, #g_FramesBear do
+		local frame = g_FramesBear[i];
+		FrameSetup(frame, "CatRotationHelper_Bear_" .. i, CatRotationFrameCounter);
+		
+		g_Module.FrameDrawFaded(frame.icon);
+		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
+		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
 	end
 
 	-- setup events
 	for i=1, #g_CrhFramesEvents do
-		local event = g_CrhFramesEvents[i]
-		event.parentFrame = CreateFrame("Frame", nil, UIParent);
-		event.parentFrame:SetFrameStrata("LOW");
-		event.parentFrame:SetWidth(30)
-		event.parentFrame:SetHeight(30)
-		event:SetPoint("CENTER", event.parentFrame, "CENTER", 0, 0);
-
-		event:SetWidth(30)
-		event:SetHeight(30)
-		event:Hide()
-		event.fading = false
-		event.startTime = nil
-
-		event.icon = event:CreateTexture(nil,"ARTWORK")
-		event.icon:SetAllPoints(event)
-		g_Module.FrameDrawActive(event.icon);
-
-		event.overlay = CreateFrame("Frame", "CatRotationHelperEventAlert" .. i, event, "CatRotationHelperEventAlert")
-		event.overlay.icon:SetBlendMode("ADD");
-		event.overlay:SetSize(28*1.5, 28*1.5)
-		event.overlay:SetPoint("TOPLEFT", event, "TOPLEFT", -28*0.25, 28*0.25)
-		event.overlay:SetPoint("BOTTOMRIGHT", event, "BOTTOMRIGHT", 28*0.25, -28*0.25)
-
-		event.countframe = CreateFrame("Frame", nil, event);
-		event.countframe:SetScript("OnUpdate", CatRotationFrameEventCounter)
-		event.countframe:Hide();
-		event.countframe.endTime = nil;
-
-		event.countframe.durtext = event.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDurText")
-		event.countframe.durtext:SetPoint("CENTER", event, "CENTER", 0, 0);
+		local frame = g_CrhFramesEvents[i];
+		FrameSetup(frame, "CatRotationHelper_Event_" .. i, CatRotationFrameEventCounter);
+		
+		g_Module.FrameDrawActive(frame.icon);
 	end
 
 	-- setup survival frame
 	for i=1, #g_CrhFramesSurv do
-		local event = g_CrhFramesSurv[i]
-		event.parentFrame = CreateFrame("Frame", nil, UIParent);
-		event.parentFrame:SetFrameStrata("LOW");
-		event.parentFrame:SetWidth(30)
-		event.parentFrame:SetHeight(30)
-		event:SetPoint("CENTER", event.parentFrame, "CENTER", 0, 0);
+		local frame = g_CrhFramesSurv[i];
+		FrameSetup(frame, "CatRotationHelper_Surv_" .. i, CatRotationFrameEventCounter);
 
-		event:SetWidth(30)
-		event:SetHeight(30)
-		event:Hide()
-		event.fading = false
-		event.startTime = nil
-
-		event.overlay = CreateFrame("Frame", "CatRotationHelperSurvivalAlert" .. i, event, "CatRotationHelperEventAlert")
-		g_Module.FrameSetTexture(event.overlay.icon, survivalTextures[i]);
-		event.overlay.icon:SetBlendMode("ADD");
-		event.overlay:SetSize(28*1.5, 28*1.5)
-		event.overlay:SetPoint("TOPLEFT", event, "TOPLEFT", -28*0.25, 28*0.25)
-		event.overlay:SetPoint("BOTTOMRIGHT", event, "BOTTOMRIGHT", 28*0.25, -28*0.25)
-		
-		event.icon = event:CreateTexture(nil,"ARTWORK")
-		event.icon:SetAllPoints(event)
-		g_Module.FrameDrawActive(event.icon);
-		g_Module.FrameSetTexture(event.icon, survivalTextures[i]);
-
-		event.countframe = CreateFrame("Frame", nil, event);
-		event.countframe:SetScript("OnUpdate", CatRotationFrameEventCounter)
-		event.countframe:Hide();
-		event.countframe.endTime = nil;
-
-		event.countframe.durtext = event.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDurText")
-		event.countframe.durtext:SetPoint("CENTER", event, "CENTER", 0, 0);
+		g_Module.FrameDrawActive(frame.icon);
+		g_Module.FrameSetTexture(frame.overlay.icon, survivalTextures[i]);
+		g_Module.FrameSetTexture(frame.icon, survivalTextures[i]);
 	end
 
 	self:RegisterEvent("ADDON_LOADED");
