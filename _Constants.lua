@@ -26,5 +26,8 @@ g_Module.Constants = MakeConstTable
 	STATUS_COUNTING		= 1,
 	STATUS_READY		= 2,
 	
+	UI_SIZE_FRAME		= 30,
+	UI_SIZE_FRAME_MARGIN = 5,
+	
 	GCD_LENGTH			= 1.6,
 };

@@ -481,213 +481,38 @@ end
 
 -- rotate main frame
 function CatRotationHelperMainOnClick()
-
-	if(crhMainAngle == 270) then
-		crhMainAngle = 0
-	else
-		crhMainAngle = crhMainAngle + 90
-	end
-
+	crhMainAngle = (crhMainAngle + 90) % 360;
 	CatRotationFrameSetMainStyle()
 end
 
 function CatRotationFrameSetMainStyle()
-	for i=1, #g_FramesAll do
-		g_FramesAll[i].parentFrame:ClearAllPoints()
-	end
-
-	local headerFrame = CatRotationHelperHeader;
-
-	if(crhMainAngle == 0) then
-		headerFrame:SetHeight(36)
-		headerFrame:SetWidth(176)
-
-		g_FramesCat[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-		g_FramesBear[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-
-		g_FramesCat[2].parentFrame:SetPoint("TOPLEFT", g_FramesCat[1].parentFrame, "TOPRIGHT", 5, 0);
-		g_FramesBear[2].parentFrame:SetPoint("TOPLEFT", g_FramesBear[1].parentFrame, "TOPRIGHT", 5, 0);
-
-		g_FramesCat[3].parentFrame:SetPoint("TOPLEFT", g_FramesCat[2].parentFrame, "TOPRIGHT", 5, 0);
-		g_FramesBear[3].parentFrame:SetPoint("TOPLEFT", g_FramesBear[2].parentFrame, "TOPRIGHT", 5, 0);
-
-		g_FramesCat[4].parentFrame:SetPoint("TOPLEFT", g_FramesCat[3].parentFrame, "TOPRIGHT", 5, 0);
-		g_FramesBear[4].parentFrame:SetPoint("TOPLEFT", g_FramesBear[3].parentFrame, "TOPRIGHT", 5, 0);
-
-		g_FramesCat[5].parentFrame:SetPoint("TOPLEFT", g_FramesCat[4].parentFrame, "TOPRIGHT", 5, 0);
-		g_FramesBear[5].parentFrame:SetPoint("TOPLEFT", g_FramesBear[4].parentFrame, "TOPRIGHT", 5, 0);
-
-	elseif(crhMainAngle == 90) then
-		headerFrame:SetHeight(176)
-		headerFrame:SetWidth(36)
-
-		g_FramesCat[1].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
-		g_FramesBear[1].parentFrame:SetPoint("BOTTOMLEFT", headerFrame, "BOTTOMLEFT", 3, 3);
-
-		g_FramesCat[2].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[1].parentFrame, "TOPLEFT", 0, 5);
-		g_FramesBear[2].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[1].parentFrame, "TOPLEFT", 0, 5);
-
-		g_FramesCat[3].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[2].parentFrame, "TOPLEFT", 0, 5);
-		g_FramesBear[3].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[2].parentFrame, "TOPLEFT", 0, 5);
-
-		g_FramesCat[4].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[3].parentFrame, "TOPLEFT", 0, 5);
-		g_FramesBear[4].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[3].parentFrame, "TOPLEFT", 0, 5);
-
-		g_FramesCat[5].parentFrame:SetPoint("BOTTOMLEFT", g_FramesCat[4].parentFrame, "TOPLEFT", 0, 5);
-		g_FramesBear[5].parentFrame:SetPoint("BOTTOMLEFT", g_FramesBear[4].parentFrame, "TOPLEFT", 0, 5);
-
-	elseif(crhMainAngle == 180) then
-		headerFrame:SetHeight(36)
-		headerFrame:SetWidth(176)
-
-		g_FramesCat[1].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
-		g_FramesBear[1].parentFrame:SetPoint("TOPRIGHT", headerFrame, "TOPRIGHT", -3, -3);
-
-		g_FramesCat[2].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[1].parentFrame, "TOPLEFT", -5, 0);
-		g_FramesBear[2].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[1].parentFrame, "TOPLEFT", -5, 0);
-
-		g_FramesCat[3].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[2].parentFrame, "TOPLEFT", -5, 0);
-		g_FramesBear[3].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[2].parentFrame, "TOPLEFT", -5, 0);
-
-		g_FramesCat[4].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[3].parentFrame, "TOPLEFT", -5, 0);
-		g_FramesBear[4].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[3].parentFrame, "TOPLEFT", -5, 0);
-
-		g_FramesCat[5].parentFrame:SetPoint("TOPRIGHT", g_FramesCat[4].parentFrame, "TOPLEFT", -5, 0);
-		g_FramesBear[5].parentFrame:SetPoint("TOPRIGHT", g_FramesBear[4].parentFrame, "TOPLEFT", -5, 0);
-
-	else
-		headerFrame:SetHeight(176)
-		headerFrame:SetWidth(36)
-
-		g_FramesCat[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-		g_FramesBear[1].parentFrame:SetPoint("TOPLEFT", headerFrame, "TOPLEFT", 3, -3);
-
-		g_FramesCat[2].parentFrame:SetPoint("TOPLEFT", g_FramesCat[1].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_FramesBear[2].parentFrame:SetPoint("TOPLEFT", g_FramesBear[1].parentFrame, "BOTTOMLEFT", 0, -5);
-
-		g_FramesCat[3].parentFrame:SetPoint("TOPLEFT", g_FramesCat[2].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_FramesBear[3].parentFrame:SetPoint("TOPLEFT", g_FramesBear[2].parentFrame, "BOTTOMLEFT", 0, -5);
-
-		g_FramesCat[4].parentFrame:SetPoint("TOPLEFT", g_FramesCat[3].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_FramesBear[4].parentFrame:SetPoint("TOPLEFT", g_FramesBear[3].parentFrame, "BOTTOMLEFT", 0, -5);
-
-		g_FramesCat[5].parentFrame:SetPoint("TOPLEFT", g_FramesCat[4].parentFrame, "BOTTOMLEFT", 0, -5);
-		g_FramesBear[5].parentFrame:SetPoint("TOPLEFT", g_FramesBear[4].parentFrame, "BOTTOMLEFT", 0, -5);
-	end
-
+	g_Module.FramesSetPosition(g_FramesCat,  CatRotationHelperHeader, crhMainAngle);
+	g_Module.FramesSetPosition(g_FramesBear, CatRotationHelperHeader, crhMainAngle);
 end
 
 -- rotate event frame
 function CatRotationHelperEventsOnClick()
-
-	if(crhEventAngle == 270) then
-		crhEventAngle = 0
-	else
-		crhEventAngle = crhEventAngle + 90
-	end
-
+	crhEventAngle = (crhEventAngle + 90) % 360;
 	CatRotationFrameSetEventStyle()
 end
 
 function CatRotationFrameSetEventStyle()
-	g_CrhFramesEvents[1].parentFrame:ClearAllPoints()
-	g_CrhFramesEvents[2].parentFrame:ClearAllPoints()
-	g_CrhFramesEvents[3].parentFrame:ClearAllPoints()
-	g_CrhFramesEvents[4].parentFrame:ClearAllPoints()
-	
-	local eventFrame = CatRotationHelperEvents
-
-	if(crhEventAngle == 0) then
-		eventFrame:SetHeight(36)
-		eventFrame:SetWidth(140)
-
-		g_CrhFramesEvents[1].parentFrame:SetPoint("TOPLEFT", eventFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesEvents[2].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[1].parentFrame, "TOPRIGHT", 4, 0);
-		g_CrhFramesEvents[3].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[2].parentFrame, "TOPRIGHT", 4, 0);
-		g_CrhFramesEvents[4].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[3].parentFrame, "TOPRIGHT", 4, 0);
-		
-	elseif(crhEventAngle == 90) then
-		eventFrame:SetHeight(140)
-		eventFrame:SetWidth(36)
-
-		g_CrhFramesEvents[1].parentFrame:SetPoint("BOTTOMLEFT", eventFrame, "BOTTOMLEFT", 3, 3);
-		g_CrhFramesEvents[2].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesEvents[1].parentFrame, "TOPLEFT", 0, 4);
-		g_CrhFramesEvents[3].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesEvents[2].parentFrame, "TOPLEFT", 0, 4);
-		g_CrhFramesEvents[4].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesEvents[3].parentFrame, "TOPLEFT", 0, 4);
-		
-	elseif(crhEventAngle == 180) then
-		eventFrame:SetHeight(36)
-		eventFrame:SetWidth(140)
-
-		g_CrhFramesEvents[1].parentFrame:SetPoint("TOPRIGHT", eventFrame, "TOPRIGHT", -3, -3);
-		g_CrhFramesEvents[2].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesEvents[1].parentFrame, "TOPLEFT", -4, 0);
-		g_CrhFramesEvents[3].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesEvents[2].parentFrame, "TOPLEFT", -4, 0);
-		g_CrhFramesEvents[4].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesEvents[3].parentFrame, "TOPLEFT", -4, 0);
-
-	else
-		eventFrame:SetHeight(140)
-		eventFrame:SetWidth(36)
-
-		g_CrhFramesEvents[1].parentFrame:SetPoint("TOPLEFT", eventFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesEvents[2].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[1].parentFrame, "BOTTOMLEFT", 0, -4);
-		g_CrhFramesEvents[3].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[2].parentFrame, "BOTTOMLEFT", 0, -4);
-		g_CrhFramesEvents[4].parentFrame:SetPoint("TOPLEFT", g_CrhFramesEvents[3].parentFrame, "BOTTOMLEFT", 0, -4);
-	end
-
+	g_Module.FramesSetPosition(g_CrhFramesEvents, CatRotationHelperEvents, crhEventAngle);
 end
 
 -- rotate survival frame
 function CatRotationHelperSurvivalOnClick()
-
-	if(crhSurvivalAngle == 270) then
-		crhSurvivalAngle = 0
-	else
-		crhSurvivalAngle = crhSurvivalAngle + 90
-	end
-
+	crhSurvivalAngle = (crhSurvivalAngle + 90) % 360;
 	CatRotationFrameSetSurvivalStyle()
 end
 
 function CatRotationFrameSetSurvivalStyle()
-	g_CrhFramesSurv[1].parentFrame:ClearAllPoints()
-	g_CrhFramesSurv[2].parentFrame:ClearAllPoints()
-	g_CrhFramesSurv[3].parentFrame:ClearAllPoints()
-
-	local survFrame = CatRotationHelperSurvival
-
-	if(crhSurvivalAngle == 0) then
-		survFrame:SetHeight(36)
-		survFrame:SetWidth(105)
-
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame:SetPoint("TOPLEFT", survFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame, "TOPRIGHT", 4, 0);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame, "TOPRIGHT", 4, 0);
-
-	elseif(crhSurvivalAngle == 90) then
-		survFrame:SetHeight(105)
-		survFrame:SetWidth(36)
-
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame:SetPoint("BOTTOMLEFT", survFrame, "BOTTOMLEFT", 3, 3);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame, "TOPLEFT", 0, 4);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[3]].parentFrame:SetPoint("BOTTOMLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame, "TOPLEFT", 0, 4);
-
-	elseif(crhSurvivalAngle == 180) then
-		survFrame:SetHeight(36)
-		survFrame:SetWidth(105)
-
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame:SetPoint("TOPRIGHT", survFrame, "TOPRIGHT", -3, -3);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame, "TOPLEFT", -4, 0);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[3]].parentFrame:SetPoint("TOPRIGHT", g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame, "TOPLEFT", -4, 0);
-
-	else
-		survFrame:SetHeight(105)
-		survFrame:SetWidth(36)
-
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame:SetPoint("TOPLEFT", survFrame, "TOPLEFT", 3, -3);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[1]].parentFrame, "BOTTOMLEFT", 0, -4);
-		g_CrhFramesSurv[g_CrhFrameOrderSurv[3]].parentFrame:SetPoint("TOPLEFT", g_CrhFramesSurv[g_CrhFrameOrderSurv[2]].parentFrame, "BOTTOMLEFT", 0, -4);
+	local survFrames = {};
+	for i = 1, #g_CrhFrameOrderSurv do
+		survFrames[i] = g_CrhFramesSurv[g_CrhFrameOrderSurv[i]];
 	end
 
+	g_Module.FramesSetPosition(survFrames, CatRotationHelperSurvival, crhSurvivalAngle);
 end
 
 function CatRotationHelperHideAll()
@@ -999,18 +824,18 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.hascp = false;
 	a_Frame.counting = false;
 
-	a_Frame:SetSize(30, 30);
+	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:Hide();
 
 	a_Frame.parentFrame = CreateFrame("Frame", a_FrameName .. "P", UIParent);
 	a_Frame.parentFrame:SetFrameStrata("LOW");
-	a_Frame.parentFrame:SetSize(30, 30);
+	a_Frame.parentFrame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:SetPoint("CENTER", a_Frame.parentFrame, "CENTER", 0, 0);
 
 	a_Frame.cpframe = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
 	a_Frame.cpframe:SetFrameStrata("BACKGROUND");
 	a_Frame.cpframe:SetPoint("CENTER");
-	a_Frame.cpframe:SetSize(30 * 1.13, 30 * 1.13);
+	a_Frame.cpframe:SetSize(g_Consts.UI_SIZE_FRAME * 1.13, g_Consts.UI_SIZE_FRAME * 1.13);
 	a_Frame.cpframe.startTime = nil;
 	a_Frame.cpframe:Hide();
 
@@ -1022,7 +847,7 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.icon:SetAllPoints(a_Frame);
 
 	-- buff fade/gain effects
-	local overlayOffs = 30 * 0.20;
+	local overlayOffs = g_Consts.UI_SIZE_FRAME * 0.20;
 	a_Frame.overlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelperEventAlert");
 	a_Frame.overlay.icon:SetBlendMode("ADD");
 	a_Frame.overlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
@@ -1109,11 +934,6 @@ function CatRotationHelperOnLoad(self)
 
 	self:RegisterEvent("ADDON_LOADED");
 	self:RegisterEvent("PLAYER_TALENT_UPDATE")
-
-	-- power bar
-	--self:RegisterEvent("UNIT_ATTACK_POWER")
-	--self:RegisterEvent("UNIT_ATTACK_SPEED")
-	--self:RegisterEvent("COMBAT_RATING_UPDATE")
 end
 
 -- Event Handling
