@@ -444,12 +444,10 @@ end
 function CatRotationFrameSetMainScale()
 	for i=1, #g_FramesCat do
 		g_FramesCat[i]:SetScale(crhScale);
-		g_FramesCat[i].parentFrame:SetScale(crhScale);
 	end
 
 	for i=1, #g_FramesBear do
 		g_FramesBear[i]:SetScale(crhScale);
-		g_FramesBear[i].parentFrame:SetScale(crhScale);
 	end
 
 	CatRotationHelperHeader:SetScale(crhScale);
@@ -458,7 +456,6 @@ end
 function CatRotationFrameSetEventScale()
 	for i=1, #g_CrhFramesEvents do
 		g_CrhFramesEvents[i]:SetScale(crhEventScale);
-		g_CrhFramesEvents[i].parentFrame:SetScale(crhEventScale);
 	end
 
 	CatRotationHelperEvents:SetScale(crhEventScale);
@@ -467,7 +464,6 @@ end
 function CatRotationFrameSetSurvivalScale()
 	for i=1, #g_CrhFramesSurv do
 		g_CrhFramesSurv[i]:SetScale(crhSurvivalScale);
-		g_CrhFramesSurv[i].parentFrame:SetScale(crhSurvivalScale);
 	end
 
 	CatRotationHelperSurvival:SetScale(crhSurvivalScale);
@@ -820,11 +816,6 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 
 	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:Hide();
-
-	a_Frame.parentFrame = CreateFrame("Frame", a_FrameName .. "P", UIParent);
-	a_Frame.parentFrame:SetFrameStrata("LOW");
-	a_Frame.parentFrame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
-	a_Frame:SetPoint("CENTER", a_Frame.parentFrame, "CENTER", 0, 0);
 
 	a_Frame.cpframe = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
 	a_Frame.cpframe:SetFrameStrata("BACKGROUND");

@@ -96,8 +96,8 @@ function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
 		x = MathRound(x, 0);
 		y = MathRound(y, 0);
 
-		frame.parentFrame:ClearAllPoints();
-		frame.parentFrame:SetPoint("CENTER", a_Box, "CENTER", x, y);
+		frame:ClearAllPoints();
+		frame:SetPoint("CENTER", a_Box, "CENTER", x, y);
 	end
 end
 
