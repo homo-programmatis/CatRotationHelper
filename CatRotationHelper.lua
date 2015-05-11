@@ -282,7 +282,7 @@ function CatRotationHelperUnlock()
 
 		frame:Show();
 		frame:SetAlpha(1);
-		g_Module.FrameDrawActive(frame.icon);
+		g_Module.FrameDrawActive(frame);
 	end
 
 	-- show static event frames
@@ -332,14 +332,14 @@ function CatRotationHelperLock()
 		local frame = g_FramesCat[i]
 
 		frame:Hide()
-		g_Module.FrameDrawFaded(frame.icon);
+		g_Module.FrameDrawFaded(frame);
 	end
 
 	for i=1, #g_FramesBear do
 		local frame = g_FramesBear[i]
 
 		frame:Hide()
-		g_Module.FrameDrawFaded(frame.icon);
+		g_Module.FrameDrawFaded(frame);
 	end
 
 	for i=1, #g_CrhFramesEvents do
@@ -580,8 +580,7 @@ function CatRotationHelperCheckClearcast()
 				local frame = g_FramesCat[i];
 
 				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.TextureSpecial);
-				g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.TextureSpecial);
+				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.TextureSpecial);
 
 				if(frame.hascp) then
 					frame.countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
@@ -601,8 +600,7 @@ function CatRotationHelperCheckClearcast()
 				local frame = g_FramesCat[i];
 
 				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
-				g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
-				g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture);
+				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture);
 
 				if(frame.hascp) then
 					frame.countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
@@ -884,9 +882,8 @@ function CatRotationHelperOnLoad(self)
 		local frame = g_FramesCat[i];
 		FrameSetup(frame, "CatRotationHelper_Cat_" .. i, CatRotationFrameCounter);
 		
-		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+		g_Module.FrameDrawFaded(frame);
+		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	-- setup bear
@@ -894,9 +891,8 @@ function CatRotationHelperOnLoad(self)
 		local frame = g_FramesBear[i];
 		FrameSetup(frame, "CatRotationHelper_Bear_" .. i, CatRotationFrameCounter);
 		
-		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-		g_Module.FrameSetTexture(frame.overlay.icon, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+		g_Module.FrameDrawFaded(frame);
+		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	-- setup events
@@ -904,7 +900,7 @@ function CatRotationHelperOnLoad(self)
 		local frame = g_CrhFramesEvents[i];
 		FrameSetup(frame, "CatRotationHelper_Event_" .. i, CatRotationFrameEventCounter);
 		
-		g_Module.FrameDrawActive(frame.icon);
+		g_Module.FrameDrawActive(frame);
 	end
 
 	-- setup survival frame
@@ -912,9 +908,8 @@ function CatRotationHelperOnLoad(self)
 		local frame = g_CrhFramesSurv[i];
 		FrameSetup(frame, "CatRotationHelper_Surv_" .. i, CatRotationFrameEventCounter);
 
-		g_Module.FrameDrawActive(frame.icon);
-		g_Module.FrameSetTexture(frame.overlay.icon, survivalTextures[i]);
-		g_Module.FrameSetTexture(frame.icon, survivalTextures[i]);
+		g_Module.FrameDrawActive(frame);
+		g_Module.FrameSetTexture(frame, survivalTextures[i]);
 	end
 
 	self:RegisterEvent("ADDON_LOADED");

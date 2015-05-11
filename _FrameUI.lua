@@ -8,18 +8,20 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	end
 
 	if (not a_MakeRound) then
-		a_Frame:SetTexture(a_Texture);
+		a_Frame.icon:SetTexture(a_Texture);
+		a_Frame.overlay.icon:SetTexture(a_Texture);
 	else
-		SetPortraitToTexture(a_Frame, a_Texture);
+		SetPortraitToTexture(a_Frame.icon, a_Texture);
+		SetPortraitToTexture(a_Frame.overlay.icon, a_Texture);
 	end
 end
 
 function g_Module.FrameDrawFaded(a_Frame)
-	a_Frame:SetVertexColor(0.35, 0.35, 0.35, 0.70);
+	a_Frame.icon:SetVertexColor(0.35, 0.35, 0.35, 0.70);
 end
 
 function g_Module.FrameDrawActive(a_Frame)
-	a_Frame:SetVertexColor(1.00, 1.00, 1.00, 1.00);
+	a_Frame.icon:SetVertexColor(1.00, 1.00, 1.00, 1.00);
 end
 
 local function MathRound(a_Value, a_Digits)
@@ -116,7 +118,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
 		a_Frame.counting = false
 		a_Frame.countframe:Hide();
 		a_Frame.countframe.endTime = nil;
-		g_Module.FrameDrawFaded(a_Frame.icon);
+		g_Module.FrameDrawFaded(a_Frame);
 		a_Frame.overlay.animOut:Play()
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
 		if (a_Frame.counting and (a_Expiration == a_Frame.countframe.endTime)) then
@@ -129,7 +131,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
 		end
 		
 		a_Frame.counting = true
-		g_Module.FrameDrawActive(a_Frame.icon);
+		g_Module.FrameDrawActive(a_Frame);
 
 		a_Frame.countframe.endTime = a_Expiration
 		a_Frame.countframe:Show()
