@@ -268,7 +268,7 @@ function CatRotationHelperUnlock()
 	HideUIPanel(InterfaceOptionsFrame)
 	unlocked = true;
 
-	-- hide bear frames
+	-- Deactivate & hide current frames
 	if(showBear) then
 		showBear = false
 
@@ -276,10 +276,9 @@ function CatRotationHelperUnlock()
 			g_Module.FrameSetStatus(g_FramesBear[i], g_Consts.STATUS_READY);
 			g_FramesBear[i]:Hide()
 		end
+
 		CatRotationHelperLacerateCounter:Hide()
 		CatRotationHelperSetBearCP(0)
-
-	-- stop cat counters and cps
 	elseif(showCat) then
 		showCat = false
 
@@ -345,16 +344,18 @@ function CatRotationHelperLock()
 	unlocked = false;
 	clearCast = false;
 
-	for i=1, #g_FramesAll do
-		local frame = g_FramesAll[i]
+	for i=1, #g_FramesCat do
+		local frame = g_FramesCat[i]
 
 		frame:Hide()
 		g_Module.FrameDrawFaded(frame.icon);
-		g_Module.FrameSetTexture(frame.icon, frame.m_CrhLogic.Texture);
-		frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
-		frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
-		frame.countframe:Hide();
-		frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
+	end
+
+	for i=1, #g_FramesBear do
+		local frame = g_FramesBear[i]
+
+		frame:Hide()
+		g_Module.FrameDrawFaded(frame.icon);
 	end
 
 	for i=1, #g_CrhFramesEvents do
