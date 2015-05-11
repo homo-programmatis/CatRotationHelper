@@ -56,22 +56,6 @@ local g_FramesBear =
 	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
 };
 
--- Temporary hack for code refactoring
-local g_FramesAll = 
-{
-	g_FramesCat[1],
-	g_FramesCat[2],
-	g_FramesCat[3],
-	g_FramesCat[4],
-	g_FramesCat[5],
-
-	g_FramesBear[1],
-	g_FramesBear[2],
-	g_FramesBear[3],
-	g_FramesBear[4],
-	g_FramesBear[5],
-}
-
 local g_CrhFramesEvents = {};
 local g_CrhFramesSurv = {};
 local survivalTextures = {};
@@ -425,8 +409,12 @@ end
 -- show all frames in a_FrameList
 local function CatRotationHelperShowByFrame(a_FrameList)
 	--if interrupting previous fade, hide frames
-	for i=1, #g_FramesAll do
-		g_FramesAll[i]:Hide();
+	for i=1, #g_FramesCat do
+		g_FramesCat[i]:Hide();
+	end
+
+	for i=1, #g_FramesBear do
+		g_FramesBear[i]:Hide();
 	end
 
 	for i=1, #a_FrameList do
@@ -454,9 +442,14 @@ function CatRotationHelperShowBear()
 end
 
 function CatRotationFrameSetMainScale()
-	for i=1, #g_FramesAll do
-		g_FramesAll[i]:SetScale(crhScale);
-		g_FramesAll[i].parentFrame:SetScale(crhScale);
+	for i=1, #g_FramesCat do
+		g_FramesCat[i]:SetScale(crhScale);
+		g_FramesCat[i].parentFrame:SetScale(crhScale);
+	end
+
+	for i=1, #g_FramesBear do
+		g_FramesBear[i]:SetScale(crhScale);
+		g_FramesBear[i].parentFrame:SetScale(crhScale);
 	end
 
 	CatRotationHelperHeader:SetScale(crhScale);
@@ -1091,20 +1084,29 @@ function CatRotationHelperFadeFunc(self)
 		self:Hide();
 
 		if(self.fading) then
-			for i=1, #g_FramesAll do
-				g_FramesAll[i]:Hide();
+			for i=1, #g_FramesCat do
+				g_FramesCat[i]:Hide();
+			end
+
+			for i=1, #g_FramesBear do
+				g_FramesBear[i]:Hide();
 			end
 		end
 	end
 
+	local alpha = 0;
 	if(self.fading) then
-		for i=1, #g_FramesAll do
-			g_FramesAll[i]:SetAlpha(1-elapsed*2.5);
-		end
+		alpha = 1-elapsed*2.5;
 	else
-		for i=1, #g_FramesAll do
-			g_FramesAll[i]:SetAlpha(elapsed*2.5);
-		end
+		alpha = elapsed*2.5;
+	end
+	
+	for i=1, #g_FramesCat do
+		g_FramesCat[i]:SetAlpha(alpha);
+	end
+
+	for i=1, #g_FramesBear do
+		g_FramesBear[i]:SetAlpha(alpha);
 	end
 end
 
