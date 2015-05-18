@@ -245,10 +245,10 @@ function CatRotationHelperUpdateEverything()
 end
 
 function CatRotationHelperUnlock()
-	CatRotationHelperHeader:Show();
-	CatRotationHelperEvents:Show();
-	CatRotationHelperSurvival:Show();
-	CatRotationHelperLockFrame:Show();
+	CatRotationHelper_BoxMain:Show();
+	CatRotationHelper_BoxEvnt:Show();
+	CatRotationHelper_BoxSurv:Show();
+	CatRotationHelper_DlgMoveHint:Show();
 	HideUIPanel(InterfaceOptionsFrame)
 	unlocked = true;
 
@@ -261,7 +261,7 @@ function CatRotationHelperUnlock()
 			g_FramesBear[i]:Hide()
 		end
 
-		CatRotationHelperLacerateCounter:Hide()
+		CatRotationHelper_TimerLacerate:Hide()
 		CatRotationHelperSetBearCP(0)
 	elseif(showCat) then
 		showCat = false
@@ -274,7 +274,7 @@ function CatRotationHelperUnlock()
 	end
 
 	-- interrupt previous fade
-	CatRotationHelperFadeFrame:Hide();
+	CatRotationHelper_TimerFade:Hide();
 
 	-- show static cat frames
 	for i=1, #g_FramesCat do
@@ -320,10 +320,10 @@ function CatRotationHelperLock()
 		return
 	end
 
-	CatRotationHelperHeader:Hide();
-	CatRotationHelperEvents:Hide();
-	CatRotationHelperSurvival:Hide();
-	CatRotationHelperLockFrame:Hide();
+	CatRotationHelper_BoxMain:Hide();
+	CatRotationHelper_BoxEvnt:Hide();
+	CatRotationHelper_BoxSurv:Hide();
+	CatRotationHelper_DlgMoveHint:Hide();
 
 	unlocked = false;
 	clearCast = false;
@@ -422,9 +422,9 @@ local function CatRotationHelperShowByFrame(a_FrameList)
 	end
 
 	-- fade effect
-	CatRotationHelperFadeFrame:Show();
-	CatRotationHelperFadeFrame.fading = false;
-	CatRotationHelperFadeFrame.startTime = GetTime();
+	CatRotationHelper_TimerFade:Show();
+	CatRotationHelper_TimerFade.fading = false;
+	CatRotationHelper_TimerFade.startTime = GetTime();
 end
 
 function CatRotationHelperShowCat()
@@ -450,7 +450,7 @@ function CatRotationFrameSetMainScale()
 		g_FramesBear[i]:SetScale(crhScale);
 	end
 
-	CatRotationHelperHeader:SetScale(crhScale);
+	CatRotationHelper_BoxMain:SetScale(crhScale);
 end
 
 function CatRotationFrameSetEventScale()
@@ -458,7 +458,7 @@ function CatRotationFrameSetEventScale()
 		g_CrhFramesEvents[i]:SetScale(crhEventScale);
 	end
 
-	CatRotationHelperEvents:SetScale(crhEventScale);
+	CatRotationHelper_BoxEvnt:SetScale(crhEventScale);
 end
 
 function CatRotationFrameSetSurvivalScale()
@@ -466,32 +466,32 @@ function CatRotationFrameSetSurvivalScale()
 		g_CrhFramesSurv[i]:SetScale(crhSurvivalScale);
 	end
 
-	CatRotationHelperSurvival:SetScale(crhSurvivalScale);
+	CatRotationHelper_BoxSurv:SetScale(crhSurvivalScale);
 end
 
 -- rotate main frame
-function CatRotationHelperMainOnClick()
+function CatRotationHelper_BoxMain_OnClick()
 	crhMainAngle = (crhMainAngle + 90) % 360;
 	CatRotationFrameSetMainStyle()
 end
 
 function CatRotationFrameSetMainStyle()
-	g_Module.FramesSetPosition(g_FramesCat,  CatRotationHelperHeader, crhMainAngle);
-	g_Module.FramesSetPosition(g_FramesBear, CatRotationHelperHeader, crhMainAngle);
+	g_Module.FramesSetPosition(g_FramesCat,  CatRotationHelper_BoxMain, crhMainAngle);
+	g_Module.FramesSetPosition(g_FramesBear, CatRotationHelper_BoxMain, crhMainAngle);
 end
 
 -- rotate event frame
-function CatRotationHelperEventsOnClick()
+function CatRotationHelper_BoxEvnt_OnClick()
 	crhEventAngle = (crhEventAngle + 90) % 360;
 	CatRotationFrameSetEventStyle()
 end
 
 function CatRotationFrameSetEventStyle()
-	g_Module.FramesSetPosition(g_CrhFramesEvents, CatRotationHelperEvents, crhEventAngle);
+	g_Module.FramesSetPosition(g_CrhFramesEvents, CatRotationHelper_BoxEvnt, crhEventAngle);
 end
 
 -- rotate survival frame
-function CatRotationHelperSurvivalOnClick()
+function CatRotationHelper_BoxSurv_OnClick()
 	crhSurvivalAngle = (crhSurvivalAngle + 90) % 360;
 	CatRotationFrameSetSurvivalStyle()
 end
@@ -502,7 +502,7 @@ function CatRotationFrameSetSurvivalStyle()
 		survFrames[i] = g_CrhFramesSurv[g_CrhFrameOrderSurv[i]];
 	end
 
-	g_Module.FramesSetPosition(survFrames, CatRotationHelperSurvival, crhSurvivalAngle);
+	g_Module.FramesSetPosition(survFrames, CatRotationHelper_BoxSurv, crhSurvivalAngle);
 end
 
 function CatRotationHelperHideAll()
@@ -513,7 +513,7 @@ function CatRotationHelperHideAll()
 		showBear = false
 
 		frameList = g_FramesBear
-		CatRotationHelperLacerateCounter:Hide()
+		CatRotationHelper_TimerLacerate:Hide()
 		CatRotationHelperSetBearCP(0)
 	elseif(showCat) then
 		showCat = false
@@ -530,9 +530,9 @@ function CatRotationHelperHideAll()
 	end
 
 	-- general fade animation
-	CatRotationHelperFadeFrame:Show();
-	CatRotationHelperFadeFrame.fading = true;
-	CatRotationHelperFadeFrame.startTime = GetTime();
+	CatRotationHelper_TimerFade:Show();
+	CatRotationHelper_TimerFade.fading = true;
+	CatRotationHelper_TimerFade.startTime = GetTime();
 
 	-- hide events
 	for i=1, #g_CrhFramesEvents do
@@ -551,7 +551,7 @@ end
 function crhUpdateLacerate()
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 	if (name == nil) then
-		CatRotationHelperLacerateCounter:Hide();
+		CatRotationHelper_TimerLacerate:Hide();
 		CatRotationHelperSetBearCP(0);
 		return;
 	end
@@ -564,8 +564,8 @@ function crhUpdateLacerate()
 	end
 
 	-- setup lacerate warning
-	CatRotationHelperLacerateCounter:Show()
-	CatRotationHelperLacerateCounter.expTime = expTime
+	CatRotationHelper_TimerLacerate:Show()
+	CatRotationHelper_TimerLacerate.expTime = expTime
 
 	-- set cp effects
 	CatRotationHelperSetBearCP(stacks);
@@ -675,7 +675,7 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	
 	if (a_CooldownID) then
 		eventCdTimers[a_CooldownID] = spellDuration + spellStart
-		CatRotationHelperCdCounter:Show()
+		CatRotationHelper_TimerCooldown:Show()
 	end
 end
 
@@ -785,7 +785,7 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	end
 
 	survivalCdTimers[a_FrameID] = spellDuration + spellStart
-	CatRotationHelperCdCounter:Show()
+	CatRotationHelper_TimerCooldown:Show()
 
 	local status, expiration = g_Module.CalcFrameFromBuff(a_SpellID);
 	if (g_Consts.STATUS_COUNTING ~= status) then
@@ -831,7 +831,7 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 
 	-- buff fade/gain effects
 	local overlayOffs = g_Consts.UI_SIZE_FRAME * 0.20;
-	a_Frame.overlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelperEventAlert");
+	a_Frame.overlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelper_FrameBaseOverlay");
 	a_Frame.overlay.icon:SetBlendMode("ADD");
 	a_Frame.overlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
 	a_Frame.overlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
@@ -841,9 +841,9 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.countframe:Hide();
 	a_Frame.countframe.endTime = nil;
 
-	a_Frame.countframe.durtext = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDurText");
+	a_Frame.countframe.durtext = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
 	a_Frame.countframe.durtext:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
-	a_Frame.countframe.dur2text = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelperDur2Text");
+	a_Frame.countframe.dur2text = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Bigger");
 	a_Frame.countframe.dur2text:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
 	a_Frame.countframe.dur2text:SetText("*");
 	a_Frame.countframe.dur2text:Hide();
@@ -865,13 +865,13 @@ function CatRotationHelperOnLoad(self)
 	self:SetClampedToScreen(true)
 
 
-	local eventFrame = CatRotationHelperEvents
+	local eventFrame = CatRotationHelper_BoxEvnt
 	eventFrame:SetBackdropColor(0, 0, 0);
 	eventFrame:RegisterForClicks("RightButtonUp")
 	eventFrame:RegisterForDrag("LeftButton")
 	eventFrame:SetClampedToScreen(true)
 
-	local survFrame = CatRotationHelperSurvival
+	local survFrame = CatRotationHelper_BoxSurv
 	survFrame:SetBackdropColor(0, 0, 0);
 	survFrame:RegisterForClicks("RightButtonUp")
 	survFrame:RegisterForDrag("LeftButton")
@@ -1033,7 +1033,7 @@ function CatRotationFrameEventCounter(self)
 end
 
 -- combo point animation when lacerate is about to expire
-function CatRotationHelperLacerateCounterFunc(self)
+function CatRotationHelper_TimerLacerate_OnUpdate(self)
 	local remaining = self.expTime - GetTime()
 
 	if(remaining > 3.0) then
@@ -1063,7 +1063,7 @@ end
 ----------------------
 
 -- fade main frame in/out
-function CatRotationHelperFadeFunc(self)
+function CatRotationHelper_TimerFade_OnUpdate(self)
 	local elapsed = GetTime() - self.startTime;
 
 	if(elapsed > 0.4) then
@@ -1138,7 +1138,7 @@ function CatRotationHelperCpEffect(self)
 	self:SetAlpha(elapsed*2.5)
 end
 
-function CatRotationHelperCdCounterFunc(self)
+function CatRotationHelper_TimerCooldown_OnUpdate(self)
 	local now = GetTime()
 	local found = false
 
@@ -1169,6 +1169,6 @@ function CatRotationHelperCdCounterFunc(self)
 	end
 
 	if(not found) then
-		CatRotationHelperCdCounter:Hide()
+		CatRotationHelper_TimerCooldown:Hide()
 	end
 end
