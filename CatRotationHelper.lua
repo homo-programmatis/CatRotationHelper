@@ -849,33 +849,27 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.countframe.dur2text:Hide();
 end
 
--- OnLoad: Create Frames
-function CatRotationHelperOnLoad(self)
+function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- load addon on druids only
 	local class = select(2, UnitClass("player"))
 	if(class ~= "DRUID") then
 		return;
 	end
 
-	self:SetScript("OnEvent", CatRotationHelperOnEvent)
-	
-	self:SetBackdropColor(0, 0, 0);
-	self:RegisterForClicks("RightButtonUp")
-	self:RegisterForDrag("LeftButton")
-	self:SetClampedToScreen(true)
+	CatRotationHelper_BoxMain:SetBackdropColor(0, 0, 0);
+	CatRotationHelper_BoxMain:RegisterForClicks("RightButtonUp")
+	CatRotationHelper_BoxMain:RegisterForDrag("LeftButton")
+	CatRotationHelper_BoxMain:SetClampedToScreen(true)
 
+	CatRotationHelper_BoxEvnt:SetBackdropColor(0, 0, 0);
+	CatRotationHelper_BoxEvnt:RegisterForClicks("RightButtonUp")
+	CatRotationHelper_BoxEvnt:RegisterForDrag("LeftButton")
+	CatRotationHelper_BoxEvnt:SetClampedToScreen(true)
 
-	local eventFrame = CatRotationHelper_BoxEvnt
-	eventFrame:SetBackdropColor(0, 0, 0);
-	eventFrame:RegisterForClicks("RightButtonUp")
-	eventFrame:RegisterForDrag("LeftButton")
-	eventFrame:SetClampedToScreen(true)
-
-	local survFrame = CatRotationHelper_BoxSurv
-	survFrame:SetBackdropColor(0, 0, 0);
-	survFrame:RegisterForClicks("RightButtonUp")
-	survFrame:RegisterForDrag("LeftButton")
-	survFrame:SetClampedToScreen(true)
+	CatRotationHelper_BoxSurv:SetBackdropColor(0, 0, 0);
+	CatRotationHelper_BoxSurv:RegisterForClicks("RightButtonUp")
+	CatRotationHelper_BoxSurv:RegisterForDrag("LeftButton")
+	CatRotationHelper_BoxSurv:SetClampedToScreen(true)
 
 	-- setup cat
 	for i=1, #g_FramesCat do
@@ -912,12 +906,12 @@ function CatRotationHelperOnLoad(self)
 		g_Module.FrameSetTexture(frame, survivalTextures[i]);
 	end
 
-	self:RegisterEvent("ADDON_LOADED");
-	self:RegisterEvent("PLAYER_TALENT_UPDATE")
+	CatRotationHelper_EntryPoint:RegisterEvent("ADDON_LOADED");
+	CatRotationHelper_EntryPoint:RegisterEvent("PLAYER_TALENT_UPDATE")
 end
 
 -- Event Handling
-function CatRotationHelperOnEvent (self, event, ...)
+function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 	local arg1 = ...
 	if(unlocked) then
 		return

@@ -97,11 +97,11 @@
 						if(self:GetChecked()) then
 							crhCp = true
 
-							CatRotationHelper_BoxMain:RegisterEvent("UNIT_COMBO_POINTS");
+							CatRotationHelper_EntryPoint:RegisterEvent("UNIT_COMBO_POINTS");
 							CatRotationHelperSetCatCP(GetComboPoints("player"));
 						else
 							CatRotationHelperSetCatCP(0);
-							CatRotationHelper_BoxMain:UnregisterEvent("UNIT_COMBO_POINTS");
+							CatRotationHelper_EntryPoint:UnregisterEvent("UNIT_COMBO_POINTS");
 
 							crhCp = false
 						end
@@ -800,7 +800,6 @@
 		<Scripts>
 			<OnDragStart>self:StartMoving()</OnDragStart>
 			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
-			<OnLoad function="CatRotationHelperOnLoad"/>
 			<OnClick function="CatRotationHelper_BoxMain_OnClick"/>
 		</Scripts>
 	</Button>
@@ -823,5 +822,10 @@
 		</Scripts>
 	</Frame>
 
-
+	<Frame name="CatRotationHelper_EntryPoint" hidden="true">
+		<Scripts>
+			<OnLoad function="CatRotationHelper_EntryPoint_OnLoad"/>
+			<OnEvent function="CatRotationHelper_EntryPoint_OnEvent"/>
+		</Scripts>
+	</Frame>
 </Ui>
