@@ -560,8 +560,12 @@ end
 
 -- Check for Clearcast procs - cat (has no effect for bear)
 function CatRotationHelperCheckClearcast()
-	name = UnitBuff("player", g_Module.GetSpellName(CRH_SPELLID_CLEARCAST));
-	if(name and crhEnableClearcast) then
+	if (not crhEnableClearcast) then
+		return;
+	end
+
+	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
+	if (isBuffPresent) then
 		if(not clearCast) then
 			for i=1, #g_FramesCat do
 				local frame = g_FramesCat[i];
@@ -580,7 +584,6 @@ function CatRotationHelperCheckClearcast()
 
 			clearCast = true;
 		end
-
 	else
 		if(clearCast) then
 			for i=1,#g_FramesCat do

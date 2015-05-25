@@ -21,6 +21,17 @@ function g_Module.GetTargetDebuffInfo(a_SpellID, a_CastByMe)
 	return name, stacks, expTime;
 end
 
+-- Get information about player's buff 
+-- \return  IsBuffPresent, ExpirationTime
+function g_Module.GetPlayerBuffInfo(a_SpellID)
+	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Module.GetSpellName(a_SpellID));
+	if (not name) then
+		return false;
+	end
+	
+	return true, expTime;
+end
+
 function g_Module.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)
 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(a_SpellID, a_CastByMe);
 	if (not name) then
@@ -35,8 +46,8 @@ function g_Module.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)
 end
 
 function g_Module.CalcFrameFromBuff(a_SpellID)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Module.GetSpellName(a_SpellID));
-	if (not name) then
+	local isBuffPresent, expTime = g_Module.GetPlayerBuffInfo(a_SpellID);
+	if (not isBuffPresent) then
 		return g_Consts.STATUS_READY, nil;
 	end
 	
