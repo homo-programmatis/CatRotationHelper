@@ -103,7 +103,7 @@ function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
 	end
 end
 
-function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
+function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 	local logic = a_Frame.m_CrhLogic;
 	if (nil == logic.Type) then
 		-- Empty frame
@@ -115,24 +115,31 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
 			return;
 		end
 
+		g_Module.FrameDrawFaded(a_Frame);
+
 		a_Frame.counting = false
 		a_Frame.countframe:Hide();
 		a_Frame.countframe.endTime = nil;
-		g_Module.FrameDrawFaded(a_Frame);
-		a_Frame.overlay.animOut:Play()
+
+		if (a_ShowEffects) then
+			a_Frame.overlay.animOut:Play();
+		end
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
 		if (a_Frame.counting and (a_Expiration == a_Frame.countframe.endTime)) then
 			return;
 		end
 		
-		a_Frame.overlay.animIn:Play()
-		
-		a_Frame.counting = true
 		g_Module.FrameDrawActive(a_Frame);
+
+		a_Frame.counting = true
 
 		a_Frame.countframe.endTime = a_Expiration
 		a_Frame.countframe:Show()
 		a_Frame.countframe.dur2text:Show();
 		a_Frame.countframe.durtext:SetText("");
+
+		if (a_ShowEffects) then
+			a_Frame.overlay.animIn:Play();
+		end
 	end
 end

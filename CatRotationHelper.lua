@@ -170,12 +170,12 @@ local function hideEventIcon(frame)
 	end
 end
 
-local function UpdateFramesByType(a_FrameList, a_Type)
+local function UpdateFramesByType(a_FrameList, a_Type, a_ShowEffects)
 	for i = 1, #a_FrameList do
 		local frame = a_FrameList[i];
 	
 		if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
-			g_Module.FrameUpdateFromLogic(frame);
+			g_Module.FrameUpdateFromLogic(frame, a_ShowEffects);
 		end
 	end
 end
@@ -202,7 +202,7 @@ function CatRotationHelperUpdateEverything()
 
 		if(enemyTarget) then
 			CatRotationHelperShowCat();
-			UpdateFramesByType(g_FramesCat);
+			UpdateFramesByType(g_FramesCat, nil, false);
 			CatRotationHelperSetCatCP(GetComboPoints("player"));
 			CatRotationHelperUpdateSurvival(false)
 			CatRotationHelperUpdateEvents(false)
@@ -218,7 +218,7 @@ function CatRotationHelperUpdateEverything()
 
 		if(enemyTarget) then
 			CatRotationHelperShowBear();
-			UpdateFramesByType(g_FramesBear);
+			UpdateFramesByType(g_FramesBear, nil, false);
 			crhUpdateLacerate();
 			CatRotationHelperUpdateSurvival(false)
 			CatRotationHelperUpdateEvents(false)
@@ -244,7 +244,7 @@ function CatRotationHelperUnlock()
 		showBear = false
 
 		for i=1, #g_FramesBear do
-			g_Module.FrameSetStatus(g_FramesBear[i], g_Consts.STATUS_READY);
+			g_Module.FrameSetStatus(g_FramesBear[i], g_Consts.STATUS_READY, nil, false);
 			g_FramesBear[i]:Hide()
 		end
 
@@ -254,7 +254,7 @@ function CatRotationHelperUnlock()
 		showCat = false
 
 		for i=1, #g_FramesCat do
-			g_Module.FrameSetStatus(g_FramesCat[i], g_Consts.STATUS_READY);
+			g_Module.FrameSetStatus(g_FramesCat[i], g_Consts.STATUS_READY, nil, false);
 		end
 
 		CatRotationHelperSetCatCP(0)
@@ -513,7 +513,7 @@ function CatRotationHelperHideAll()
 
 	-- stop running timers
 	for i=1, #frameList do
-		g_Module.FrameSetStatus(frameList[i], g_Consts.STATUS_READY);
+		g_Module.FrameSetStatus(frameList[i], g_Consts.STATUS_READY, nil, false);
 	end
 
 	-- general fade animation
@@ -903,21 +903,21 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 		if(enemyTarget) then
 			if(inCatForm) then
 				if(arg1 == "player") then
-					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BUFF);
+					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BUFF, true);
 					CatRotationHelperCheckClearcast();
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
-					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_DEBUFF);
+					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_DEBUFF, true);
 					CatRotationHelperUpdateEvents(true)
 				end
 			elseif(inBearForm) then
 				if(arg1 == "player") then
-					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF);
+					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF, true);
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
-					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_DEBUFF);
+					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_DEBUFF, true);
 					CatRotationHelperUpdateEvents(true)
 					crhUpdateLacerate();
 				end
@@ -932,11 +932,11 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 	elseif(event == "SPELL_UPDATE_COOLDOWN") then
 		if(enemyTarget) then
 			if(inBearForm) then
-				UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_SKILL);
+				UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_SKILL, true);
 				CatRotationHelperUpdateSurvival(true)
 				CatRotationHelperUpdateEvents(true)
 			elseif(inCatForm) then
-				UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_SKILL);
+				UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_SKILL, true);
 				CatRotationHelperUpdateSurvival(true)
 				CatRotationHelperUpdateEvents(true)
 			end
@@ -990,7 +990,7 @@ function CatRotationFrameCounter(self)
 	local time = self.endTime - GetTime();
 
 	if(time <= 0) then
-		g_Module.FrameSetStatus(self:GetParent(), g_Consts.STATUS_READY);
+		g_Module.FrameSetStatus(self:GetParent(), g_Consts.STATUS_READY, nil, true);
 	elseif(time <= crhCounterStartTime) then
 		self.durtext:SetText(CatRotationHelperFormatTime(time));
 		self.dur2text:Hide();
