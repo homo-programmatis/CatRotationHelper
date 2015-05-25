@@ -125,10 +125,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration)
 			return;
 		end
 		
-		-- new buff applied
-		if(not a_Frame.counting or a_Frame.countframe.endTime - GetTime() < 11) then
-			a_Frame.overlay.animIn:Play()
-		end
+		a_Frame.overlay.animIn:Play()
 		
 		a_Frame.counting = true
 		g_Module.FrameDrawActive(a_Frame);
