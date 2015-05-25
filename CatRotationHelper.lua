@@ -792,7 +792,6 @@ local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.fading = false;
 	a_Frame.startTime = nil;
 	a_Frame.hascp = false;
-	a_Frame.counting = false;
 
 	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:Hide();
@@ -858,7 +857,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 		local frame = g_FramesCat[i];
 		FrameSetup(frame, "CatRotationHelper_Cat_" .. i, CatRotationFrameCounter);
 		
-		g_Module.FrameDrawFaded(frame);
+		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
@@ -867,7 +866,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 		local frame = g_FramesBear[i];
 		FrameSetup(frame, "CatRotationHelper_Bear_" .. i, CatRotationFrameCounter);
 		
-		g_Module.FrameDrawFaded(frame);
+		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 

@@ -110,14 +110,13 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 		return;
 	end
 	
-	if (g_Consts.STATUS_READY == a_Status) then
-		if (not a_Frame.counting) then
-			return;
-		end
+	if ((a_Frame.LastStatus == a_Status) and (a_Frame.LastExpiration == a_Expiration)) then
+		return;
+	end
 
+	if (g_Consts.STATUS_READY == a_Status) then
 		g_Module.FrameDrawFaded(a_Frame);
 
-		a_Frame.counting = false
 		a_Frame.countframe:Hide();
 		a_Frame.countframe.endTime = nil;
 
@@ -125,13 +124,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 			a_Frame.overlay.animOut:Play();
 		end
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
-		if (a_Frame.counting and (a_Expiration == a_Frame.countframe.endTime)) then
-			return;
-		end
-		
 		g_Module.FrameDrawActive(a_Frame);
-
-		a_Frame.counting = true
 
 		a_Frame.countframe.endTime = a_Expiration
 		a_Frame.countframe:Show()
@@ -142,4 +135,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 			a_Frame.overlay.animIn:Play();
 		end
 	end
+
+	a_Frame.LastStatus = a_Status;
+	a_Frame.LastExpiration = a_Expiration;
 end
