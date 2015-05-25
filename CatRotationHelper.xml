@@ -816,12 +816,6 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="CatRotationHelper_TimerCooldown" hidden="true">
-		<Scripts>
-			<OnUpdate function="CatRotationHelper_TimerCooldown_OnUpdate"/>
-		</Scripts>
-	</Frame>
-
 	<Frame name="CatRotationHelper_EntryPoint" hidden="true">
 		<Scripts>
 			<OnLoad function="CatRotationHelper_EntryPoint_OnLoad"/>

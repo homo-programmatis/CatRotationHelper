@@ -82,19 +82,6 @@ end
 
 InitFrames();
 
-eventCdTimers = {
---	nil, -- Berserk
---	nil, -- Feral Charge
---	nil, -- Enrage
---	nil, -- Savage defense
-}
-
-survivalCdTimers = {
---	nil, -- Barkskin
---	nil, -- Survival Instincts
---	nil, -- Might of ursoc
-}
-
 -- state variables
 local inCatForm = false;
 local inBearForm = false;
@@ -631,7 +618,7 @@ local function crhSetNotificationEffects(a_FrameID, a_ShowEffects)
 	end
 end
 
-local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, a_SpellID, a_BuffId, a_Image, a_ShowEffects)
+local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_SpellID, a_BuffId, a_Image, a_ShowEffects)
 	if ((not a_IsEnabled) or (not IsPlayerSpell(a_SpellID))) then
 		crhResetNotificationFrame(a_FrameID);
 		return;
@@ -672,11 +659,6 @@ local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_CooldownID, 
 	eventList[a_FrameID] = nil
 	eventTimers[a_FrameID] = nil
 	eventEffects[a_FrameID] = nil
-	
-	if (a_CooldownID) then
-		eventCdTimers[a_CooldownID] = spellDuration + spellStart
-		CatRotationHelper_TimerCooldown:Show()
-	end
 end
 
 local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Image, a_ShowEffects)
@@ -724,14 +706,14 @@ end
 function CatRotationHelperUpdateEvents(a_ShowEffects)
 	-- first, update eventList table
 	if (inCatForm) then
-		crhUpdateNotificationSpell(crhShowCatBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowCatBerserk, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
 		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
-		crhUpdateNotificationSpell(crhShowFeralCharge, 3, 2, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowFeralCharge, 3, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", a_ShowEffects);
 		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", a_ShowEffects);
 	elseif (inBearForm) then
-		crhUpdateNotificationSpell(crhShowBearBerserk, 1, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowBearBerserk, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
 		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
-		crhUpdateNotificationSpell(crhShowSavageDefense, 4, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", a_ShowEffects);
+		crhUpdateNotificationSpell(crhShowSavageDefense, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", a_ShowEffects);
 	end
 
 	-- second, fill event frames with information
@@ -783,9 +765,6 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	if (spellDuration < g_Consts.GCD_LENGTH) then
 		return;
 	end
-
-	survivalCdTimers[a_FrameID] = spellDuration + spellStart
-	CatRotationHelper_TimerCooldown:Show()
 
 	local status, expiration = g_Module.CalcFrameFromBuff(a_SpellID);
 	if (g_Consts.STATUS_COUNTING ~= status) then
@@ -1130,39 +1109,4 @@ function CatRotationHelperCpEffect(self)
 
 	self:SetScale(1.3-elapsed*0.75)
 	self:SetAlpha(elapsed*2.5)
-end
-
-function CatRotationHelper_TimerCooldown_OnUpdate(self)
-	local now = GetTime()
-	local found = false
-
-	for i=1, 4 do
-		if(eventCdTimers[i] ~= nil) then
-			if(eventCdTimers[i] < now) then
-				eventCdTimers[i] = nil
-				if(enemyTarget) then
-					CatRotationHelperUpdateEvents(true)
-				end
-			else
-				found = true
-			end
-		end
-	end
-
-	for i=1, 3 do
-		if(survivalCdTimers[i] ~= nil) then
-			if(survivalCdTimers[i] < now) then
-				survivalCdTimers[i] = nil
-				if(enemyTarget) then
-					CatRotationHelperUpdateSurvival(true)
-				end
-			else
-				found = true
-			end
-		end
-	end
-
-	if(not found) then
-		CatRotationHelper_TimerCooldown:Hide()
-	end
 end
