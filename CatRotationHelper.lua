@@ -86,8 +86,6 @@ InitFrames();
 local inCatForm = false;
 local inBearForm = false;
 local enemyTarget = false;
-local showCat = false;
-local showBear = false;
 local clearCast = false;
 local unlocked = false;
 
@@ -130,29 +128,6 @@ local function CatRotationHelperFormatTime(time)
 	end
 end
 
--- start fade effects for event & survival frame icons
-local function showEventIcon(frame)
-	if(not frame:IsVisible() or frame.fading) then
-		frame:SetScript("OnUpdate",CatRotationHelperEventFadeFunc)
-		frame:Show()
-		frame.fading = false
-		frame.startTime = GetTime()
-	end
-end
-
-local function showSurvivalIcon(frame, a_ShowEffects)
-	if(not frame:IsVisible() or frame.fading) then
-		frame:SetScript("OnUpdate",CatRotationHelperEventFadeFunc)
-		frame:Show()
-		frame.fading = false
-		frame.startTime = GetTime()
-		
-		if(a_ShowEffects) then
-			frame.overlay.animIn:Play()
-		end	
-	end
-end
-
 local function crhIsAddonUseful()
 	local specID = GetSpecialization();
 	if ((specID ~= 2) and (specID ~= 3)) then
@@ -162,11 +137,10 @@ local function crhIsAddonUseful()
 	return true;
 end
 
-local function hideEventIcon(frame)
-	if(frame:IsVisible() and not frame.fading) then
-		frame:SetScript("OnUpdate",CatRotationHelperEventFadeFunc)
-		frame.fading = true
-		frame.startTime = GetTime()
+-- Shows/hides all frames in a_FrameList
+local function ShowFrames(a_FrameList, a_IsShow)
+	for i=1, #a_FrameList do
+		a_FrameList[i]:SetShown(a_IsShow);
 	end
 end
 
@@ -201,7 +175,8 @@ function CatRotationHelperUpdateEverything()
 		inCatForm = true
 
 		if(enemyTarget) then
-			CatRotationHelperShowCat();
+			ShowFrames(g_FramesCat, true);
+			ShowFrames(g_FramesBear, false);
 			UpdateFramesByType(g_FramesCat, nil, false);
 			CatRotationHelperSetCatCP(GetComboPoints("player"));
 			CatRotationHelperUpdateSurvival(false)
@@ -217,7 +192,8 @@ function CatRotationHelperUpdateEverything()
 		inBearForm = true
 
 		if(enemyTarget) then
-			CatRotationHelperShowBear();
+			ShowFrames(g_FramesBear, true);
+			ShowFrames(g_FramesCat, false);
 			UpdateFramesByType(g_FramesBear, nil, false);
 			crhUpdateLacerate();
 			CatRotationHelperUpdateSurvival(false)
@@ -239,37 +215,19 @@ function CatRotationHelperUnlock()
 	HideUIPanel(InterfaceOptionsFrame)
 	unlocked = true;
 
-	-- Deactivate & hide current frames
-	if(showBear) then
-		showBear = false
-
-		for i=1, #g_FramesBear do
-			g_Module.FrameSetStatus(g_FramesBear[i], g_Consts.STATUS_READY, nil, false);
-			g_FramesBear[i]:Hide()
-		end
-
-		CatRotationHelper_TimerLacerate:Hide()
-		CatRotationHelperSetBearCP(0)
-	elseif(showCat) then
-		showCat = false
-
-		for i=1, #g_FramesCat do
-			g_Module.FrameSetStatus(g_FramesCat[i], g_Consts.STATUS_READY, nil, false);
-		end
-
-		CatRotationHelperSetCatCP(0)
-	end
-
-	-- interrupt previous fade
-	CatRotationHelper_TimerFade:Hide();
+	-- Hide bear frames
+	ShowFrames(g_FramesBear, false);
+	CatRotationHelper_TimerLacerate:Hide()
+	CatRotationHelperSetBearCP(0)
 
 	-- show static cat frames
+	CatRotationHelperSetCatCP(0)
+
 	for i=1, #g_FramesCat do
 		local frame = g_FramesCat[i];
 
+		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		frame:Show();
-		frame:SetAlpha(1);
-		g_Module.FrameDrawActive(frame);
 	end
 
 	-- show static event frames
@@ -281,11 +239,8 @@ function CatRotationHelperUnlock()
 	for i=1, #g_CrhFramesEvents do
 		g_CrhFramesEvents[i]:Show()
 		g_CrhFramesEvents[i]:SetAlpha(1)
-		g_CrhFramesEvents[i].fading = false
-		g_CrhFramesEvents[i].startTime = nil
 		g_CrhFramesEvents[i].countframe:Hide();
 		g_CrhFramesEvents[i].countframe.endTime = nil;
-		g_CrhFramesEvents[i]:SetScript("OnUpdate",nil)
 		g_CrhFramesEvents[i].icon:SetTexture(eventList[i])
 	end
 
@@ -293,11 +248,8 @@ function CatRotationHelperUnlock()
 	for i=1, #g_CrhFramesSurv do
 		g_CrhFramesSurv[i]:Show()
 		g_CrhFramesSurv[i]:SetAlpha(1)
-		g_CrhFramesSurv[i].fading = false
-		g_CrhFramesSurv[i].startTime = nil
 		g_CrhFramesSurv[i].countframe:Hide();
 		g_CrhFramesSurv[i].countframe.endTime = nil;
-		g_CrhFramesSurv[i]:SetScript("OnUpdate",nil)
 	end
 
 end
@@ -392,42 +344,6 @@ function CatRotationHelperSetBearCP(num)
 	CatRotationHelperSetCPEffects(g_FramesBear, num);
 end
 
-
--- show all frames in a_FrameList
-local function CatRotationHelperShowByFrame(a_FrameList)
-	--if interrupting previous fade, hide frames
-	for i=1, #g_FramesCat do
-		g_FramesCat[i]:Hide();
-	end
-
-	for i=1, #g_FramesBear do
-		g_FramesBear[i]:Hide();
-	end
-
-	for i=1, #a_FrameList do
-		a_FrameList[i]:Show();
-	end
-
-	-- fade effect
-	CatRotationHelper_TimerFade:Show();
-	CatRotationHelper_TimerFade.fading = false;
-	CatRotationHelper_TimerFade.startTime = GetTime();
-end
-
-function CatRotationHelperShowCat()
-	if(showCat) then return; end
-	showCat = true;
-
-	CatRotationHelperShowByFrame(g_FramesCat);
-end
-
-function CatRotationHelperShowBear()
-	if(showBear) then return; end
-	showBear = true;
-
-	CatRotationHelperShowByFrame(g_FramesBear);
-end
-
 function CatRotationFrameSetMainScale()
 	for i=1, #g_FramesCat do
 		g_FramesCat[i]:SetScale(crhScale);
@@ -493,42 +409,15 @@ function CatRotationFrameSetSurvivalStyle()
 end
 
 function CatRotationHelperHideAll()
-	local frameList
+	CatRotationHelper_TimerLacerate:Hide();
 
-	-- decide what frames to hide
-	if(showBear) then
-		showBear = false
+	CatRotationHelperSetBearCP(0);
+	CatRotationHelperSetCatCP(0);
 
-		frameList = g_FramesBear
-		CatRotationHelper_TimerLacerate:Hide()
-		CatRotationHelperSetBearCP(0)
-	elseif(showCat) then
-		showCat = false
-
-		frameList = g_FramesCat
-		CatRotationHelperSetCatCP(0)
-	else
-		return
-	end
-
-	-- stop running timers
-	for i=1, #frameList do
-		g_Module.FrameSetStatus(frameList[i], g_Consts.STATUS_READY, nil, false);
-	end
-
-	-- general fade animation
-	CatRotationHelper_TimerFade:Show();
-	CatRotationHelper_TimerFade.fading = true;
-	CatRotationHelper_TimerFade.startTime = GetTime();
-
-	-- hide events
-	for i=1, #g_CrhFramesEvents do
-		hideEventIcon(g_CrhFramesEvents[i])
-	end
-
-	for i=1, #g_CrhFramesSurv do
-		hideEventIcon(g_CrhFramesSurv[i])
-	end
+	ShowFrames(g_FramesCat, false);
+	ShowFrames(g_FramesBear, false);
+	ShowFrames(g_CrhFramesEvents, false);
+	ShowFrames(g_CrhFramesSurv, false);
 end
 
 ------------------------------
@@ -726,7 +615,7 @@ function CatRotationHelperUpdateEvents(a_ShowEffects)
 		if(eventList[i] ~= nil) then
 			g_CrhFramesEvents[j].icon:SetTexture(eventList[i])
 			g_CrhFramesEvents[j].overlay.icon:SetTexture(eventList[i])
-			showEventIcon(g_CrhFramesEvents[j])
+			g_CrhFramesEvents[j]:Show();
 			
 			if(eventEffects[i]) then
 				g_CrhFramesEvents[j].overlay.animIn:Play()
@@ -745,7 +634,7 @@ function CatRotationHelperUpdateEvents(a_ShowEffects)
 
 	-- hide unused event frames
 	while j <= #g_CrhFramesEvents do
-		hideEventIcon(g_CrhFramesEvents[j])
+		g_CrhFramesEvents[j]:Hide();
 		j = j + 1
 	end
 end
@@ -760,7 +649,14 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 	
 	-- Spell ready
 	if (spellStart == 0) then
-		showSurvivalIcon(g_CrhFramesSurv[a_FrameID], a_ShowEffects)
+		if (not g_CrhFramesSurv[a_FrameID]:IsVisible()) then
+			g_CrhFramesSurv[a_FrameID]:Show();
+
+			if(a_ShowEffects) then
+				g_CrhFramesSurv[a_FrameID].overlay.animIn:Play()
+			end
+		end
+
 		return;
 	end
 
@@ -771,11 +667,11 @@ local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
 
 	local status, expiration = g_Module.CalcFrameFromBuff(a_SpellID);
 	if (g_Consts.STATUS_COUNTING ~= status) then
-		hideEventIcon(g_CrhFramesSurv[a_FrameID])
+		g_CrhFramesSurv[a_FrameID]:Hide();
 		return;
 	end
 	
-	showEventIcon(g_CrhFramesSurv[a_FrameID])
+	g_CrhFramesSurv[a_FrameID]:Show();
 	g_CrhFramesSurv[a_FrameID].countframe.endTime = expiration
 	g_CrhFramesSurv[a_FrameID].countframe:Show()
 end
@@ -789,8 +685,6 @@ function CatRotationHelperUpdateSurvival(a_ShowEffects)
 end
 
 local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
-	a_Frame.fading = false;
-	a_Frame.startTime = nil;
 	a_Frame.hascp = false;
 
 	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
@@ -1036,59 +930,6 @@ end
 ----------------------
 -- Effect Functions --
 ----------------------
-
--- fade main frame in/out
-function CatRotationHelper_TimerFade_OnUpdate(self)
-	local elapsed = GetTime() - self.startTime;
-
-	if(elapsed > 0.4) then
-		self:Hide();
-
-		if(self.fading) then
-			for i=1, #g_FramesCat do
-				g_FramesCat[i]:Hide();
-			end
-
-			for i=1, #g_FramesBear do
-				g_FramesBear[i]:Hide();
-			end
-		end
-	end
-
-	local alpha = 0;
-	if(self.fading) then
-		alpha = 1-elapsed*2.5;
-	else
-		alpha = elapsed*2.5;
-	end
-	
-	for i=1, #g_FramesCat do
-		g_FramesCat[i]:SetAlpha(alpha);
-	end
-
-	for i=1, #g_FramesBear do
-		g_FramesBear[i]:SetAlpha(alpha);
-	end
-end
-
--- fade single events in/out
-function CatRotationHelperEventFadeFunc(self)
-	local elapsed = GetTime() - self.startTime;
-
-	if(elapsed > 0.4) then
-		if(self.fading) then
-			self:Hide()
-		else
-			self:SetScript("OnUpdate", nil);
-		end
-	end
-
-	if(self.fading) then
-		self:SetAlpha(1-elapsed*2.5);
-	else
-		self:SetAlpha(elapsed*2.5);
-	end
-end
 
 -- fade cps in/out
 function CatRotationHelperCpEffect(self)

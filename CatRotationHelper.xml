@@ -804,12 +804,6 @@
 		</Scripts>
 	</Button>
 
-	<Frame name="CatRotationHelper_TimerFade" hidden="true">
-		<Scripts>
-			<OnUpdate function="CatRotationHelper_TimerFade_OnUpdate"/>
-		</Scripts>
-	</Frame>
-
 	<Frame name="CatRotationHelper_TimerLacerate" hidden="true">
 		<Scripts>
 			<OnUpdate function="CatRotationHelper_TimerLacerate_OnUpdate"/>
