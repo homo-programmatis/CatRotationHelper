@@ -8,24 +8,24 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	end
 
 	if (not a_MakeRound) then
-		a_Frame.icon:SetTexture(a_Texture);
-		a_Frame.overlay.icon:SetTexture(a_Texture);
+		a_Frame.IconSpell:SetTexture(a_Texture);
+		a_Frame.FrameOverlay.IconSpell:SetTexture(a_Texture);
 	else
-		SetPortraitToTexture(a_Frame.icon, a_Texture);
-		SetPortraitToTexture(a_Frame.overlay.icon, a_Texture);
+		SetPortraitToTexture(a_Frame.IconSpell, a_Texture);
+		SetPortraitToTexture(a_Frame.FrameOverlay.IconSpell, a_Texture);
 	end
 end
 
 function g_Module.FrameDrawInvisible(a_Frame)
-	a_Frame.icon:SetVertexColor(0.00, 0.00, 0.00, 0.00);
+	a_Frame.IconSpell:SetVertexColor(0.00, 0.00, 0.00, 0.00);
 end
 
 function g_Module.FrameDrawFaded(a_Frame)
-	a_Frame.icon:SetVertexColor(0.35, 0.35, 0.35, 0.70);
+	a_Frame.IconSpell:SetVertexColor(0.35, 0.35, 0.35, 0.70);
 end
 
 function g_Module.FrameDrawActive(a_Frame)
-	a_Frame.icon:SetVertexColor(1.00, 1.00, 1.00, 1.00);
+	a_Frame.IconSpell:SetVertexColor(1.00, 1.00, 1.00, 1.00);
 end
 
 local function MathRound(a_Value, a_Digits)
@@ -107,6 +107,31 @@ function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
 	end
 end
 
+function g_Module.FrameTimer_FormatTime(a_Time)
+	if (a_Time >= 60) then
+		return ceil(a_Time / 60) .. "m";
+	elseif (a_Time >= 1) then
+		return floor(a_Time);
+	else
+		return "." .. floor(a_Time * 10);
+	end
+end
+
+function g_Module.FrameTimer_OnUpdate(a_Frame)
+	local remainingTime = a_Frame.endTime - GetTime();
+
+	if (remainingTime <= 0) then
+		g_Module.FrameSetStatus(a_Frame:GetParent(), g_Consts.STATUS_READY, nil, true);
+	elseif (remainingTime <= crhCounterStartTime) then
+		a_Frame.TextTime:SetText(g_Module.FrameTimer_FormatTime(remainingTime));
+		a_Frame.TextTime:Show();
+		a_Frame.TextStar:Hide();
+	else
+		a_Frame.TextTime:Hide();
+		a_Frame.TextStar:Show();
+	end
+end
+
 function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 	local logic = a_Frame.m_CrhLogic;
 	if (nil == logic.Type) then
@@ -121,39 +146,35 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 	if (g_Consts.STATUS_READY == a_Status) then
 		g_Module.FrameDrawFaded(a_Frame);
 
-		a_Frame.countframe:Hide();
-		a_Frame.countframe.endTime = nil;
+		a_Frame.FrameTimer:Hide();
 
 		if (a_ShowEffects) then
-			a_Frame.overlay.animOut:Play();
+			a_Frame.FrameOverlay.animOut:Play();
 		end
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
 		g_Module.FrameDrawActive(a_Frame);
 
-		a_Frame.countframe.endTime = a_Expiration
-		a_Frame.countframe:Show()
-		a_Frame.countframe.dur2text:Show();
-		a_Frame.countframe.durtext:SetText("");
+		a_Frame.FrameTimer.endTime = a_Expiration;
+		g_Module.FrameTimer_OnUpdate(a_Frame.FrameTimer);
+		a_Frame.FrameTimer:Show()
 
 		if (a_ShowEffects) then
-			a_Frame.overlay.animIn:Play();
+			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_BURSTING == a_Status) then
 		g_Module.FrameDrawFaded(a_Frame);
 
-		a_Frame.countframe.endTime = a_Expiration
-		a_Frame.countframe:Show()
-		a_Frame.countframe.dur2text:Show();
-		a_Frame.countframe.durtext:SetText("");
+		a_Frame.FrameTimer.endTime = a_Expiration;
+		g_Module.FrameTimer_OnUpdate(a_Frame.FrameTimer);
+		a_Frame.FrameTimer:Show()
 
 		if (a_ShowEffects) then
-			a_Frame.overlay.animIn:Play();
+			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_WAITING == a_Status) then
 		g_Module.FrameDrawInvisible(a_Frame);
 
-		a_Frame.countframe:Hide();
-		a_Frame.countframe.endTime = nil;
+		a_Frame.FrameTimer:Hide();
 	end
 
 	a_Frame.LastStatus = a_Status;

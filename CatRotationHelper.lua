@@ -75,16 +75,6 @@ crhShowFeralCharge = true;
 crhShowBearBerserk = true;
 crhShowPredatorsSwiftness = true;
 
-local function CatRotationHelperFormatTime(time)
-	if (time >= 60) then
-		return ceil(time / 60).."m";
-	elseif(time >= 1) then
-		return floor(time);
-	else
-		return "."..floor(time*10);
-	end
-end
-
 local function crhIsAddonUseful()
 	local specID = GetSpecialization();
 	if ((specID ~= 2) and (specID ~= 3)) then
@@ -253,31 +243,31 @@ local function CatRotationHelperSetCPEffects(a_FrameList, num)
 		if(i <= num) then
 			if(not frame.hascp) then
 				if(clearCast) then
-					frame.countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
-					frame.countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
+					frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
+					frame.FrameTimer.TextStar:SetTextColor(0.40, 0.70, 0.95);
 				else
-					frame.countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
-					frame.countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
+					frame.FrameTimer.TextTime:SetTextColor(0.90, 0.70, 0.00);
+					frame.FrameTimer.TextStar:SetTextColor(0.90, 0.70, 0.00);
 				end
 				frame.hascp = true;
-				frame.cpframe:Show()
-				frame.cpframe:SetScript("OnUpdate", CatRotationHelperCpEffect)
-				frame.cpframe.startTime = GetTime()
-				frame.cpframe.reverse = false
+				frame.FrameCombo:Show()
+				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
+				frame.FrameCombo.startTime = GetTime()
+				frame.FrameCombo.reverse = false
 			end
 		else
 			if(frame.hascp) then
 				if(clearCast) then
-					frame.countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
-					frame.countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
+					frame.FrameTimer.TextTime:SetTextColor(0.50, 0.85, 1.00);
+					frame.FrameTimer.TextStar:SetTextColor(0.50, 0.85, 1.00);
 				else
-					frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
-					frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
+					frame.FrameTimer.TextTime:SetTextColor(1.00, 1.00, 0.00);
+					frame.FrameTimer.TextStar:SetTextColor(1.00, 1.00, 0.00);
 				end
 				frame.hascp = false;
-				frame.cpframe:SetScript("OnUpdate", CatRotationHelperCpEffect)
-				frame.cpframe.startTime = GetTime()
-				frame.cpframe.reverse = true
+				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
+				frame.FrameCombo.startTime = GetTime()
+				frame.FrameCombo.reverse = true
 			else
 				return;
 			end
@@ -385,8 +375,8 @@ function crhUpdateLacerate()
 	-- stop possible cp animation when lacerate is refreshed
 	local i = 1;
 	for i=1, #g_FramesBear do
-		g_FramesBear[i].cpframe:SetAlpha(1)
-		g_FramesBear[i].cpframe:SetScale(1)
+		g_FramesBear[i].FrameCombo:SetAlpha(1)
+		g_FramesBear[i].FrameCombo:SetScale(1)
 	end
 
 	-- setup lacerate warning
@@ -409,15 +399,15 @@ function CatRotationHelperCheckClearcast()
 			for i=1, #g_FramesCat do
 				local frame = g_FramesCat[i];
 
-				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
+				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.TextureSpecial);
 
 				if(frame.hascp) then
-					frame.countframe.durtext:SetTextColor(0.40, 0.70, 0.95);
-					frame.countframe.dur2text:SetTextColor(0.40, 0.70, 0.95);
+					frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
+					frame.FrameTimer.TextStar:SetTextColor(0.40, 0.70, 0.95);
 				else
-					frame.countframe.durtext:SetTextColor(0.50, 0.85, 1.00);
-					frame.countframe.dur2text:SetTextColor(0.50, 0.85, 1.00);
+					frame.FrameTimer.TextTime:SetTextColor(0.50, 0.85, 1.00);
+					frame.FrameTimer.TextStar:SetTextColor(0.50, 0.85, 1.00);
 				end
 			end
 
@@ -428,15 +418,15 @@ function CatRotationHelperCheckClearcast()
 			for i=1,#g_FramesCat do
 				local frame = g_FramesCat[i];
 
-				frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"))
+				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture);
 
 				if(frame.hascp) then
-					frame.countframe.durtext:SetTextColor(0.90, 0.70, 0.00);
-					frame.countframe.dur2text:SetTextColor(0.90, 0.70, 0.00);
+					frame.FrameTimer.TextTime:SetTextColor(0.90, 0.70, 0.00);
+					frame.FrameTimer.TextStar:SetTextColor(0.90, 0.70, 0.00);
 				else
-					frame.countframe.durtext:SetTextColor(1.00, 1.00, 0.00);
-					frame.countframe.dur2text:SetTextColor(1.00, 1.00, 0.00);
+					frame.FrameTimer.TextTime:SetTextColor(1.00, 1.00, 0.00);
+					frame.FrameTimer.TextStar:SetTextColor(1.00, 1.00, 0.00);
 				end
 
 			end
@@ -446,44 +436,44 @@ function CatRotationHelperCheckClearcast()
 	end
 end
 
-local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
+local function FrameSetup(a_Frame, a_FrameName)
 	a_Frame.hascp = false;
 
 	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:Hide();
 
-	a_Frame.cpframe = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
-	a_Frame.cpframe:SetFrameStrata("BACKGROUND");
-	a_Frame.cpframe:SetPoint("CENTER");
-	a_Frame.cpframe:SetSize(g_Consts.UI_SIZE_FRAME * 1.13, g_Consts.UI_SIZE_FRAME * 1.13);
-	a_Frame.cpframe.startTime = nil;
-	a_Frame.cpframe:Hide();
+	a_Frame.FrameCombo = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
+	a_Frame.FrameCombo:SetFrameStrata("BACKGROUND");
+	a_Frame.FrameCombo:SetPoint("CENTER");
+	a_Frame.FrameCombo:SetSize(g_Consts.UI_SIZE_FRAME * 1.13, g_Consts.UI_SIZE_FRAME * 1.13);
+	a_Frame.FrameCombo.startTime = nil;
+	a_Frame.FrameCombo:Hide();
 
-	a_Frame.cpicon = a_Frame.cpframe:CreateTexture(nil, "BACKGROUND");
-	a_Frame.cpicon:SetTexture(g_Module.GetMyImage("Cp.tga"));
-	a_Frame.cpicon:SetAllPoints(a_Frame.cpframe);
+	a_Frame.FrameCombo.IconCombo = a_Frame.FrameCombo:CreateTexture(nil, "BACKGROUND");
+	a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"));
+	a_Frame.FrameCombo.IconCombo:SetAllPoints(a_Frame.FrameCombo);
 
-	a_Frame.icon = a_Frame:CreateTexture(nil, "ARTWORK");
-	a_Frame.icon:SetAllPoints(a_Frame);
+	a_Frame.IconSpell = a_Frame:CreateTexture(nil, "ARTWORK");
+	a_Frame.IconSpell:SetAllPoints(a_Frame);
 
 	-- buff fade/gain effects
 	local overlayOffs = g_Consts.UI_SIZE_FRAME * 0.20;
-	a_Frame.overlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelper_FrameBaseOverlay");
-	a_Frame.overlay.icon:SetBlendMode("ADD");
-	a_Frame.overlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
-	a_Frame.overlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
+	a_Frame.FrameOverlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelper_FrameBaseOverlay");
+	a_Frame.FrameOverlay.IconSpell:SetBlendMode("ADD");
+	a_Frame.FrameOverlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
+	a_Frame.FrameOverlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
 
-	a_Frame.countframe = CreateFrame("Frame", a_FrameName .. "C", a_Frame);
-	a_Frame.countframe:SetScript("OnUpdate", a_OnUpdate);
-	a_Frame.countframe:Hide();
-	a_Frame.countframe.endTime = nil;
+	a_Frame.FrameTimer = CreateFrame("Frame", a_FrameName .. "C", a_Frame);
+	a_Frame.FrameTimer:SetScript("OnUpdate", g_Module.FrameTimer_OnUpdate);
+	a_Frame.FrameTimer:Hide();
+	a_Frame.FrameTimer.endTime = nil;
 
-	a_Frame.countframe.durtext = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
-	a_Frame.countframe.durtext:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
-	a_Frame.countframe.dur2text = a_Frame.countframe:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Bigger");
-	a_Frame.countframe.dur2text:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
-	a_Frame.countframe.dur2text:SetText("*");
-	a_Frame.countframe.dur2text:Hide();
+	a_Frame.FrameTimer.TextTime = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
+	a_Frame.FrameTimer.TextTime:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
+	a_Frame.FrameTimer.TextStar = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Bigger");
+	a_Frame.FrameTimer.TextStar:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
+	a_Frame.FrameTimer.TextStar:SetText("*");
+	a_Frame.FrameTimer.TextStar:Hide();
 end
 
 function CatRotationHelper_EntryPoint_OnLoad(self)
@@ -511,7 +501,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup cat
 	for i=1, #g_FramesCat do
 		local frame = g_FramesCat[i];
-		FrameSetup(frame, "CatRotationHelper_Cat_" .. i, CatRotationFrameCounter);
+		FrameSetup(frame, "CatRotationHelper_Cat_" .. i);
 		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
@@ -520,7 +510,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup bear
 	for i=1, #g_FramesBear do
 		local frame = g_FramesBear[i];
-		FrameSetup(frame, "CatRotationHelper_Bear_" .. i, CatRotationFrameCounter);
+		FrameSetup(frame, "CatRotationHelper_Bear_" .. i);
 		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
@@ -529,7 +519,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup events
 	for i=1, #g_FramesEvents do
 		local frame = g_FramesEvents[i];
-		FrameSetup(frame, "CatRotationHelper_Event_" .. i, CatRotationFrameCounter);
+		FrameSetup(frame, "CatRotationHelper_Event_" .. i);
 		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
@@ -538,7 +528,7 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup survival frame
 	for i=1, #g_FramesSurv do
 		local frame = g_FramesSurv[i];
-		FrameSetup(frame, "CatRotationHelper_Surv_" .. i, CatRotationFrameCounter);
+		FrameSetup(frame, "CatRotationHelper_Surv_" .. i);
 
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
@@ -647,20 +637,9 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 	end
 end
 
------------------------
--- Counter Functions --
------------------------
-
-function CatRotationFrameCounter(self)
-	local time = self.endTime - GetTime();
-
-	if(time <= 0) then
-		g_Module.FrameSetStatus(self:GetParent(), g_Consts.STATUS_READY, nil, true);
-	elseif(time <= crhCounterStartTime) then
-		self.durtext:SetText(CatRotationHelperFormatTime(time));
-		self.dur2text:Hide();
-	end
-end
+----------------------
+-- Effect Functions --
+----------------------
 
 -- combo point animation when lacerate is about to expire
 function CatRotationHelper_TimerLacerate_OnUpdate(self)
@@ -677,20 +656,16 @@ function CatRotationHelper_TimerLacerate_OnUpdate(self)
 
 	if(t <= 0.5) then
 		for i=1, #g_FramesBear do
-			g_FramesBear[i].cpframe:SetAlpha(1.0-t)
-			g_FramesBear[i].cpframe:SetScale(1.0+0.3*t)
+			g_FramesBear[i].FrameCombo:SetAlpha(1.0-t)
+			g_FramesBear[i].FrameCombo:SetScale(1.0+0.3*t)
 		end
 	else
 		for i=1, #g_FramesBear do
-			g_FramesBear[i].cpframe:SetAlpha(t)
-			g_FramesBear[i].cpframe:SetScale(1.3-0.3*t)
+			g_FramesBear[i].FrameCombo:SetAlpha(t)
+			g_FramesBear[i].FrameCombo:SetScale(1.3-0.3*t)
 		end
 	end
 end
-
-----------------------
--- Effect Functions --
-----------------------
 
 -- fade cps in/out
 function CatRotationHelperCpEffect(self)

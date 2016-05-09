@@ -548,7 +548,7 @@
                         <Anchor point="CENTER"/>
                     </Anchors>
                 </Texture>
-                <Texture name="$parentIcon" parentKey="icon" alpha="0" setAllPoints="true">
+                <Texture name="$parentIcon" parentKey="IconSpell" alpha="0" setAllPoints="true">
                     <Anchors>
                         <Anchor point="CENTER"/>
                     </Anchors>
@@ -582,8 +582,8 @@
                         frame.innerGlow:SetAlpha(0.6);
                         frame.outerGlow:SetSize(frameWidth * 1.25, frameHeight * 1.25);
                         frame.outerGlow:SetAlpha(0.6);
-                        frame.icon:SetSize(frameWidth * 1.05, frameHeight * 1.05);
-                        frame.icon:SetAlpha(0.7);
+                        frame.IconSpell:SetSize(frameWidth * 1.05, frameHeight * 1.05);
+                        frame.IconSpell:SetAlpha(0.7);
                         frame:Show();
                     </OnPlay>
                     <OnFinished>
@@ -607,8 +607,8 @@
                         frame.innerGlow:SetAlpha(0.0);
                         frame.outerGlow:SetSize(frameWidth * 0.95, frameHeight * 0.95);
 						frame.outerGlow:SetAlpha(0.6);
-                        frame.icon:SetSize(frameWidth * 0.9, frameHeight * 0.9);
-                        frame.icon:SetAlpha(0.7);
+                        frame.IconSpell:SetSize(frameWidth * 0.9, frameHeight * 0.9);
+                        frame.IconSpell:SetAlpha(0.7);
                         frame:Show();
                     </OnPlay>
                     <OnFinished>
