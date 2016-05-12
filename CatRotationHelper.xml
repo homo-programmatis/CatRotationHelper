@@ -77,7 +77,7 @@
 							CatRotationHelper_ChkOptionsCatSurvival:Disable()
 						end
 
-						CatRotationHelperUpdateEverything()
+						g_Module.OnPackageChanged();
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -205,7 +205,7 @@
 							CatRotationHelper_ChkOptionsBearSurvival:Disable()
 						end
 
-						CatRotationHelperUpdateEverything()
+						g_Module.OnPackageChanged();
 					</OnClick>
 				</Scripts>
 			</CheckButton>

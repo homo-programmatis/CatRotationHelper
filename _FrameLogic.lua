@@ -7,6 +7,46 @@ g_Module.LogicUnusedFrame =
 	Type			= nil,
 };
 
+function g_Module.IsLogicAvailable(a_Logic)
+	if (nil ~= a_Logic.IsAvailable) then
+		return a_Logic.IsAvailable(a_Logic);
+	end
+	
+	if (nil ~= a_Logic.TalentID) then
+		return g_Module.IsTalentTaken(a_Logic.TalentID);
+	end
+	
+	if (nil ~= a_Logic.SkillID) then
+		return IsPlayerSpell(a_Logic.SkillID);
+	end
+
+	if (nil ~= a_Logic.SpellID) then
+		return IsPlayerSpell(a_Logic.SpellID);
+	end
+
+	return false;
+end
+
+function g_Module.AddLogicIfAvailable(a_Table, a_Logic)
+	if (not g_Module.IsLogicAvailable(a_Logic)) then
+		return;
+	end
+	
+	table.insert(a_Table, a_Logic);
+end
+
+function g_Module.AddLogicUnused(a_Table, a_MinCount)
+	local currentCount = #a_Table;
+	if (currentCount >= a_MinCount) then
+		return;
+	end
+	
+	local unusedSlots = a_MinCount - currentCount;
+	for i = 1, unusedSlots do
+		table.insert(a_Table, g_Module.LogicUnusedFrame);
+	end
+end
+
 function g_Module.FrameUpdateFromLogic(a_Frame, a_ShowEffects)
 	local logic = a_Frame.m_CrhLogic;
 

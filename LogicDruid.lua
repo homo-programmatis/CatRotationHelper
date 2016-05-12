@@ -27,6 +27,7 @@ g_Module.LogicDruidCatThrash =
 	TextureSpecial	= g_Module.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 106830,
+	SkillID 		= 77758,
 	CastByMe		= true,
 };
 
@@ -36,6 +37,7 @@ g_Module.LogicDruidCatRake =
 	TextureSpecial	= g_Module.GetMyImage("Rake-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 59881,
+	SkillID			= 1822,
 	CastByMe		= true,
 };
 
@@ -53,6 +55,7 @@ g_Module.LogicDruidCatPredatorySwiftness =
 	Texture			= g_Module.GetMyImage("PredatoryStrikes.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
+	SkillID			= 16974,
 };
 
 -----------------------------------

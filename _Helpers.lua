@@ -17,6 +17,11 @@ function g_Module.GetSpellName(a_SpellID)
 	return spellName;
 end
 
+function g_Module.IsTalentTaken(a_TalentID)
+	local _, _, _, selected, _ = GetTalentInfoByID(a_TalentID, GetActiveSpecGroup());
+	return selected;
+end
+
 function g_Module.GetMyImage(a_ImageName)
 	return "Interface\\AddOns\\CatRotationHelper\\Images\\" .. a_ImageName;
 end

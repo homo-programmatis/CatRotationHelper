@@ -4,57 +4,12 @@ local g_Consts = g_Module.Constants;
 
 -- spellIDs
 local CRH_SPELLID_CLEARCAST				= 16870;
-local CRH_SPELLID_LACERATE				= 33745;
-
-local CRH_SHAPE_BEAR 					= 1;
-local CRH_SHAPE_CAT						= 2;
-
-local g_NextFrameID = 1;
-local function CreateFrameWithLogic(a_Logic)
-	local frame = g_Module.FrameCreateNew(THIS_ADDON_NAME .. "_Frame_" .. g_NextFrameID);
-	g_NextFrameID = g_NextFrameID + 1;
-	
-	frame.m_CrhLogic = a_Logic;
-	return frame;
-end
-
-local g_FramesCat =
-{
-	CreateFrameWithLogic(g_Module.LogicDruidCatTigersFury),
-	CreateFrameWithLogic(g_Module.LogicDruidCatSavageRoar),
-	CreateFrameWithLogic(g_Module.LogicDruidCatRake),
-	CreateFrameWithLogic(g_Module.LogicDruidCatRip),
-	CreateFrameWithLogic(g_Module.LogicDruidCatThrash),
-};
-
-local g_FramesBear =
-{
-	CreateFrameWithLogic(g_Module.LogicDruidBearMangle),
-	CreateFrameWithLogic(g_Module.LogicDruidBearLacerate),
-	CreateFrameWithLogic(g_Module.LogicDruidBearThrash),
-	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
-	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
-};
-
-local g_FramesEvents =
-{
-	CreateFrameWithLogic(g_Module.LogicDruidBerserk),
-	CreateFrameWithLogic(g_Module.LogicDruidWildCharge),
-	CreateFrameWithLogic(g_Module.LogicDruidCatPredatorySwiftness),
-};
-
-local g_FramesSurv =
-{
-	CreateFrameWithLogic(g_Module.LogicDruidSurvivalInstincts),
-	CreateFrameWithLogic(g_Module.LogicDruidBearBarkskin),
-};
 
 -- state variables
-local inCatForm = false;
-local inBearForm = false;
-local enemyTarget = false;
 local clearCast = false;
 local unlocked = false;
+local g_IsActive = true;
+local g_LastShapeshiftForm = nil;
 
 -- saved variables
 crhScale = 1;
@@ -78,86 +33,123 @@ crhShowFeralCharge = true;
 crhShowBearBerserk = true;
 crhShowPredatorsSwiftness = true;
 
-local function crhIsAddonUseful()
-	local specID = GetSpecialization();
-	if ((specID ~= 2) and (specID ~= 3)) then
+local function UpdateFrames(a_Type, a_ShowEffects)
+	if (not g_IsActive) then
+		return;
+	end
+	
+	for _, frameList in pairs(g_Module.FrameLists) do
+		for _, frame in pairs(frameList) do
+			if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
+				g_Module.FrameUpdateFromLogic(frame, a_ShowEffects);
+			end
+		end
+	end
+end
+
+local function UpdateComboPoints()
+	local comboPoints = g_Module.ActivePackage.GetComboPoints();
+	CatRotationHelperSetCPEffects(g_Module.FrameLists[1], comboPoints);
+end
+
+local function UpdateEverything()
+	UpdateFrames(nil, false);
+	UpdateComboPoints();
+	CatRotationHelperCheckClearcast();
+end
+
+function g_Module.ShowAllFrames(a_IsShow)
+	local frameCount = 0;
+	for _, frameList in pairs(g_Module.FrameLists) do
+		for _, frame in pairs(frameList) do
+			frame:SetShown(a_IsShow);
+			frameCount = frameCount + 1;
+		end
+	end
+
+	if (0 == frameCount) then
+		-- Optimization: with (g_IsActive == false), no events are processed
+		-- If we have 0 frames anyway, processing events doesn't make sense
+		g_IsActive = false;
+	else
+		g_IsActive = a_IsShow;
+	end
+end
+
+function g_Module.ReloadPackage(a_NoUpdate)
+	g_Module.FrameDeallocAll();
+	g_IsActive = false;
+	g_LastShapeshiftForm = GetShapeshiftForm();
+
+	local playerClass = select(2, UnitClass("player"));
+	g_Module.ActivePackage = g_Module.GetPackage[playerClass]();
+	
+	for logicListIdx, logicList in pairs(g_Module.ActivePackage.LogicLists) do
+		local frameList = {};
+		g_Module.FrameLists[logicListIdx] = frameList;
+		
+		for logicIdx, logic in pairs(logicList) do
+			local frame = g_Module.FrameAlloc();
+			frameList[logicIdx] = frame;
+			
+			frame.m_CrhLogic = logic;
+			g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
+			g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+		end
+	end
+	
+	CatRotationFrameSetMainScale();
+	CatRotationFrameSetEventScale();
+	CatRotationFrameSetSurvivalScale();
+	CatRotationFrameSetMainStyle();
+	CatRotationFrameSetEventStyle();
+	CatRotationFrameSetSurvivalStyle();
+
+	if (not a_NoUpdate) then
+		-- Simulate target switching to decide whether to show/update frames
+		g_Module.OnTargetSwitched();
+	end
+end
+
+local function IsEnemyTarget()
+	if (not UnitExists("target")) then
+		return false;
+	end
+
+	if (not UnitCanAttack("player", "target")) then
+		return false;
+	end
+	
+	if (UnitIsDead("target")) then
 		return false;
 	end
 	
 	return true;
 end
 
--- Shows/hides all frames in a_FrameList
-local function ShowFrames(a_FrameList, a_IsShow)
-	for i=1, #a_FrameList do
-		a_FrameList[i]:SetShown(a_IsShow);
+function g_Module.OnTargetSwitched()
+	if (not IsEnemyTarget()) then
+		g_Module.ShowAllFrames(false);
+		-- FIXME: fix lacerate wearoff animation
+		-- CatRotationHelper_TimerLacerate:Hide();
+		return;
 	end
+
+	g_Module.ShowAllFrames(true);
+	UpdateEverything();
 end
 
-local function UpdateFramesByType(a_FrameList, a_Type, a_ShowEffects)
-	for i = 1, #a_FrameList do
-		local frame = a_FrameList[i];
-	
-		if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
-			g_Module.FrameUpdateFromLogic(frame, a_ShowEffects);
-		end
-	end
+function g_Module.OnPackageChanged()
+	g_Module.ReloadPackage();
 end
 
-function CatRotationHelperUpdateEverything()
-	if(not crhIsAddonUseful()) then
-		return
+function g_Module.OnShapeShift()
+	if (g_LastShapeshiftForm == GetShapeshiftForm()) then
+		-- Casting "Predatory Swiftness" will send two UPDATE_SHAPESHIFT_FORM in WOW6.2 for some reason
+		return;
 	end
 	
-	if(UnitExists("target") and UnitCanAttack("player", "target") and not UnitIsDead("target")) then
-		enemyTarget = true
-	else
-		enemyTarget = false
-		CatRotationHelperHideAll()
-	end
-
-	if(GetShapeshiftForm() == CRH_SHAPE_CAT and crhShowCat) then
-		if(inBearForm) then
-			CatRotationHelperHideAll()
-			inBearForm = false
-		end
-
-		inCatForm = true
-
-		if(enemyTarget) then
-			ShowFrames(g_FramesCat, true);
-			ShowFrames(g_FramesBear, false);
-			UpdateFramesByType(g_FramesCat, nil, false);
-			CatRotationHelperSetCatCP(GetComboPoints("player"));
-			ShowFrames(g_FramesSurv, crhShowCatSurvival);
-			UpdateFramesByType(g_FramesSurv, nil, false);
-			ShowFrames(g_FramesEvents, true);
-			UpdateFramesByType(g_FramesEvents, nil, false);
-		end
-
-	elseif(GetShapeshiftForm() == CRH_SHAPE_BEAR and crhShowBear) then
-		if(inCatForm) then
-			CatRotationHelperHideAll()
-			inCatForm = false
-		end
-
-		inBearForm = true
-
-		if(enemyTarget) then
-			ShowFrames(g_FramesBear, true);
-			ShowFrames(g_FramesCat, false);
-			UpdateFramesByType(g_FramesBear, nil, false);
-			crhUpdateLacerate();
-			ShowFrames(g_FramesSurv, crhShowBearSurvival);
-			UpdateFramesByType(g_FramesSurv, nil, false);
-			ShowFrames(g_FramesEvents, true);
-			UpdateFramesByType(g_FramesEvents, nil, false);
-		end
-	else
-		CatRotationHelperHideAll();
-		inCatForm = false
- 		inBearForm = false
-	end
+	g_Module.ReloadPackage();
 end
 
 function CatRotationHelperUnlock()
@@ -168,30 +160,12 @@ function CatRotationHelperUnlock()
 	HideUIPanel(InterfaceOptionsFrame)
 	unlocked = true;
 
-	-- Hide bear frames
-	ShowFrames(g_FramesBear, false);
-	CatRotationHelper_TimerLacerate:Hide()
-	CatRotationHelperSetBearCP(0)
+	-- Hide effects
+	CatRotationHelper_TimerLacerate:Hide();
+	CatRotationHelperSetCPEffects(g_Module.FrameLists[1], 0);
 
-	-- show static cat frames
-	CatRotationHelperSetCatCP(0)
-
-	for i=1, #g_FramesCat do
-		local frame = g_FramesCat[i];
-
-		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-		frame:Show();
-	end
-
-	for i=1, #g_FramesEvents do
-		g_FramesEvents[i]:Show()
-		g_Module.FrameSetStatus(g_FramesEvents[i], g_Consts.STATUS_READY, nil, false);
-	end
-
-	for i=1, #g_FramesSurv do
-		g_FramesSurv[i]:Show()
-		g_Module.FrameSetStatus(g_FramesSurv[i], g_Consts.STATUS_READY, nil, false);
-	end
+	-- Show all frames in their default state, even if they should be currently hidden
+	g_Module.ReloadPackage(true);
 end
 
 function CatRotationHelperLock()
@@ -207,39 +181,11 @@ function CatRotationHelperLock()
 	unlocked = false;
 	clearCast = false;
 
-	for i=1, #g_FramesCat do
-		local frame = g_FramesCat[i]
-
-		frame:Hide()
-		g_Module.FrameDrawFaded(frame);
-	end
-
-	for i=1, #g_FramesBear do
-		local frame = g_FramesBear[i]
-
-		frame:Hide()
-		g_Module.FrameDrawFaded(frame);
-	end
-
-	for i=1, #g_FramesEvents do
-		local frame = g_FramesEvents[i];
-
-		frame:Hide()
-		g_Module.FrameDrawFaded(frame);
-	end
-
-	for i=1, #g_FramesSurv do
-		local frame = g_FramesSurv[i];
-
-		frame:Hide()
-		g_Module.FrameDrawFaded(frame);
-	end
-
-	CatRotationHelperUpdateEverything()
+	g_Module.OnPackageChanged();
 end
 
 -- shows num combo point circles using frames in a_FrameList
-local function CatRotationHelperSetCPEffects(a_FrameList, num)
+function CatRotationHelperSetCPEffects(a_FrameList, num)
 	for i=1, #a_FrameList do
 		local frame = a_FrameList[i];
 
@@ -268,41 +214,25 @@ local function CatRotationHelperSetCPEffects(a_FrameList, num)
 	end
 end
 
-function CatRotationHelperSetCatCP(num)
-	if(not crhCp) then return; end
-
-	CatRotationHelperSetCPEffects(g_FramesCat, num);
-end
-
-function CatRotationHelperSetBearCP(num)
-	if(not crhLacCounter) then return; end
-
-	CatRotationHelperSetCPEffects(g_FramesBear, num);
-end
-
 function CatRotationFrameSetMainScale()
-	for i=1, #g_FramesCat do
-		g_FramesCat[i]:SetScale(crhScale);
-	end
-
-	for i=1, #g_FramesBear do
-		g_FramesBear[i]:SetScale(crhScale);
+	for _, frame in pairs(g_Module.FrameLists[1]) do
+		frame:SetScale(crhScale);
 	end
 
 	CatRotationHelper_BoxMain:SetScale(crhScale);
 end
 
 function CatRotationFrameSetEventScale()
-	for i=1, #g_FramesEvents do
-		g_FramesEvents[i]:SetScale(crhEventScale);
+	for _, frame in pairs(g_Module.FrameLists[2]) do
+		frame:SetScale(crhScale);
 	end
 
 	CatRotationHelper_BoxEvnt:SetScale(crhEventScale);
 end
 
 function CatRotationFrameSetSurvivalScale()
-	for i=1, #g_FramesSurv do
-		g_FramesSurv[i]:SetScale(crhSurvivalScale);
+	for _, frame in pairs(g_Module.FrameLists[3]) do
+		frame:SetScale(crhScale);
 	end
 
 	CatRotationHelper_BoxSurv:SetScale(crhSurvivalScale);
@@ -315,8 +245,7 @@ function CatRotationHelper_BoxMain_OnClick()
 end
 
 function CatRotationFrameSetMainStyle()
-	g_Module.FramesSetPosition(g_FramesCat,  CatRotationHelper_BoxMain, crhMainAngle);
-	g_Module.FramesSetPosition(g_FramesBear, CatRotationHelper_BoxMain, crhMainAngle);
+	g_Module.FramesSetPosition(g_Module.FrameLists[1], CatRotationHelper_BoxMain, crhMainAngle);
 end
 
 -- rotate event frame
@@ -327,7 +256,7 @@ end
 
 function CatRotationFrameSetEventStyle()
 	-- FIXME: Need better positioning
-	g_Module.FramesSetPosition(g_FramesEvents, CatRotationHelper_BoxEvnt, crhEventAngle);
+	g_Module.FramesSetPosition(g_Module.FrameLists[2], CatRotationHelper_BoxEvnt, crhEventAngle);
 end
 
 -- rotate survival frame
@@ -338,47 +267,36 @@ end
 
 function CatRotationFrameSetSurvivalStyle()
 	-- FIXME: Need better positioning
-	g_Module.FramesSetPosition(g_FramesSurv, CatRotationHelper_BoxSurv, crhSurvivalAngle);
-end
-
-function CatRotationHelperHideAll()
-	CatRotationHelper_TimerLacerate:Hide();
-
-	CatRotationHelperSetBearCP(0);
-	CatRotationHelperSetCatCP(0);
-
-	ShowFrames(g_FramesCat, false);
-	ShowFrames(g_FramesBear, false);
-	ShowFrames(g_FramesEvents, false);
-	ShowFrames(g_FramesSurv, false);
+	g_Module.FramesSetPosition(g_Module.FrameLists[3], CatRotationHelper_BoxSurv, crhSurvivalAngle);
 end
 
 ------------------------------
 -- Bear - Main Frame Checks --
 ------------------------------
 
-function crhUpdateLacerate()
-	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
-	if (name == nil) then
-		CatRotationHelper_TimerLacerate:Hide();
-		CatRotationHelperSetBearCP(0);
-		return;
-	end
-	
-	-- stop possible cp animation when lacerate is refreshed
-	local i = 1;
-	for i=1, #g_FramesBear do
-		g_FramesBear[i].FrameCombo:SetAlpha(1)
-		g_FramesBear[i].FrameCombo:SetScale(1)
-	end
-
-	-- setup lacerate warning
-	CatRotationHelper_TimerLacerate:Show()
-	CatRotationHelper_TimerLacerate.expTime = expTime
-
-	-- set cp effects
-	CatRotationHelperSetBearCP(stacks);
-end
+-- FIXME: Fix lacerate wearoff animation
+-- function crhUpdateLacerate()
+-- 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
+-- 	if (name == nil) then
+-- 		CatRotationHelper_TimerLacerate:Hide();
+-- 		CatRotationHelperSetBearCP(0);
+-- 		return;
+-- 	end
+-- 	
+-- 	-- stop possible cp animation when lacerate is refreshed
+-- 	local i = 1;
+-- 	for i=1, #g_FramesBear do
+-- 		g_FramesBear[i].FrameCombo:SetAlpha(1)
+-- 		g_FramesBear[i].FrameCombo:SetScale(1)
+-- 	end
+-- 
+-- 	-- setup lacerate warning
+-- 	CatRotationHelper_TimerLacerate:Show()
+-- 	CatRotationHelper_TimerLacerate.expTime = expTime
+-- 
+-- 	-- set cp effects
+-- 	CatRotationHelperSetBearCP(stacks);
+-- end
 
 -- Check for Clearcast procs - cat (has no effect for bear)
 function CatRotationHelperCheckClearcast()
@@ -387,13 +305,16 @@ function CatRotationHelperCheckClearcast()
 	end
 
 	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
+	if (1 == GetShapeshiftForm()) then
+		-- Ignore clearcast on bear
+		isBuffPresent = false;
+	end
+	
 	if (isBuffPresent) then
 		if(not clearCast) then
 			clearCast = true;
 
-			for i=1, #g_FramesCat do
-				local frame = g_FramesCat[i];
-
+			for _, frame in pairs(g_Module.FrameLists[1]) do
 				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.TextureSpecial);
 				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
@@ -403,9 +324,7 @@ function CatRotationHelperCheckClearcast()
 		if(clearCast) then
 			clearCast = false;
 
-			for i=1,#g_FramesCat do
-				local frame = g_FramesCat[i];
-
+			for _, frame in pairs(g_Module.FrameLists[1]) do
 				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture);
 				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
@@ -436,36 +355,6 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	CatRotationHelper_BoxSurv:RegisterForDrag("LeftButton")
 	CatRotationHelper_BoxSurv:SetClampedToScreen(true)
 
-	CreateFrames();
-	
-	-- setup cat
-	for i=1, #g_FramesCat do
-		local frame = g_FramesCat[i];
-		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-	end
-
-	-- setup bear
-	for i=1, #g_FramesBear do
-		local frame = g_FramesBear[i];
-		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-	end
-
-	-- setup events
-	for i=1, #g_FramesEvents do
-		local frame = g_FramesEvents[i];
-		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-	end
-
-	-- setup survival frame
-	for i=1, #g_FramesSurv do
-		local frame = g_FramesSurv[i];
-		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
-	end
-
 	CatRotationHelper_EntryPoint:RegisterEvent("ADDON_LOADED");
 	CatRotationHelper_EntryPoint:RegisterEvent("PLAYER_TALENT_UPDATE")
 end
@@ -478,94 +367,41 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 	end
 
 	if(event == "UNIT_AURA") then
-		if(enemyTarget) then
-			if(inCatForm) then
-				if(arg1 == "player") then
-					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BURST, true);
-					CatRotationHelperCheckClearcast();
-					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_PROC, true);
-				elseif(arg1 == "target") then
-					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_DEBUFF, true);
-				end
-			elseif(inBearForm) then
-				if(arg1 == "player") then
-					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BURST, true);
-					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BUFF, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
-					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_PROC, true);
-				elseif(arg1 == "target") then
-					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_DEBUFF, true);
-				end
-			end
+		if(arg1 == "player") then
+			UpdateFrames(g_Consts.LOGIC_TYPE_BUFF, true);
+			UpdateFrames(g_Consts.LOGIC_TYPE_BURST, true);
+			UpdateFrames(g_Consts.LOGIC_TYPE_PROC, true);
+			CatRotationHelperCheckClearcast();
+		elseif(arg1 == "target") then
+			UpdateFrames(g_Consts.LOGIC_TYPE_DEBUFF, true);
+			UpdateComboPoints(); -- Bear "combo points"
 		end
-
 	elseif(event == "UNIT_COMBO_POINTS") then
 		if(arg1 == "player") then
-			CatRotationHelperSetCatCP(GetComboPoints("player"))
+			UpdateComboPoints();
 		end
-
 	elseif(event == "SPELL_UPDATE_COOLDOWN") then
-		if(enemyTarget) then
-			if(inBearForm) then
-				UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
-			elseif(inCatForm) then
-				UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_SKILL, true);
-				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
-			end
-		end
-
-	elseif(event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_FACTION" and arg1 == "target")) then
+		UpdateFrames(g_Consts.LOGIC_TYPE_SKILL, true);
+		UpdateFrames(g_Consts.LOGIC_TYPE_BURST, true);
+	elseif (event == "UPDATE_SHAPESHIFT_FORM") then
+		g_Module.OnShapeShift();
+	elseif(event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_FACTION" and arg1 == "target")) then
 		-- checking UNIT_FACTION so starting a duel behaves like changing target
-		CatRotationHelperUpdateEverything()
-
-	--elseif(event == "UNIT_ATTACK_POWER" or event == "UNIT_ATTACK_SPEED" or event == "COMBAT_RATING_UPDATE") then
-
+		g_Module.OnTargetSwitched();
 	elseif(event == "PLAYER_TALENT_UPDATE") then
-		if(crhIsAddonUseful()) then
-			self:RegisterEvent("UNIT_AURA");
-			self:RegisterEvent("PLAYER_TARGET_CHANGED");
-			self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
-			self:RegisterEvent("UNIT_FACTION");
-			self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
+		self:RegisterEvent("UNIT_AURA");
+		self:RegisterEvent("PLAYER_TARGET_CHANGED");
+		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
+		self:RegisterEvent("UNIT_FACTION");
+		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 
-			if(crhCp) then
-				self:RegisterEvent("UNIT_COMBO_POINTS");
-			end
-
-			CatRotationHelperUpdateEverything()
-		else
-			self:UnregisterEvent("UNIT_AURA");
-			self:UnregisterEvent("PLAYER_TARGET_CHANGED");
-			self:UnregisterEvent("UPDATE_SHAPESHIFT_FORM");
-			self:UnregisterEvent("UNIT_FACTION");
-			self:UnregisterEvent("SPELL_UPDATE_COOLDOWN");
-			self:UnregisterEvent("UNIT_COMBO_POINTS");
-
-			CatRotationHelperHideAll();
+		if(crhCp) then
+			self:RegisterEvent("UNIT_COMBO_POINTS");
 		end
 
+		g_Module.OnPackageChanged();
 	elseif(event == "ADDON_LOADED" and arg1 == "CatRotationHelper") then
-		CatRotationFrameSetMainScale()
-		CatRotationFrameSetEventScale()
-		CatRotationFrameSetSurvivalScale()
-		CatRotationFrameSetMainStyle()
-		CatRotationFrameSetEventStyle()
-		CatRotationFrameSetSurvivalStyle()
+		
 	end
 end
 
