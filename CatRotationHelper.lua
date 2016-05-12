@@ -242,14 +242,9 @@ local function CatRotationHelperSetCPEffects(a_FrameList, num)
 
 		if(i <= num) then
 			if(not frame.hascp) then
-				if(clearCast) then
-					frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
-					frame.FrameTimer.TextStar:SetTextColor(0.40, 0.70, 0.95);
-				else
-					frame.FrameTimer.TextTime:SetTextColor(0.90, 0.70, 0.00);
-					frame.FrameTimer.TextStar:SetTextColor(0.90, 0.70, 0.00);
-				end
 				frame.hascp = true;
+				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
+				
 				frame.FrameCombo:Show()
 				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
 				frame.FrameCombo.startTime = GetTime()
@@ -257,14 +252,9 @@ local function CatRotationHelperSetCPEffects(a_FrameList, num)
 			end
 		else
 			if(frame.hascp) then
-				if(clearCast) then
-					frame.FrameTimer.TextTime:SetTextColor(0.50, 0.85, 1.00);
-					frame.FrameTimer.TextStar:SetTextColor(0.50, 0.85, 1.00);
-				else
-					frame.FrameTimer.TextTime:SetTextColor(1.00, 1.00, 0.00);
-					frame.FrameTimer.TextStar:SetTextColor(1.00, 1.00, 0.00);
-				end
 				frame.hascp = false;
+				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
+
 				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
 				frame.FrameCombo.startTime = GetTime()
 				frame.FrameCombo.reverse = true
@@ -396,42 +386,27 @@ function CatRotationHelperCheckClearcast()
 	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
 	if (isBuffPresent) then
 		if(not clearCast) then
+			clearCast = true;
+
 			for i=1, #g_FramesCat do
 				local frame = g_FramesCat[i];
 
 				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.TextureSpecial);
-
-				if(frame.hascp) then
-					frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
-					frame.FrameTimer.TextStar:SetTextColor(0.40, 0.70, 0.95);
-				else
-					frame.FrameTimer.TextTime:SetTextColor(0.50, 0.85, 1.00);
-					frame.FrameTimer.TextStar:SetTextColor(0.50, 0.85, 1.00);
-				end
+				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
 			end
-
-			clearCast = true;
 		end
 	else
 		if(clearCast) then
+			clearCast = false;
+
 			for i=1,#g_FramesCat do
 				local frame = g_FramesCat[i];
 
 				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
 				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture);
-
-				if(frame.hascp) then
-					frame.FrameTimer.TextTime:SetTextColor(0.90, 0.70, 0.00);
-					frame.FrameTimer.TextStar:SetTextColor(0.90, 0.70, 0.00);
-				else
-					frame.FrameTimer.TextTime:SetTextColor(1.00, 1.00, 0.00);
-					frame.FrameTimer.TextStar:SetTextColor(1.00, 1.00, 0.00);
-				end
-
+				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
 			end
-
-			clearCast = false;
 		end
 	end
 end

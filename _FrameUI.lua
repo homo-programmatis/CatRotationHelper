@@ -16,6 +16,26 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	end
 end
 
+function g_Module.FrameUpdateTimerColor(a_Frame, a_IsClearcast, a_IsCombo)
+	if (a_IsClearcast) then
+		if (a_IsCombo) then
+			a_Frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
+			a_Frame.FrameTimer.TextStar:SetTextColor(0.40, 0.70, 0.95);
+		else
+			a_Frame.FrameTimer.TextTime:SetTextColor(0.50, 0.85, 1.00);
+			a_Frame.FrameTimer.TextStar:SetTextColor(0.50, 0.85, 1.00);
+		end
+	else
+		if (a_IsCombo) then
+			a_Frame.FrameTimer.TextTime:SetTextColor(0.90, 0.70, 0.00);
+			a_Frame.FrameTimer.TextStar:SetTextColor(0.90, 0.70, 0.00);
+		else
+			a_Frame.FrameTimer.TextTime:SetTextColor(1.00, 1.00, 0.00);
+			a_Frame.FrameTimer.TextStar:SetTextColor(1.00, 1.00, 0.00);
+		end
+	end
+end
+
 function g_Module.FrameDrawInvisible(a_Frame)
 	a_Frame.IconSpell:SetVertexColor(0.00, 0.00, 0.00, 0.00);
 end
