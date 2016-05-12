@@ -286,7 +286,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 			UpdateFrames(g_Consts.LOGIC_TYPE_DEBUFF, true);
 			UpdateComboPoints(); -- Bear "combo points"
 		end
-	elseif(event == "UNIT_COMBO_POINTS") then
+	elseif(event == "UNIT_POWER") then
 		if(arg1 == "player") then
 			UpdateComboPoints();
 		end
@@ -306,7 +306,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 
 		if(crhCp) then
-			self:RegisterEvent("UNIT_COMBO_POINTS");
+			self:RegisterEvent("UNIT_POWER");
 		end
 
 		g_Module.OnPackageChanged();

@@ -6,7 +6,7 @@ local function GetPackage_DruidCat()
 	local newPackage =
 	{
 		GetComboPoints = function()
-			return GetComboPoints("player");
+			return UnitPower("player", SPELL_POWER_COMBO_POINTS);
 		end,
 		
 		LogicLists = 
