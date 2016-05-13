@@ -3,7 +3,6 @@ local g_Module = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Module.Constants;
 
 -- spellIDs
-local CRH_SPELLID_BARKSKIN				= 22812;
 local CRH_SPELLID_BERSERK 				= 106952;
 local CRH_SPELLID_CLEARCAST				= 16870;
 local CRH_SPELLID_FAERIE_FIRE			= 770;
@@ -13,7 +12,6 @@ local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
 local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
 local CRH_SPELLID_SAVAGE_DEFENSE_BUFF	= 132402;
-local CRH_SPELLID_SURVIVAL_INSTINCTS	= 61336;
 
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
@@ -23,14 +21,6 @@ local CRH_FAERIE_FIRE_SPELLID_LIST		=
 	CRH_SPELLID_FAERIE_FIRE,
 	CRH_SPELLID_FAERIE_SWARM
 }
-
--- Frame IDs
-local CRH_FRAME_BARKSKIN				= 1;
-local CRH_FRAME_SURVINSTINCTS			= 2;
-local CRH_FRAME_SURV_UNUSED3 			= 3;
-
--- change order of icons here
-local g_CrhFrameOrderSurv = {CRH_FRAME_SURV_UNUSED3, CRH_FRAME_SURVINSTINCTS, CRH_FRAME_BARKSKIN}
 
 local function CreateFrameWithLogic(a_Logic)
 	local frame = CreateFrame("Frame", nil, UIParent);
@@ -57,22 +47,14 @@ local g_FramesBear =
 };
 
 local g_CrhFramesEvents = {};
-local g_CrhFramesSurv = {};
-local survivalTextures = {};
+
+local g_FramesSurv =
+{
+	CreateFrameWithLogic(g_Module.LogicDruidSurvivalInstincts),
+	CreateFrameWithLogic(g_Module.LogicDruidBearBarkskin),
+};
 
 local function InitFrames()
-	-- Survival: Barkskin
-	g_CrhFramesSurv[CRH_FRAME_BARKSKIN] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_BARKSKIN] = g_Module.GetMyImage("Barkskin.tga");
-
-	-- Survival: Survival instincts
-	g_CrhFramesSurv[CRH_FRAME_SURVINSTINCTS] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_SURVINSTINCTS] = g_Module.GetMyImage("SurvivalInstincts.tga");
-
-	-- Survival: Unused3
-	g_CrhFramesSurv[CRH_FRAME_SURV_UNUSED3] = CreateFrame("Frame", nil, UIParent);
-	survivalTextures[CRH_FRAME_SURV_UNUSED3] = nil;
-	
 	-- Events
 	g_CrhFramesEvents[1] = CreateFrame("Frame", nil, UIParent);
 	g_CrhFramesEvents[2] = CreateFrame("Frame", nil, UIParent);
@@ -179,7 +161,8 @@ function CatRotationHelperUpdateEverything()
 			ShowFrames(g_FramesBear, false);
 			UpdateFramesByType(g_FramesCat, nil, false);
 			CatRotationHelperSetCatCP(GetComboPoints("player"));
-			CatRotationHelperUpdateSurvival(false)
+			ShowFrames(g_FramesSurv, crhShowCatSurvival);
+			UpdateFramesByType(g_FramesSurv, nil, false);
 			CatRotationHelperUpdateEvents(false)
 		end
 
@@ -196,7 +179,8 @@ function CatRotationHelperUpdateEverything()
 			ShowFrames(g_FramesCat, false);
 			UpdateFramesByType(g_FramesBear, nil, false);
 			crhUpdateLacerate();
-			CatRotationHelperUpdateSurvival(false)
+			ShowFrames(g_FramesSurv, crhShowBearSurvival);
+			UpdateFramesByType(g_FramesSurv, nil, false);
 			CatRotationHelperUpdateEvents(false)
 		end
 	else
@@ -204,7 +188,6 @@ function CatRotationHelperUpdateEverything()
 		inCatForm = false
  		inBearForm = false
 	end
-
 end
 
 function CatRotationHelperUnlock()
@@ -244,14 +227,10 @@ function CatRotationHelperUnlock()
 		g_CrhFramesEvents[i].icon:SetTexture(eventList[i])
 	end
 
-	-- show static survival frames
-	for i=1, #g_CrhFramesSurv do
-		g_CrhFramesSurv[i]:Show()
-		g_CrhFramesSurv[i]:SetAlpha(1)
-		g_CrhFramesSurv[i].countframe:Hide();
-		g_CrhFramesSurv[i].countframe.endTime = nil;
+	for i=1, #g_FramesSurv do
+		g_FramesSurv[i]:Show()
+		g_Module.FrameSetStatus(g_FramesSurv[i], g_Consts.STATUS_READY, nil, false);
 	end
-
 end
 
 function CatRotationHelperLock()
@@ -285,8 +264,11 @@ function CatRotationHelperLock()
 		g_CrhFramesEvents[i]:Hide()
 	end
 
-	for i=1, #g_CrhFramesSurv do
-		g_CrhFramesSurv[i]:Hide()
+	for i=1, #g_FramesSurv do
+		local frame = g_FramesSurv[i];
+
+		frame:Hide()
+		g_Module.FrameDrawFaded(frame);
 	end
 
 	CatRotationHelperUpdateEverything()
@@ -365,8 +347,8 @@ function CatRotationFrameSetEventScale()
 end
 
 function CatRotationFrameSetSurvivalScale()
-	for i=1, #g_CrhFramesSurv do
-		g_CrhFramesSurv[i]:SetScale(crhSurvivalScale);
+	for i=1, #g_FramesSurv do
+		g_FramesSurv[i]:SetScale(crhSurvivalScale);
 	end
 
 	CatRotationHelper_BoxSurv:SetScale(crhSurvivalScale);
@@ -400,12 +382,8 @@ function CatRotationHelper_BoxSurv_OnClick()
 end
 
 function CatRotationFrameSetSurvivalStyle()
-	local survFrames = {};
-	for i = 1, #g_CrhFrameOrderSurv do
-		survFrames[i] = g_CrhFramesSurv[g_CrhFrameOrderSurv[i]];
-	end
-
-	g_Module.FramesSetPosition(survFrames, CatRotationHelper_BoxSurv, crhSurvivalAngle);
+	-- FIXME: Need better positioning
+	g_Module.FramesSetPosition(g_FramesSurv, CatRotationHelper_BoxSurv, crhSurvivalAngle);
 end
 
 function CatRotationHelperHideAll()
@@ -417,7 +395,7 @@ function CatRotationHelperHideAll()
 	ShowFrames(g_FramesCat, false);
 	ShowFrames(g_FramesBear, false);
 	ShowFrames(g_CrhFramesEvents, false);
-	ShowFrames(g_CrhFramesSurv, false);
+	ShowFrames(g_FramesSurv, false);
 end
 
 ------------------------------
@@ -639,51 +617,6 @@ function CatRotationHelperUpdateEvents(a_ShowEffects)
 	end
 end
 
-local function crhUpdateSurvivalFrame(a_FrameID, a_SpellID, a_ShowEffects)
-	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
-	
-	-- Unknown legacy safety code
-	if (spellStart == nil) then
-		return;
-	end
-	
-	-- Spell ready
-	if (spellStart == 0) then
-		if (not g_CrhFramesSurv[a_FrameID]:IsVisible()) then
-			g_CrhFramesSurv[a_FrameID]:Show();
-
-			if(a_ShowEffects) then
-				g_CrhFramesSurv[a_FrameID].overlay.animIn:Play()
-			end
-		end
-
-		return;
-	end
-
-	-- Prevent blinking on GCD
-	if (spellDuration < g_Consts.GCD_LENGTH) then
-		return;
-	end
-
-	local status, expiration = g_Module.CalcFrameFromBuff(a_SpellID);
-	if (g_Consts.STATUS_COUNTING ~= status) then
-		g_CrhFramesSurv[a_FrameID]:Hide();
-		return;
-	end
-	
-	g_CrhFramesSurv[a_FrameID]:Show();
-	g_CrhFramesSurv[a_FrameID].countframe.endTime = expiration
-	g_CrhFramesSurv[a_FrameID].countframe:Show()
-end
-
--- Survival Frame - Bear & Cat
-function CatRotationHelperUpdateSurvival(a_ShowEffects)
-	if ((crhShowCatSurvival and inCatForm) or (crhShowBearSurvival and inBearForm)) then
-		crhUpdateSurvivalFrame(CRH_FRAME_BARKSKIN, CRH_SPELLID_BARKSKIN, a_ShowEffects);
-		crhUpdateSurvivalFrame(CRH_FRAME_SURVINSTINCTS, CRH_SPELLID_SURVIVAL_INSTINCTS, a_ShowEffects);
-	end
-end
-
 local function FrameSetup(a_Frame, a_FrameName, a_OnUpdate)
 	a_Frame.hascp = false;
 
@@ -773,12 +706,12 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	end
 
 	-- setup survival frame
-	for i=1, #g_CrhFramesSurv do
-		local frame = g_CrhFramesSurv[i];
-		FrameSetup(frame, "CatRotationHelper_Surv_" .. i, CatRotationFrameEventCounter);
+	for i=1, #g_FramesSurv do
+		local frame = g_FramesSurv[i];
+		FrameSetup(frame, "CatRotationHelper_Surv_" .. i, CatRotationFrameCounter);
 
-		g_Module.FrameDrawActive(frame);
-		g_Module.FrameSetTexture(frame, survivalTextures[i]);
+		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
+		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	CatRotationHelper_EntryPoint:RegisterEvent("ADDON_LOADED");
@@ -799,7 +732,8 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BUFF, true);
 					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BURST, true);
 					CatRotationHelperCheckClearcast();
-					CatRotationHelperUpdateSurvival(true)
+					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
 					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_DEBUFF, true);
@@ -809,7 +743,8 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 				if(arg1 == "player") then
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF, true);
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BURST, true);
-					CatRotationHelperUpdateSurvival(true)
+					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_DEBUFF, true);
@@ -828,11 +763,13 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 		if(enemyTarget) then
 			if(inBearForm) then
 				UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_SKILL, true);
-				CatRotationHelperUpdateSurvival(true)
+				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
+				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
 				CatRotationHelperUpdateEvents(true)
 			elseif(inCatForm) then
 				UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_SKILL, true);
-				CatRotationHelperUpdateSurvival(true)
+				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
+				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
 				CatRotationHelperUpdateEvents(true)
 			end
 		end

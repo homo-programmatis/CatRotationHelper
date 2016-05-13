@@ -73,3 +73,20 @@ g_Module.LogicDruidBearLacerate =
 	SpellID			= 33745,
 	CastByMe		= true,
 };
+
+g_Module.LogicDruidBearBarkskin =
+{
+	Texture			= g_Module.GetMyImage("Barkskin.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BURST,
+	SpellID			= 22812,
+};
+
+-----------------------------------
+-- Cat & Bear
+-----------------------------------
+g_Module.LogicDruidSurvivalInstincts =
+{
+	Texture			= g_Module.GetMyImage("SurvivalInstincts.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BURST,
+	SpellID			= 61336,
+};
