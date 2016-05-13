@@ -93,6 +93,13 @@ g_Module.LogicDruidBearGalacticGuardian =
 	TalentID		= 22421,
 };
 
+g_Module.LogicDruidBearPulverize =
+{
+	Texture			= g_Module.GetMyImage("Pulverize.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BUFF,
+	SpellID			= 158792,
+};
+
 g_Module.LogicDruidBearBarkskin =
 {
 	Texture			= g_Module.GetMyImage("Barkskin.tga"),

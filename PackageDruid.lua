@@ -70,6 +70,7 @@ local function GetPackage_DruidBear()
 	logicList = newPackage.LogicLists[1];
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearMangle);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearThrash);
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearPulverize);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearGalacticGuardian);
 	g_Module.AddLogicUnused(logicList, 3);
 	
