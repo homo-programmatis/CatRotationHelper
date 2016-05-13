@@ -3,24 +3,11 @@ local g_Module = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Module.Constants;
 
 -- spellIDs
-local CRH_SPELLID_BERSERK 				= 106952;
 local CRH_SPELLID_CLEARCAST				= 16870;
-local CRH_SPELLID_FAERIE_FIRE			= 770;
-local CRH_SPELLID_FAERIE_SWARM			= 102355;
-local CRH_SPELLID_FERAL_CHARGE			= 102401;
 local CRH_SPELLID_LACERATE				= 33745;
-local CRH_SPELLID_PREDATORS_SWIFTNESS	= 69369;
-local CRH_SPELLID_SAVAGE_DEFENSE		= 62606;
-local CRH_SPELLID_SAVAGE_DEFENSE_BUFF	= 132402;
 
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
-
-local CRH_FAERIE_FIRE_SPELLID_LIST		=
-{
-	CRH_SPELLID_FAERIE_FIRE,
-	CRH_SPELLID_FAERIE_SWARM
-}
 
 local function CreateFrameWithLogic(a_Logic)
 	local frame = CreateFrame("Frame", nil, UIParent);
@@ -46,7 +33,12 @@ local g_FramesBear =
 	CreateFrameWithLogic(g_Module.LogicUnusedFrame),
 };
 
-local g_CrhFramesEvents = {};
+local g_FramesEvents =
+{
+	CreateFrameWithLogic(g_Module.LogicDruidBerserk),
+	CreateFrameWithLogic(g_Module.LogicDruidWildCharge),
+	CreateFrameWithLogic(g_Module.LogicDruidCatPredatorySwiftness),
+};
 
 local g_FramesSurv =
 {
@@ -54,27 +46,12 @@ local g_FramesSurv =
 	CreateFrameWithLogic(g_Module.LogicDruidBearBarkskin),
 };
 
-local function InitFrames()
-	-- Events
-	g_CrhFramesEvents[1] = CreateFrame("Frame", nil, UIParent);
-	g_CrhFramesEvents[2] = CreateFrame("Frame", nil, UIParent);
-	g_CrhFramesEvents[3] = CreateFrame("Frame", nil, UIParent);
-	g_CrhFramesEvents[4] = CreateFrame("Frame", nil, UIParent);
-end
-
-InitFrames();
-
 -- state variables
 local inCatForm = false;
 local inBearForm = false;
 local enemyTarget = false;
 local clearCast = false;
 local unlocked = false;
-
--- eventframe variables
-local eventList = {}
-local eventTimers = {}
-local eventEffects = {}
 
 -- saved variables
 crhScale = 1;
@@ -87,18 +64,16 @@ crhShowBear = true;
 crhShowCat = true;
 crhShowCatSurvival = true;
 crhShowBearSurvival = true;
-crhEventAngle = 90;
+crhEventAngle = 270;
 crhSurvivalAngle = 270;
 crhMainAngle = 0;
 crhCounterStartTime = 30;
 
-crhShowCatFaerieFire = true;
+-- FIXME: Settings not working
 crhShowCatBerserk = true;
 crhShowFeralCharge = true;
 crhShowBearBerserk = true;
 crhShowPredatorsSwiftness = true;
-crhShowSavageDefense = true;
-crhShowBearFaerieFire = true;
 
 local function CatRotationHelperFormatTime(time)
 	if (time >= 60) then
@@ -163,7 +138,8 @@ function CatRotationHelperUpdateEverything()
 			CatRotationHelperSetCatCP(GetComboPoints("player"));
 			ShowFrames(g_FramesSurv, crhShowCatSurvival);
 			UpdateFramesByType(g_FramesSurv, nil, false);
-			CatRotationHelperUpdateEvents(false)
+			ShowFrames(g_FramesEvents, true);
+			UpdateFramesByType(g_FramesEvents, nil, false);
 		end
 
 	elseif(GetShapeshiftForm() == CRH_SHAPE_BEAR and crhShowBear) then
@@ -181,7 +157,8 @@ function CatRotationHelperUpdateEverything()
 			crhUpdateLacerate();
 			ShowFrames(g_FramesSurv, crhShowBearSurvival);
 			UpdateFramesByType(g_FramesSurv, nil, false);
-			CatRotationHelperUpdateEvents(false)
+			ShowFrames(g_FramesEvents, true);
+			UpdateFramesByType(g_FramesEvents, nil, false);
 		end
 	else
 		CatRotationHelperHideAll();
@@ -213,18 +190,9 @@ function CatRotationHelperUnlock()
 		frame:Show();
 	end
 
-	-- show static event frames
-	eventList[1] = g_Module.GetMyImage("Berserk.tga")
-	eventList[2] = g_Module.GetMyImage("FaerieFire.tga")
-	eventList[3] = g_Module.GetMyImage("FeralCharge.tga")
-	eventList[4] = g_Module.GetMyImage("PredatoryStrikes.tga")
-
-	for i=1, #g_CrhFramesEvents do
-		g_CrhFramesEvents[i]:Show()
-		g_CrhFramesEvents[i]:SetAlpha(1)
-		g_CrhFramesEvents[i].countframe:Hide();
-		g_CrhFramesEvents[i].countframe.endTime = nil;
-		g_CrhFramesEvents[i].icon:SetTexture(eventList[i])
+	for i=1, #g_FramesEvents do
+		g_FramesEvents[i]:Show()
+		g_Module.FrameSetStatus(g_FramesEvents[i], g_Consts.STATUS_READY, nil, false);
 	end
 
 	for i=1, #g_FramesSurv do
@@ -260,8 +228,11 @@ function CatRotationHelperLock()
 		g_Module.FrameDrawFaded(frame);
 	end
 
-	for i=1, #g_CrhFramesEvents do
-		g_CrhFramesEvents[i]:Hide()
+	for i=1, #g_FramesEvents do
+		local frame = g_FramesEvents[i];
+
+		frame:Hide()
+		g_Module.FrameDrawFaded(frame);
 	end
 
 	for i=1, #g_FramesSurv do
@@ -339,8 +310,8 @@ function CatRotationFrameSetMainScale()
 end
 
 function CatRotationFrameSetEventScale()
-	for i=1, #g_CrhFramesEvents do
-		g_CrhFramesEvents[i]:SetScale(crhEventScale);
+	for i=1, #g_FramesEvents do
+		g_FramesEvents[i]:SetScale(crhEventScale);
 	end
 
 	CatRotationHelper_BoxEvnt:SetScale(crhEventScale);
@@ -372,7 +343,8 @@ function CatRotationHelper_BoxEvnt_OnClick()
 end
 
 function CatRotationFrameSetEventStyle()
-	g_Module.FramesSetPosition(g_CrhFramesEvents, CatRotationHelper_BoxEvnt, crhEventAngle);
+	-- FIXME: Need better positioning
+	g_Module.FramesSetPosition(g_FramesEvents, CatRotationHelper_BoxEvnt, crhEventAngle);
 end
 
 -- rotate survival frame
@@ -394,7 +366,7 @@ function CatRotationHelperHideAll()
 
 	ShowFrames(g_FramesCat, false);
 	ShowFrames(g_FramesBear, false);
-	ShowFrames(g_CrhFramesEvents, false);
+	ShowFrames(g_FramesEvents, false);
 	ShowFrames(g_FramesSurv, false);
 end
 
@@ -471,149 +443,6 @@ function CatRotationHelperCheckClearcast()
 
 			clearCast = false;
 		end
-	end
-end
-
-local function crhResetNotificationFrame(a_FrameID)
-	eventList[a_FrameID] = nil
-	eventTimers[a_FrameID] = nil
-	eventEffects[a_FrameID] = nil
-end
-
-local function crhSetNotificationEffects(a_FrameID, a_ShowEffects)
-	if (eventList[a_FrameID] == nil) then
-		eventEffects[a_FrameID] = a_ShowEffects
-	else
-		eventEffects[a_FrameID] = nil
-	end
-end
-
-local function crhUpdateNotificationSpell(a_IsEnabled, a_FrameID, a_SpellID, a_BuffId, a_Image, a_ShowEffects)
-	if ((not a_IsEnabled) or (not IsPlayerSpell(a_SpellID))) then
-		crhResetNotificationFrame(a_FrameID);
-		return;
-	end
-	
-	-- If buff is active show its timer, whether or not spell is on cd
-	if (a_BuffId) then
-		local status, expiration = g_Module.CalcFrameFromBuff(a_BuffId);
-		if (g_Consts.STATUS_COUNTING == status) then
-			eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
-			eventTimers[a_FrameID] = expiration
-			eventEffects[a_FrameID] = nil
-			return;
-		end
-	end
-
-	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
-	
-	-- Unknown legacy safety code
-	if (not spellStart) then
-		crhResetNotificationFrame(a_FrameID);
-		return;
-	end
-
-	-- If spell is ready show notification
-	if (0 == spellStart) then
-		crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-		eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
-		eventTimers[a_FrameID] = nil
-		return;
-	end
-	
-	-- Prevent blinking on GCD
-	if (spellDuration < g_Consts.GCD_LENGTH) then
-		return;
-	end
-	
-	eventList[a_FrameID] = nil
-	eventTimers[a_FrameID] = nil
-	eventEffects[a_FrameID] = nil
-end
-
-local function crhUpdateNotificationProc(a_IsEnabled, a_FrameID, a_SpellID, a_Image, a_ShowEffects)
-	if (not a_IsEnabled) then
-		crhResetNotificationFrame(a_FrameID);
-		return;
-	end
-	
-	local status, expiration = g_Module.CalcFrameFromBuff(a_SpellID);
-	if (g_Consts.STATUS_COUNTING ~= status) then
-		crhResetNotificationFrame(a_FrameID);
-		return;
-	end
-	
-	-- On proc, show notification
-	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-	eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
-	eventTimers[a_FrameID] = expiration
-end
-
-local function crhUpdateNotificationDebuff(a_IsEnabled, a_FrameID, a_SpellID_List, a_Image, a_ShowEffects)
-	if (not a_IsEnabled) then
-		crhResetNotificationFrame(a_FrameID);
-		return;
-	end
-	
-	for i = 1, #a_SpellID_List do
-		local status, expiration = g_Module.CalcFrameFromDebuff(a_SpellID_List[i]);
-		
-		if (g_Consts.STATUS_COUNTING == status) then
-			-- Has debuff, no notification needed
-			crhResetNotificationFrame(a_FrameID);
-			return;
-		end
-	end
-	
-	-- No debuff, show notification
-	crhSetNotificationEffects(a_FrameID, a_ShowEffects);
-	eventList[a_FrameID] = g_Module.GetMyImage(a_Image)
-	eventTimers[a_FrameID] = nil
-end
-
-
--- Event Frame - Bear & Cat
-function CatRotationHelperUpdateEvents(a_ShowEffects)
-	-- first, update eventList table
-	if (inCatForm) then
-		crhUpdateNotificationSpell(crhShowCatBerserk, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
-		crhUpdateNotificationDebuff(crhShowCatFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
-		crhUpdateNotificationSpell(crhShowFeralCharge, 3, CRH_SPELLID_FERAL_CHARGE, nil, "FeralCharge.tga", a_ShowEffects);
-		crhUpdateNotificationProc(crhShowPredatorsSwiftness, 4, CRH_SPELLID_PREDATORS_SWIFTNESS, "PredatoryStrikes.tga", a_ShowEffects);
-	elseif (inBearForm) then
-		crhUpdateNotificationSpell(crhShowBearBerserk, 1, CRH_SPELLID_BERSERK, CRH_SPELLID_BERSERK, "Berserk.tga", a_ShowEffects);
-		crhUpdateNotificationDebuff(crhShowBearFaerieFire, 2, CRH_FAERIE_FIRE_SPELLID_LIST, "FaerieFire.tga", a_ShowEffects);
-		crhUpdateNotificationSpell(crhShowSavageDefense, 4, CRH_SPELLID_SAVAGE_DEFENSE, CRH_SPELLID_SAVAGE_DEFENSE_BUFF, "SavageDefense.tga", a_ShowEffects);
-	end
-
-	-- second, fill event frames with information
-	j = 1
-
-	for i=1, #g_CrhFramesEvents do
-		if(eventList[i] ~= nil) then
-			g_CrhFramesEvents[j].icon:SetTexture(eventList[i])
-			g_CrhFramesEvents[j].overlay.icon:SetTexture(eventList[i])
-			g_CrhFramesEvents[j]:Show();
-			
-			if(eventEffects[i]) then
-				g_CrhFramesEvents[j].overlay.animIn:Play()
-			end
-			
-			if(eventTimers[i] ~= nil) then
-				g_CrhFramesEvents[j].countframe.endTime = eventTimers[i]
-				g_CrhFramesEvents[j].countframe:Show()
-			else
-				g_CrhFramesEvents[j].countframe:Hide()
-			end
-
-			j = j + 1
-		end
-	end
-
-	-- hide unused event frames
-	while j <= #g_CrhFramesEvents do
-		g_CrhFramesEvents[j]:Hide();
-		j = j + 1
 	end
 end
 
@@ -698,11 +527,12 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	end
 
 	-- setup events
-	for i=1, #g_CrhFramesEvents do
-		local frame = g_CrhFramesEvents[i];
-		FrameSetup(frame, "CatRotationHelper_Event_" .. i, CatRotationFrameEventCounter);
+	for i=1, #g_FramesEvents do
+		local frame = g_FramesEvents[i];
+		FrameSetup(frame, "CatRotationHelper_Event_" .. i, CatRotationFrameCounter);
 		
-		g_Module.FrameDrawActive(frame);
+		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
+		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
 
 	-- setup survival frame
@@ -734,10 +564,11 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 					CatRotationHelperCheckClearcast();
 					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
 					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-					CatRotationHelperUpdateEvents(true)
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_PROC, true);
 				elseif(arg1 == "target") then
 					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_DEBUFF, true);
-					CatRotationHelperUpdateEvents(true)
 				end
 			elseif(inBearForm) then
 				if(arg1 == "player") then
@@ -745,11 +576,11 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BURST, true);
 					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BUFF, true);
 					UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-					CatRotationHelperUpdateEvents(true)
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
+					UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_PROC, true);
 				elseif(arg1 == "target") then
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_DEBUFF, true);
-					CatRotationHelperUpdateEvents(true)
-					crhUpdateLacerate();
 				end
 			end
 		end
@@ -765,12 +596,14 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 				UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_SKILL, true);
 				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
 				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-				CatRotationHelperUpdateEvents(true)
+				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_SKILL, true);
+				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
 			elseif(inCatForm) then
 				UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_SKILL, true);
 				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_SKILL, true);
 				UpdateFramesByType(g_FramesSurv, g_Consts.LOGIC_TYPE_BURST, true);
-				CatRotationHelperUpdateEvents(true)
+				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_SKILL, true);
+				UpdateFramesByType(g_FramesEvents, g_Consts.LOGIC_TYPE_BURST, true);
 			end
 		end
 
@@ -826,17 +659,6 @@ function CatRotationFrameCounter(self)
 	elseif(time <= crhCounterStartTime) then
 		self.durtext:SetText(CatRotationHelperFormatTime(time));
 		self.dur2text:Hide();
-	end
-end
-
-function CatRotationFrameEventCounter(self)
-	local time = self.endTime - GetTime();
-
-	if(time <= 0) then
-		self:Hide()
-		self.durtext:SetText("")
-	else
-		self.durtext:SetText(CatRotationHelperFormatTime(time));
 	end
 end
 

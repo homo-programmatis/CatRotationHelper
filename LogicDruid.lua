@@ -48,6 +48,13 @@ g_Module.LogicDruidCatRip =
 	CastByMe		= true,
 };
 
+g_Module.LogicDruidCatPredatorySwiftness =
+{
+	Texture			= g_Module.GetMyImage("PredatoryStrikes.tga"),
+	Type			= g_Consts.LOGIC_TYPE_PROC,
+	SpellID			= 69369,
+};
+
 -----------------------------------
 -- Bear
 -----------------------------------
@@ -89,4 +96,18 @@ g_Module.LogicDruidSurvivalInstincts =
 	Texture			= g_Module.GetMyImage("SurvivalInstincts.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 61336,
+};
+
+g_Module.LogicDruidBerserk =
+{
+	Texture			= g_Module.GetMyImage("Berserk.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BURST,
+	SpellID			= 106952,
+};
+
+g_Module.LogicDruidWildCharge =
+{
+	Texture			= g_Module.GetMyImage("FeralCharge.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 102401,
 };

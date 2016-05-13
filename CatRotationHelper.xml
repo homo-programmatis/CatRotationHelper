@@ -64,7 +64,6 @@
 						if(self:GetChecked()) then
 							crhShowCat = true
 							CatRotationHelper_ChkOptionsCatCombo:Enable()
-							CatRotationHelper_ChkOptionsCatFaerie:Enable()
 							CatRotationHelper_ChkOptionsCatBerserk:Enable()
 							CatRotationHelper_ChkOptionsCatPredators:Enable()
 							CatRotationHelper_ChkOptionsCatCharge:Enable()
@@ -72,7 +71,6 @@
 						else
 							crhShowCat = false
 							CatRotationHelper_ChkOptionsCatCombo:Disable()
-							CatRotationHelper_ChkOptionsCatFaerie:Disable()
 							CatRotationHelper_ChkOptionsCatBerserk:Disable()
 							CatRotationHelper_ChkOptionsCatPredators:Disable()
 							CatRotationHelper_ChkOptionsCatCharge:Disable()
@@ -109,30 +107,11 @@
 				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatFaerie" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-180"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowCatFaerieFire = true
-						else
-							crhShowCatFaerieFire = false
-						end
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-
 			<CheckButton name="CatRotationHelper_ChkOptionsCatBerserk" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-210"/>
+							<AbsDimension x="25" y="-180"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -151,7 +130,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-240"/>
+							<AbsDimension x="25" y="-210"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -170,7 +149,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-270"/>
+							<AbsDimension x="25" y="-240"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -189,7 +168,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-300"/>
+							<AbsDimension x="25" y="-270"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -218,15 +197,11 @@
 							crhShowBear = true
 							CatRotationHelper_ChkOptionsBearLacerate:Enable()
 							CatRotationHelper_ChkOptionsBearBerserk:Enable()
-							CatRotationHelper_ChkOptionsBearFaerie:Enable()
-							CatRotationHelper_ChkOptionsBearMaul:Enable()
 							CatRotationHelper_ChkOptionsBearSurvival:Enable()
 						else
 							crhShowBear = false
 							CatRotationHelper_ChkOptionsBearLacerate:Disable()
 							CatRotationHelper_ChkOptionsBearBerserk:Disable()
-							CatRotationHelper_ChkOptionsBearFaerie:Disable()
-							CatRotationHelper_ChkOptionsBearMaul:Disable()
 							CatRotationHelper_ChkOptionsBearSurvival:Disable()
 						end
 
@@ -276,49 +251,11 @@
 				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsBearFaerie" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-210"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowBearFaerieFire = true
-						else
-							crhShowBearFaerieFire = false
-						end
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsBearMaul" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-240"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowSavageDefense = true
-						else
-							crhShowSavageDefense = false
-						end
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-
 			<CheckButton name="CatRotationHelper_ChkOptionsBearSurvival" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOP">
 						<Offset>
-							<AbsDimension x="15" y="-270"/>
+							<AbsDimension x="15" y="-210"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -449,10 +386,6 @@
 					CatRotationHelper_ChkOptionsClearcastText:SetText("Show Clearcast procs")
 					CatRotationHelper_ChkOptionsClearcast.tooltipText = "Icons turn blue during a Clearcast proc"
 
-					CatRotationHelper_ChkOptionsCatFaerieText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatFaerieText:SetText("Faerie Fire reminder")
-					CatRotationHelper_ChkOptionsCatFaerie.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
-
 					CatRotationHelper_ChkOptionsCatBerserkText:SetTextColor(1,1,1)
 					CatRotationHelper_ChkOptionsCatBerserkText:SetText("Berserk reminder")
 					CatRotationHelper_ChkOptionsCatBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
@@ -472,14 +405,6 @@
 					CatRotationHelper_ChkOptionsBearBerserkText:SetTextColor(1,1,1)
 					CatRotationHelper_ChkOptionsBearBerserkText:SetText("Berserk reminder")
 					CatRotationHelper_ChkOptionsBearBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
-
-					CatRotationHelper_ChkOptionsBearFaerieText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsBearFaerieText:SetText("Faerie Fire reminder")
-					CatRotationHelper_ChkOptionsBearFaerie.tooltipText = "Shows an icon in the Notification Frame when Faerie Fire is missing on the target"
-
-					CatRotationHelper_ChkOptionsBearMaulText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsBearMaulText:SetText("Savage Defense reminder")
-					CatRotationHelper_ChkOptionsBearMaul.tooltipText = "Shows an icon in the Notification Frame when Savage Defense is ready"
 
 					CatRotationHelper_ChkOptionsBearSurvivalText:SetTextColor(1,1,1)
 					CatRotationHelper_ChkOptionsBearSurvivalText:SetText("Show Survival Frame")
@@ -501,7 +426,6 @@
 					CatRotationHelper_ChkOptionsCat:SetChecked(true)
 				else
 					CatRotationHelper_ChkOptionsCatCombo:Disable()
-					CatRotationHelper_ChkOptionsCatFaerie:Disable()
 					CatRotationHelper_ChkOptionsCatBerserk:Disable()
 					CatRotationHelper_ChkOptionsCatPredators:Disable()
 					CatRotationHelper_ChkOptionsCatCharge:Disable()
@@ -513,8 +437,6 @@
 				else
 					CatRotationHelper_ChkOptionsBearLacerate:Disable()
 					CatRotationHelper_ChkOptionsBearBerserk:Disable()
-					CatRotationHelper_ChkOptionsBearMaul:Disable()
-					CatRotationHelper_ChkOptionsBearFaerie:Disable()
 					CatRotationHelper_ChkOptionsBearSurvival:Disable()
 				end
 				
@@ -522,13 +444,10 @@
 				CatRotationHelper_ChkOptionsBearLacerate:SetChecked(crhLacCounter)
 				CatRotationHelper_ChkOptionsClearcast:SetChecked(crhEnableClearcast)
 
-				CatRotationHelper_ChkOptionsCatFaerie:SetChecked(crhShowCatFaerieFire)
 				CatRotationHelper_ChkOptionsCatBerserk:SetChecked(crhShowCatBerserk)
 				CatRotationHelper_ChkOptionsCatPredators:SetChecked(crhShowPredatorsSwiftness)
 				CatRotationHelper_ChkOptionsCatCharge:SetChecked(crhShowFeralCharge)
 				CatRotationHelper_ChkOptionsBearBerserk:SetChecked(crhShowBearBerserk)
-				CatRotationHelper_ChkOptionsBearFaerie:SetChecked(crhShowBearFaerieFire)
-				CatRotationHelper_ChkOptionsBearMaul:SetChecked(crhShowSavageDefense)
 				CatRotationHelper_ChkOptionsBearSurvival:SetChecked(crhShowBearSurvival)
 				CatRotationHelper_ChkOptionsCatSurvival:SetChecked(crhShowCatSurvival)
 
