@@ -16,6 +16,10 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	end
 end
 
+function g_Module.FrameDrawInvisible(a_Frame)
+	a_Frame.icon:SetVertexColor(0.00, 0.00, 0.00, 0.00);
+end
+
 function g_Module.FrameDrawFaded(a_Frame)
 	a_Frame.icon:SetVertexColor(0.35, 0.35, 0.35, 0.70);
 end
@@ -134,6 +138,22 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 		if (a_ShowEffects) then
 			a_Frame.overlay.animIn:Play();
 		end
+	elseif (g_Consts.STATUS_BURSTING == a_Status) then
+		g_Module.FrameDrawFaded(a_Frame);
+
+		a_Frame.countframe.endTime = a_Expiration
+		a_Frame.countframe:Show()
+		a_Frame.countframe.dur2text:Show();
+		a_Frame.countframe.durtext:SetText("");
+
+		if (a_ShowEffects) then
+			a_Frame.overlay.animIn:Play();
+		end
+	elseif (g_Consts.STATUS_WAITING == a_Status) then
+		g_Module.FrameDrawInvisible(a_Frame);
+
+		a_Frame.countframe:Hide();
+		a_Frame.countframe.endTime = nil;
 	end
 
 	a_Frame.LastStatus = a_Status;

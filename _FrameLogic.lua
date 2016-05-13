@@ -22,6 +22,12 @@ function g_Module.FrameUpdateFromLogic(a_Frame, a_ShowEffects)
 	elseif (g_Consts.LOGIC_TYPE_DEBUFF == logic.Type) then
 		local status, expiration = g_Module.CalcFrameFromDebuff(logic.SpellID, logic.MinimumStacks, logic.CastByMe);
 		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+	elseif (g_Consts.LOGIC_TYPE_BURST == logic.Type) then
+		local status, expiration = g_Module.CalcFrameFromBurst(logic.SpellID);
+		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+	elseif (g_Consts.LOGIC_TYPE_PROC == logic.Type) then
+		local status, expiration = g_Module.CalcFrameFromProc(logic.SpellID);
+		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	else
 		g_Module.PrintToChat("Unknown frame logic Type: " .. logic.Type);
 	end

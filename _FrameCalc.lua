@@ -76,3 +76,26 @@ function g_Module.CalcFrameFromSkill(a_SpellID)
 
 	return g_Consts.STATUS_COUNTING, spellStart + spellDuration;
 end
+
+function g_Module.CalcFrameFromBurst(a_SpellID)
+	-- First of all, check if currently bursting.
+	-- When bursting, remaining burst time is more important then cooldown.
+	local isBuffPresent, expTime = g_Module.GetPlayerBuffInfo(a_SpellID);
+	if (isBuffPresent) then
+		-- Burst buff is active
+		return g_Consts.STATUS_BURSTING, expTime;
+	end
+
+	-- When not bursting, use default skill logic.
+	return g_Module.CalcFrameFromSkill(a_SpellID);
+end
+
+function g_Module.CalcFrameFromProc(a_SpellID)
+	local isBuffPresent, expTime = g_Module.GetPlayerBuffInfo(a_SpellID);
+	if (isBuffPresent) then
+		-- Proc is up
+		return g_Consts.STATUS_COUNTING, expTime;
+	end
+	
+	return g_Consts.STATUS_WAITING, nil;
+end

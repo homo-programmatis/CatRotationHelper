@@ -797,6 +797,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 			if(inCatForm) then
 				if(arg1 == "player") then
 					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesCat, g_Consts.LOGIC_TYPE_BURST, true);
 					CatRotationHelperCheckClearcast();
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
@@ -807,6 +808,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 			elseif(inBearForm) then
 				if(arg1 == "player") then
 					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BUFF, true);
+					UpdateFramesByType(g_FramesBear, g_Consts.LOGIC_TYPE_BURST, true);
 					CatRotationHelperUpdateSurvival(true)
 					CatRotationHelperUpdateEvents(true)
 				elseif(arg1 == "target") then
