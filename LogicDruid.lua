@@ -76,6 +76,14 @@ g_Module.LogicDruidBearThrash =
 	SkillID			= 106832,
 };
 
+g_Module.LogicDruidBearGalacticGuardian =
+{
+	Texture			= g_Module.GetMyImage("Moonfire.tga"),
+	Type			= g_Consts.LOGIC_TYPE_PROC,
+	SpellID			= 213708,
+	TalentID		= 22421,
+};
+
 g_Module.LogicDruidBearBarkskin =
 {
 	Texture			= g_Module.GetMyImage("Barkskin.tga"),
