@@ -9,8 +9,11 @@ local CRH_SPELLID_LACERATE				= 33745;
 local CRH_SHAPE_BEAR 					= 1;
 local CRH_SHAPE_CAT						= 2;
 
+local g_NextFrameID = 1;
 local function CreateFrameWithLogic(a_Logic)
-	local frame = CreateFrame("Frame", nil, UIParent);
+	local frame = g_Module.FrameCreateNew(THIS_ADDON_NAME .. "_Frame_" .. g_NextFrameID);
+	g_NextFrameID = g_NextFrameID + 1;
+	
 	frame.m_CrhLogic = a_Logic;
 	return frame;
 end
@@ -411,46 +414,6 @@ function CatRotationHelperCheckClearcast()
 	end
 end
 
-local function FrameSetup(a_Frame, a_FrameName)
-	a_Frame.hascp = false;
-
-	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
-	a_Frame:Hide();
-
-	a_Frame.FrameCombo = CreateFrame("Frame", a_FrameName .. "CP", a_Frame);
-	a_Frame.FrameCombo:SetFrameStrata("BACKGROUND");
-	a_Frame.FrameCombo:SetPoint("CENTER");
-	a_Frame.FrameCombo:SetSize(g_Consts.UI_SIZE_FRAME * 1.13, g_Consts.UI_SIZE_FRAME * 1.13);
-	a_Frame.FrameCombo.startTime = nil;
-	a_Frame.FrameCombo:Hide();
-
-	a_Frame.FrameCombo.IconCombo = a_Frame.FrameCombo:CreateTexture(nil, "BACKGROUND");
-	a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"));
-	a_Frame.FrameCombo.IconCombo:SetAllPoints(a_Frame.FrameCombo);
-
-	a_Frame.IconSpell = a_Frame:CreateTexture(nil, "ARTWORK");
-	a_Frame.IconSpell:SetAllPoints(a_Frame);
-
-	-- buff fade/gain effects
-	local overlayOffs = g_Consts.UI_SIZE_FRAME * 0.20;
-	a_Frame.FrameOverlay = CreateFrame("Frame", a_FrameName .. "O", a_Frame, "CatRotationHelper_FrameBaseOverlay");
-	a_Frame.FrameOverlay.IconSpell:SetBlendMode("ADD");
-	a_Frame.FrameOverlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
-	a_Frame.FrameOverlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
-
-	a_Frame.FrameTimer = CreateFrame("Frame", a_FrameName .. "C", a_Frame);
-	a_Frame.FrameTimer:SetScript("OnUpdate", g_Module.FrameTimer_OnUpdate);
-	a_Frame.FrameTimer:Hide();
-	a_Frame.FrameTimer.endTime = nil;
-
-	a_Frame.FrameTimer.TextTime = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
-	a_Frame.FrameTimer.TextTime:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
-	a_Frame.FrameTimer.TextStar = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Bigger");
-	a_Frame.FrameTimer.TextStar:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
-	a_Frame.FrameTimer.TextStar:SetText("*");
-	a_Frame.FrameTimer.TextStar:Hide();
-end
-
 function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- load addon on druids only
 	local class = select(2, UnitClass("player"))
@@ -473,11 +436,11 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	CatRotationHelper_BoxSurv:RegisterForDrag("LeftButton")
 	CatRotationHelper_BoxSurv:SetClampedToScreen(true)
 
+	CreateFrames();
+	
 	-- setup cat
 	for i=1, #g_FramesCat do
 		local frame = g_FramesCat[i];
-		FrameSetup(frame, "CatRotationHelper_Cat_" .. i);
-		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
@@ -485,8 +448,6 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup bear
 	for i=1, #g_FramesBear do
 		local frame = g_FramesBear[i];
-		FrameSetup(frame, "CatRotationHelper_Bear_" .. i);
-		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
@@ -494,8 +455,6 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup events
 	for i=1, #g_FramesEvents do
 		local frame = g_FramesEvents[i];
-		FrameSetup(frame, "CatRotationHelper_Event_" .. i);
-		
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end
@@ -503,8 +462,6 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- setup survival frame
 	for i=1, #g_FramesSurv do
 		local frame = g_FramesSurv[i];
-		FrameSetup(frame, "CatRotationHelper_Surv_" .. i);
-
 		g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 		g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 	end

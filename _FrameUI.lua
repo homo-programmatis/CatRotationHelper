@@ -2,6 +2,65 @@ local THIS_ADDON_NAME="CatRotationHelper";
 local g_Module = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Module.Constants;
 
+function g_Module.FrameCreateNew(a_FrameName)
+	local newFrame = CreateFrame("Frame", a_FrameName, UIParent);
+	g_Module.FrameCreateComponents(newFrame, a_FrameName);
+	g_Module.FrameReset(newFrame);
+
+	return newFrame;
+end
+
+function g_Module.FrameCreateComponents(a_Frame, a_FrameName)
+	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
+	a_Frame:Hide();
+
+	a_Frame.FrameCombo = CreateFrame("Frame", a_FrameName .. "Combo", a_Frame);
+	a_Frame.FrameCombo:SetFrameStrata("BACKGROUND");
+	a_Frame.FrameCombo:SetPoint("CENTER");
+	a_Frame.FrameCombo:SetSize(g_Consts.UI_SIZE_FRAME * 1.13, g_Consts.UI_SIZE_FRAME * 1.13);
+
+	a_Frame.FrameCombo.IconCombo = a_Frame.FrameCombo:CreateTexture(nil, "BACKGROUND");
+	a_Frame.FrameCombo.IconCombo:SetAllPoints(a_Frame.FrameCombo);
+
+	a_Frame.IconSpell = a_Frame:CreateTexture(nil, "ARTWORK");
+	a_Frame.IconSpell:SetAllPoints(a_Frame);
+
+	-- buff fade/gain effects
+	local overlayOffs = g_Consts.UI_SIZE_FRAME * 0.20;
+	a_Frame.FrameOverlay = CreateFrame("Frame", a_FrameName .. "Overlay", a_Frame, "CatRotationHelper_FrameBaseOverlay");
+	a_Frame.FrameOverlay.IconSpell:SetBlendMode("ADD");
+	a_Frame.FrameOverlay:SetPoint("TOPLEFT", a_Frame, "TOPLEFT", -overlayOffs, overlayOffs);
+	a_Frame.FrameOverlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
+
+	a_Frame.FrameTimer = CreateFrame("Frame", a_FrameName .. "Timer", a_Frame);
+	a_Frame.FrameTimer:SetScript("OnUpdate", g_Module.FrameTimer_OnUpdate);
+
+	a_Frame.FrameTimer.TextTime = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
+	a_Frame.FrameTimer.TextTime:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
+	a_Frame.FrameTimer.TextStar = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Bigger");
+	a_Frame.FrameTimer.TextStar:SetPoint("CENTER", a_Frame, "CENTER", 0, -5);
+	a_Frame.FrameTimer.TextStar:SetText("*");
+end
+
+function g_Module.FrameReset(a_Frame)
+	a_Frame.LastStatus     = nil;
+	a_Frame.LastExpiration = nil;
+
+	a_Frame.hascp = false;
+	a_Frame.FrameCombo.startTime = nil;
+	a_Frame.FrameCombo:Hide();
+	a_Frame.FrameCombo:SetScript("OnUpdate", nil);
+	
+	a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"));
+	
+	a_Frame.FrameTimer:Hide();
+	a_Frame.FrameTimer.endTime = nil;
+
+	a_Frame.FrameTimer.TextTime:Hide();
+	a_Frame.FrameTimer.TextStar:Hide();
+	g_Module.FrameUpdateTimerColor(a_Frame, false, false);
+end
+
 function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	if (not a_Texture) then
 		return
