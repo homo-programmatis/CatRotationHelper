@@ -27,7 +27,7 @@ g_Module.LogicDruidCatThrash =
 	TextureSpecial	= g_Module.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 106830,
-	SkillID 		= 77758,
+	SkillID 		= 106832,
 	CastByMe		= true,
 };
 
