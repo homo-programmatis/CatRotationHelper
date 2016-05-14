@@ -63,7 +63,9 @@ end
 
 function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	if (not a_Texture) then
-		return
+		a_Frame.IconSpell:SetTexture(nil);
+		a_Frame.FrameOverlay.IconSpell:SetTexture(nil);
+		return;
 	end
 
 	if (not a_MakeRound) then
