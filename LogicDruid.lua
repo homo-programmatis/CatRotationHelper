@@ -71,9 +71,9 @@ g_Module.LogicDruidBearMangle =
 g_Module.LogicDruidBearThrash =
 {
 	Texture			= g_Module.GetMyImage("Thrash.tga"),
-	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 77758,
-	CastByMe		= true,
+	SkillID			= 106832,
 };
 
 g_Module.LogicDruidBearBarkskin =
