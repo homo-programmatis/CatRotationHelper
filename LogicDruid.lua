@@ -97,7 +97,7 @@ g_Module.LogicDruidBerserk =
 {
 	Texture			= g_Module.GetMyImage("Berserk.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
-	SpellID			= 106952,
+	SpellID			= 106951,
 };
 
 g_Module.LogicDruidWildCharge =
