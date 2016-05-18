@@ -46,7 +46,7 @@ local function GetPackage_DruidBear()
 	local newPackage =
 	{
 		GetComboPoints = function()
-			local name, stacks, expTime = g_Module.GetTargetDebuffInfo(g_Module.LogicDruidBearLacerate.SpellID, true);
+			local name, stacks, expTime = g_Module.GetTargetDebuffInfo(g_Module.LogicDruidBearThrash.SpellID, true);
 			if (name == nil) then
 				return 0;
 			end
@@ -67,7 +67,6 @@ local function GetPackage_DruidBear()
 	-- Main box
 	logicList = newPackage.LogicLists[1];
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearMangle);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearLacerate);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearThrash);
 	g_Module.AddLogicUnused(logicList, 3);
 	

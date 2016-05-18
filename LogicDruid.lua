@@ -76,14 +76,6 @@ g_Module.LogicDruidBearThrash =
 	CastByMe		= true,
 };
 
-g_Module.LogicDruidBearLacerate =
-{
-	Texture			= g_Module.GetMyImage("Lacerate.tga"),
-	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
-	SpellID			= 33745,
-	CastByMe		= true,
-};
-
 g_Module.LogicDruidBearBarkskin =
 {
 	Texture			= g_Module.GetMyImage("Barkskin.tga"),
