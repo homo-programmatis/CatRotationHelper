@@ -58,6 +58,15 @@ g_Module.LogicDruidCatPredatorySwiftness =
 	SkillID			= 16974,
 };
 
+g_Module.LogicDruidCatLunarInspiration =
+{
+	Texture			= g_Module.GetMyImage("Moonfire.tga"),
+	TextureSpecial	= g_Module.GetMyImage("Moonfire-Blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
+	SpellID			= 155625,
+	TalentID		= 22365,
+};
+
 -----------------------------------
 -- Bear
 -----------------------------------

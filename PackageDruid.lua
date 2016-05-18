@@ -24,6 +24,7 @@ local function GetPackage_DruidCat()
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatTigersFury);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatSavageRoar);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatRake);
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatLunarInspiration);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatRip);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatThrash);
 	g_Module.AddLogicUnused(logicList, 5);
