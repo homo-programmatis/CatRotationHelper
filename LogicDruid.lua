@@ -140,6 +140,14 @@ g_Module.LogicDruidBearIncarnation =
 	TalentID		= 21706,
 };
 
+g_Module.LogicDruidBearLunarBeam =
+{
+	Texture			= g_Module.GetMyImage("LunarBeam.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 204066,
+	TalentID		= 22427,
+};
+
 -----------------------------------
 -- Cat & Bear
 -----------------------------------
