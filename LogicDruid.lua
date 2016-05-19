@@ -132,6 +132,14 @@ g_Module.LogicDruidBearBarkskin =
 	SpellID			= 22812,
 };
 
+g_Module.LogicDruidBearIncarnation =
+{
+	Texture			= g_Module.GetMyImage("Incarnation.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 102558,
+	TalentID		= 21706,
+};
+
 -----------------------------------
 -- Cat & Bear
 -----------------------------------
