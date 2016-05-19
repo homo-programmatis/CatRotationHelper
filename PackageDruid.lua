@@ -27,6 +27,7 @@ local function GetPackage_DruidCat()
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatLunarInspiration);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatRip);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatThrash);
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatBrutalSlash);
 	g_Module.AddLogicUnused(logicList, 5);
 
 	-- Events box

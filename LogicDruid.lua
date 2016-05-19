@@ -83,6 +83,15 @@ g_Module.LogicDruidCatElunesGuidance =
 	TalentID		= 22370,
 };
 
+g_Module.LogicDruidCatBrutalSlash =
+{
+	Texture			= g_Module.GetMyImage("BrutalSlash.tga"),
+	TextureSpecial	= g_Module.GetMyImage("BrutalSlash-Blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 202028,
+	TalentID		= 21646,
+};
+
 -----------------------------------
 -- Bear
 -----------------------------------
