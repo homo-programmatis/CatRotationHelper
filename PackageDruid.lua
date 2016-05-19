@@ -39,6 +39,7 @@ local function GetPackage_DruidCat()
 	logicList = newPackage.LogicLists[3];
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidSurvivalInstincts);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBarkskin);           -- In case of Guardian in cat form
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidRenewal);
 	
 	return newPackage;
 end
@@ -81,6 +82,7 @@ local function GetPackage_DruidBear()
 	logicList = newPackage.LogicLists[3];
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidSurvivalInstincts);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBarkskin);
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidRenewal);                -- In case of Feral in bear form
 	
 	return newPackage;
 end

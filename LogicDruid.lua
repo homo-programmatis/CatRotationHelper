@@ -123,3 +123,11 @@ g_Module.LogicDruidWildCharge =
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 102401,
 };
+
+g_Module.LogicDruidRenewal =
+{
+	Texture			= g_Module.GetMyImage("Renewal.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 108238,
+	TalentID		= 19283,
+};
