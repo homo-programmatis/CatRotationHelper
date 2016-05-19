@@ -35,6 +35,16 @@ function g_Module.AddLogicIfAvailable(a_Table, a_Logic)
 	table.insert(a_Table, a_Logic);
 end
 
+function g_Module.AddLogicFirstAvailable(a_Table, ...)
+	local logicList = {...};
+	for _, logic in pairs(logicList) do
+		if (g_Module.IsLogicAvailable(logic)) then
+			table.insert(a_Table, logic);
+			return;
+		end
+	end
+end
+
 function g_Module.AddLogicUnused(a_Table, a_MinCount)
 	local currentCount = #a_Table;
 	if (currentCount >= a_MinCount) then
