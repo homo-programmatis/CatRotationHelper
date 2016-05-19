@@ -32,6 +32,7 @@ local function GetPackage_DruidCat()
 	-- Events box
 	logicList = newPackage.LogicLists[2];
 	g_Module.AddLogicFirstAvailable(logicList, g_Module.LogicDruidCatIncarnation, g_Module.LogicDruidBerserk);
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatElunesGuidance);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidWildCharge);
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatPredatorySwiftness);
 
@@ -77,6 +78,7 @@ local function GetPackage_DruidBear()
 	-- Events box
 	logicList = newPackage.LogicLists[2];
 	g_Module.AddLogicFirstAvailable(logicList, g_Module.LogicDruidCatIncarnation, g_Module.LogicDruidBerserk);	-- In case of Feral in bear form
+	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatElunesGuidance);      -- In case of Feral in bear form
 	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidWildCharge);
 
 	-- Survival box

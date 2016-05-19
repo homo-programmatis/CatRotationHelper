@@ -75,6 +75,14 @@ g_Module.LogicDruidCatIncarnation =
 	TalentID		= 21705,
 };
 
+g_Module.LogicDruidCatElunesGuidance =
+{
+	Texture			= g_Module.GetMyImage("ElunesGuidance.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 202060,
+	TalentID		= 22370,
+};
+
 -----------------------------------
 -- Bear
 -----------------------------------
