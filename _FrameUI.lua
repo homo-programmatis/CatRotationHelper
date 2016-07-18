@@ -46,11 +46,11 @@ function g_Module.FrameReset(a_Frame)
 	a_Frame.LastStatus     = nil;
 	a_Frame.LastExpiration = nil;
 
-	a_Frame.hascp = false;
-	a_Frame.FrameCombo.startTime = nil;
+	a_Frame.m_IsCombo      = false;
+	a_Frame.m_IsClearcast  = false;
+
 	a_Frame.FrameCombo:Hide();
 	a_Frame.FrameCombo:SetScript("OnUpdate", nil);
-	
 	a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"));
 	
 	a_Frame.FrameTimer:Hide();
@@ -59,6 +59,64 @@ function g_Module.FrameReset(a_Frame)
 	a_Frame.FrameTimer.TextTime:Hide();
 	a_Frame.FrameTimer.TextStar:Hide();
 	g_Module.FrameUpdateTimerColor(a_Frame, false, false);
+end
+
+function g_Module.FrameSetClearcast(a_Frame, a_IsClearcast)
+	if (a_Frame.m_IsClearcast == a_IsClearcast) then
+		return;
+	end
+	
+	a_Frame.m_IsClearcast = a_IsClearcast;
+	g_Module.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
+	
+	if (a_IsClearcast) then
+		a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
+		g_Module.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.TextureSpecial);
+	else
+		a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
+		g_Module.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.Texture);
+	end
+end
+
+function g_Module.EffectComboPoint(a_FrameCombo)
+	local elapsed = GetTime() - a_FrameCombo.m_EffectStartTime;
+
+	if (elapsed >= 0.4) then
+		if(a_FrameCombo.m_EffectIsReverse) then
+			a_FrameCombo:Hide();
+		else
+			a_FrameCombo:SetScale(1);
+			a_FrameCombo:SetAlpha(1);
+			a_FrameCombo:SetScript("OnUpdate", nil);
+		end
+		
+		return;
+	end
+
+	if (a_FrameCombo.m_EffectIsReverse) then
+		elapsed = 0.4 - elapsed;
+	end
+
+	a_FrameCombo:SetScale(1.3 - elapsed*0.75);
+	a_FrameCombo:SetAlpha(elapsed*2.5);
+end
+
+function g_Module.FrameSetCombo(a_Frame, a_IsCombo)
+	if (a_IsCombo == a_Frame.m_IsCombo) then
+		return;
+	end
+	
+	a_Frame.m_IsCombo = a_IsCombo;
+	
+	g_Module.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
+	
+	a_Frame.FrameCombo:SetScript("OnUpdate", g_Module.EffectComboPoint);
+	a_Frame.FrameCombo.m_EffectStartTime = GetTime();
+	a_Frame.FrameCombo.m_EffectIsReverse = not a_IsCombo;
+	
+	if (a_IsCombo) then
+		a_Frame.FrameCombo:Show();
+	end
 end
 
 function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)

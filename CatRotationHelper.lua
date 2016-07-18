@@ -6,7 +6,6 @@ local g_Consts = g_Module.Constants;
 local CRH_SPELLID_CLEARCAST				= 16870;
 
 -- state variables
-local clearCast = false;
 local unlocked = false;
 local g_IsActive = true;
 local g_LastShapeshiftForm = nil;
@@ -52,10 +51,26 @@ local function UpdateComboPoints()
 	CatRotationHelperSetCPEffects(g_Module.FrameLists[1], comboPoints);
 end
 
+local function UpdateClearcast()
+	if (not crhEnableClearcast) then
+		return;
+	end
+
+	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
+	if (1 == GetShapeshiftForm()) then
+		-- Ignore clearcast on bear (can happen when feral is shapeshifted to bear)
+		isBuffPresent = false;
+	end
+	
+	for _, frame in pairs(g_Module.FrameLists[1]) do
+		g_Module.FrameSetClearcast(frame, isBuffPresent);
+	end
+end
+
 local function UpdateEverything()
 	UpdateFrames(nil, false);
 	UpdateComboPoints();
-	CatRotationHelperCheckClearcast();
+	UpdateClearcast();
 end
 
 function g_Module.ShowAllFrames(a_IsShow)
@@ -179,7 +194,6 @@ function CatRotationHelperLock()
 	CatRotationHelper_DlgMoveHint:Hide();
 
 	unlocked = false;
-	clearCast = false;
 
 	g_Module.OnPackageChanged();
 end
@@ -188,29 +202,8 @@ end
 function CatRotationHelperSetCPEffects(a_FrameList, num)
 	for i=1, #a_FrameList do
 		local frame = a_FrameList[i];
-
-		if(i <= num) then
-			if(not frame.hascp) then
-				frame.hascp = true;
-				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
-				
-				frame.FrameCombo:Show()
-				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
-				frame.FrameCombo.startTime = GetTime()
-				frame.FrameCombo.reverse = false
-			end
-		else
-			if(frame.hascp) then
-				frame.hascp = false;
-				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
-
-				frame.FrameCombo:SetScript("OnUpdate", CatRotationHelperCpEffect)
-				frame.FrameCombo.startTime = GetTime()
-				frame.FrameCombo.reverse = true
-			else
-				return;
-			end
-		end
+		local isCombo = (i <= num);
+		g_Module.FrameSetCombo(frame, isCombo);
 	end
 end
 
@@ -298,41 +291,6 @@ end
 -- 	CatRotationHelperSetBearCP(stacks);
 -- end
 
--- Check for Clearcast procs - cat (has no effect for bear)
-function CatRotationHelperCheckClearcast()
-	if (not crhEnableClearcast) then
-		return;
-	end
-
-	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
-	if (1 == GetShapeshiftForm()) then
-		-- Ignore clearcast on bear
-		isBuffPresent = false;
-	end
-	
-	if (isBuffPresent) then
-		if(not clearCast) then
-			clearCast = true;
-
-			for _, frame in pairs(g_Module.FrameLists[1]) do
-				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.TextureSpecial);
-				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
-			end
-		end
-	else
-		if(clearCast) then
-			clearCast = false;
-
-			for _, frame in pairs(g_Module.FrameLists[1]) do
-				frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
-				g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture);
-				g_Module.FrameUpdateTimerColor(frame, clearCast, frame.hascp);
-			end
-		end
-	end
-end
-
 function CatRotationHelper_EntryPoint_OnLoad(self)
 	-- load addon on druids only
 	local class = select(2, UnitClass("player"))
@@ -371,7 +329,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 			UpdateFrames(g_Consts.LOGIC_TYPE_BUFF, true);
 			UpdateFrames(g_Consts.LOGIC_TYPE_BURST, true);
 			UpdateFrames(g_Consts.LOGIC_TYPE_PROC, true);
-			CatRotationHelperCheckClearcast();
+			UpdateClearcast();
 		elseif(arg1 == "target") then
 			UpdateFrames(g_Consts.LOGIC_TYPE_DEBUFF, true);
 			UpdateComboPoints(); -- Bear "combo points"
@@ -433,27 +391,4 @@ function CatRotationHelper_TimerLacerate_OnUpdate(self)
 			g_FramesBear[i].FrameCombo:SetScale(1.3-0.3*t)
 		end
 	end
-end
-
--- fade cps in/out
-function CatRotationHelperCpEffect(self)
-	local elapsed = GetTime() - self.startTime;
-
-	if(elapsed >= 0.4) then
-		if(self.reverse) then
-			self:Hide();
-		else
-			self:SetScale(1)
-			self:SetAlpha(1)
-			self:SetScript("OnUpdate",nil)
-		end
-		return;
-	end
-
-	if(self.reverse) then
-		elapsed = 0.4-elapsed
-	end
-
-	self:SetScale(1.3-elapsed*0.75)
-	self:SetAlpha(elapsed*2.5)
 end
