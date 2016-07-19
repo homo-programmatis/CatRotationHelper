@@ -11,9 +11,6 @@ local g_IsActive = true;
 local g_LastShapeshiftForm = nil;
 
 -- saved variables
-crhScale = 1;
-crhSurvivalScale = 1.15;
-crhEventScale = 1.15;
 crhCp = true;
 crhLacCounter = true;
 crhEnableClearcast = true;
@@ -21,9 +18,6 @@ crhShowBear = true;
 crhShowCat = true;
 crhShowCatSurvival = true;
 crhShowBearSurvival = true;
-crhEventAngle = 270;
-crhSurvivalAngle = 270;
-crhMainAngle = 0;
 crhCounterStartTime = 30;
 
 -- FIXME: Settings not working
@@ -113,12 +107,7 @@ function g_Module.ReloadPackage(a_NoUpdate)
 		end
 	end
 	
-	CatRotationFrameSetMainScale();
-	CatRotationFrameSetEventScale();
-	CatRotationFrameSetSurvivalScale();
-	CatRotationFrameSetMainStyle();
-	CatRotationFrameSetEventStyle();
-	CatRotationFrameSetSurvivalStyle();
+	g_Module.FrameBoxes_LoadSettings();
 
 	if (not a_NoUpdate) then
 		-- Simulate target switching to decide whether to show/update frames
@@ -168,10 +157,14 @@ function g_Module.OnShapeShift()
 end
 
 function CatRotationHelperUnlock()
-	CatRotationHelper_BoxMain:Show();
-	CatRotationHelper_BoxEvnt:Show();
-	CatRotationHelper_BoxSurv:Show();
+	for _, frameBox in pairs(g_Module.FrameBoxes) do
+		frameBox:Show();
+		frameBox:SetMovable(true);
+		frameBox:EnableMouse(true);
+	end
+	
 	CatRotationHelper_DlgMoveHint:Show();
+	
 	HideUIPanel(InterfaceOptionsFrame)
 	unlocked = true;
 
@@ -188,9 +181,12 @@ function CatRotationHelperLock()
 		return
 	end
 
-	CatRotationHelper_BoxMain:Hide();
-	CatRotationHelper_BoxEvnt:Hide();
-	CatRotationHelper_BoxSurv:Hide();
+	for _, frameBox in pairs(g_Module.FrameBoxes) do
+		frameBox:Hide();
+		frameBox:SetMovable(false);
+		frameBox:EnableMouse(false);
+	end
+
 	CatRotationHelper_DlgMoveHint:Hide();
 
 	unlocked = false;
@@ -205,62 +201,6 @@ function CatRotationHelperSetCPEffects(a_FrameList, num)
 		local isCombo = (i <= num);
 		g_Module.FrameSetCombo(frame, isCombo);
 	end
-end
-
-function CatRotationFrameSetMainScale()
-	for _, frame in pairs(g_Module.FrameLists[1]) do
-		frame:SetScale(crhScale);
-	end
-
-	CatRotationHelper_BoxMain:SetScale(crhScale);
-end
-
-function CatRotationFrameSetEventScale()
-	for _, frame in pairs(g_Module.FrameLists[2]) do
-		frame:SetScale(crhScale);
-	end
-
-	CatRotationHelper_BoxEvnt:SetScale(crhEventScale);
-end
-
-function CatRotationFrameSetSurvivalScale()
-	for _, frame in pairs(g_Module.FrameLists[3]) do
-		frame:SetScale(crhScale);
-	end
-
-	CatRotationHelper_BoxSurv:SetScale(crhSurvivalScale);
-end
-
--- rotate main frame
-function CatRotationHelper_BoxMain_OnClick()
-	crhMainAngle = (crhMainAngle + 90) % 360;
-	CatRotationFrameSetMainStyle()
-end
-
-function CatRotationFrameSetMainStyle()
-	g_Module.FramesSetPosition(g_Module.FrameLists[1], CatRotationHelper_BoxMain, crhMainAngle);
-end
-
--- rotate event frame
-function CatRotationHelper_BoxEvnt_OnClick()
-	crhEventAngle = (crhEventAngle + 90) % 360;
-	CatRotationFrameSetEventStyle()
-end
-
-function CatRotationFrameSetEventStyle()
-	-- FIXME: Need better positioning
-	g_Module.FramesSetPosition(g_Module.FrameLists[2], CatRotationHelper_BoxEvnt, crhEventAngle);
-end
-
--- rotate survival frame
-function CatRotationHelper_BoxSurv_OnClick()
-	crhSurvivalAngle = (crhSurvivalAngle + 90) % 360;
-	CatRotationFrameSetSurvivalStyle()
-end
-
-function CatRotationFrameSetSurvivalStyle()
-	-- FIXME: Need better positioning
-	g_Module.FramesSetPosition(g_Module.FrameLists[3], CatRotationHelper_BoxSurv, crhSurvivalAngle);
 end
 
 ------------------------------
@@ -298,23 +238,35 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 		return;
 	end
 
-	CatRotationHelper_BoxMain:SetBackdropColor(0, 0, 0);
-	CatRotationHelper_BoxMain:RegisterForClicks("RightButtonUp")
-	CatRotationHelper_BoxMain:RegisterForDrag("LeftButton")
-	CatRotationHelper_BoxMain:SetClampedToScreen(true)
-
-	CatRotationHelper_BoxEvnt:SetBackdropColor(0, 0, 0);
-	CatRotationHelper_BoxEvnt:RegisterForClicks("RightButtonUp")
-	CatRotationHelper_BoxEvnt:RegisterForDrag("LeftButton")
-	CatRotationHelper_BoxEvnt:SetClampedToScreen(true)
-
-	CatRotationHelper_BoxSurv:SetBackdropColor(0, 0, 0);
-	CatRotationHelper_BoxSurv:RegisterForClicks("RightButtonUp")
-	CatRotationHelper_BoxSurv:RegisterForDrag("LeftButton")
-	CatRotationHelper_BoxSurv:SetClampedToScreen(true)
-
 	CatRotationHelper_EntryPoint:RegisterEvent("ADDON_LOADED");
 	CatRotationHelper_EntryPoint:RegisterEvent("PLAYER_TALENT_UPDATE")
+end
+
+local function InitializeAddon()
+	g_Module.Settings_Load();
+
+	g_Module.FrameBoxes =
+	{
+		CatRotationHelper_BoxMain,
+		CatRotationHelper_BoxEvnt,
+		CatRotationHelper_BoxSurv,
+	};
+	
+	for index, frameBox in pairs(g_Module.FrameBoxes) do
+		frameBox.m_Index = index;
+	
+		frameBox:SetBackdropColor(0, 0, 0);
+		frameBox:RegisterForClicks("RightButtonUp");
+		frameBox:RegisterForDrag("LeftButton");
+		frameBox:SetClampedToScreen(true);
+		
+		frameBox:SetScript("OnDragStart", frameBox.StartMoving);
+		frameBox:SetScript("OnDragStop", g_Module.FrameBox_OnDragStop);
+		frameBox:SetScript("OnClick", g_Module.FrameBox_OnClick);
+	end
+	
+	g_Module.SettingsUI_Initialize();
+	g_Module.SettingsUI_Load();
 end
 
 -- Event Handling
@@ -359,7 +311,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 
 		g_Module.OnPackageChanged();
 	elseif(event == "ADDON_LOADED" and arg1 == "CatRotationHelper") then
-		
+		InitializeAddon();
 	end
 end
 

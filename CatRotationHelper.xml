@@ -1,6 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-	<Script file="CatRotationHelper.lua"/>
-
 	<Frame name="CatRotationHelper_DlgOptions">
 		<Layers>
 			<Layer level="OVERLAY">
@@ -32,25 +30,6 @@
 				</Scripts>
 			</Button>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsClearcast" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="20" y="-75"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhEnableClearcast = true
-						else
-							crhEnableClearcast = false
-						end
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-
 			<CheckButton name="CatRotationHelper_ChkOptionsCat" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -59,30 +38,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowCat = true
-							CatRotationHelper_ChkOptionsCatCombo:Enable()
-							CatRotationHelper_ChkOptionsCatBerserk:Enable()
-							CatRotationHelper_ChkOptionsCatPredators:Enable()
-							CatRotationHelper_ChkOptionsCatCharge:Enable()
-							CatRotationHelper_ChkOptionsCatSurvival:Enable()
-						else
-							crhShowCat = false
-							CatRotationHelper_ChkOptionsCatCombo:Disable()
-							CatRotationHelper_ChkOptionsCatBerserk:Disable()
-							CatRotationHelper_ChkOptionsCatPredators:Disable()
-							CatRotationHelper_ChkOptionsCatCharge:Disable()
-							CatRotationHelper_ChkOptionsCatSurvival:Disable()
-						end
-
-						g_Module.OnPackageChanged();
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatCombo" inherits="OptionsCheckButtonTemplate">
+			<CheckButton name="CatRotationHelper_ChkOptionsClearcast" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -90,24 +48,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhCp = true
-
-							CatRotationHelper_EntryPoint:RegisterEvent("UNIT_COMBO_POINTS");
-							CatRotationHelperSetCatCP(GetComboPoints("player"));
-						else
-							CatRotationHelperSetCatCP(0);
-							CatRotationHelper_EntryPoint:UnregisterEvent("UNIT_COMBO_POINTS");
-
-							crhCp = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatBerserk" inherits="OptionsCheckButtonTemplate">
+			<CheckButton name="CatRotationHelper_ChkOptionsCatCombo" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -115,18 +58,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowCatBerserk = true
-						else
-							crhShowCatBerserk = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatPredators" inherits="OptionsCheckButtonTemplate">
+			<CheckButton name="CatRotationHelper_ChkOptionsCatBerserk" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -134,18 +68,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowPredatorsSwiftness = true
-						else
-							crhShowPredatorsSwiftness = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatCharge" inherits="OptionsCheckButtonTemplate">
+			<CheckButton name="CatRotationHelper_ChkOptionsCatPredators" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -153,18 +78,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowFeralCharge = true
-						else
-							crhShowFeralCharge = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
-			<CheckButton name="CatRotationHelper_ChkOptionsCatSurvival" inherits="OptionsCheckButtonTemplate">
+			<CheckButton name="CatRotationHelper_ChkOptionsCatCharge" inherits="OptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -172,15 +88,16 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowCatSurvival = true
-						else
-							crhShowCatSurvival = false
-						end
-					</OnClick>
-				</Scripts>
+			</CheckButton>
+
+			<CheckButton name="CatRotationHelper_ChkOptionsCatSurvival" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-300"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
 			</CheckButton>
 
 			<CheckButton name="CatRotationHelper_ChkOptionsBear" inherits="OptionsCheckButtonTemplate">
@@ -191,23 +108,6 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowBear = true
-							CatRotationHelper_ChkOptionsBearLacerate:Enable()
-							CatRotationHelper_ChkOptionsBearBerserk:Enable()
-							CatRotationHelper_ChkOptionsBearSurvival:Enable()
-						else
-							crhShowBear = false
-							CatRotationHelper_ChkOptionsBearLacerate:Disable()
-							CatRotationHelper_ChkOptionsBearBerserk:Disable()
-							CatRotationHelper_ChkOptionsBearSurvival:Disable()
-						end
-
-						g_Module.OnPackageChanged();
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 			<CheckButton name="CatRotationHelper_ChkOptionsBearLacerate" inherits="OptionsCheckButtonTemplate">
@@ -218,18 +118,6 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhLacCounter = true
-
-							CatRotationHelperCheckBearDebuffs();
-						else
-							CatRotationHelperSetBearCP(0);
-							crhLacCounter = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 			<CheckButton name="CatRotationHelper_ChkOptionsBearBerserk" inherits="OptionsCheckButtonTemplate">
@@ -240,15 +128,6 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowBearBerserk = true
-						else
-							crhShowBearBerserk = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 			<CheckButton name="CatRotationHelper_ChkOptionsBearSurvival" inherits="OptionsCheckButtonTemplate">
@@ -259,15 +138,6 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if(self:GetChecked()) then
-							crhShowBearSurvival = true
-						else
-							crhShowBearSurvival = false
-						end
-					</OnClick>
-				</Scripts>
 			</CheckButton>
 
 			<Slider name="CatRotationHelper_SldOptionsMainScale" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
@@ -291,17 +161,9 @@
 						</FontString>
 					</Layer>
 				</Layers>
-				<Scripts>
-					<OnValueChanged>
-						local scale = math.floor(self:GetValue()*100+0.5)/100
-						crhScale = scale
-						CatRotationFrameSetMainScale()
-						CatRotationHelper_SldOptionsMainScaleValue:SetText(scale)
-					</OnValueChanged>
-				</Scripts>
 			</Slider>
 
-			<Slider name="CatRotationHelper_SldOptionsEnvtScale" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
+			<Slider name="CatRotationHelper_SldOptionsEvntScale" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
 				<Anchors>
 					<Anchor point="CENTER" relativePoint="TOP">
 						<Offset>
@@ -322,14 +184,6 @@
 						</FontString>
 					</Layer>
 				</Layers>
-				<Scripts>
-					<OnValueChanged>
-						local scale = math.floor(self:GetValue()*100+0.5)/100
-						crhEventScale = scale
-						CatRotationFrameSetEventScale()
-						CatRotationHelper_SldOptionsEnvtScaleValue:SetText(scale)
-					</OnValueChanged>
-				</Scripts>
 			</Slider>
 
 			<Slider name="CatRotationHelper_SldOptionsSurvScale" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
@@ -353,112 +207,8 @@
 						</FontString>
 					</Layer>
 				</Layers>
-				<Scripts>
-					<OnValueChanged>
-						local scale = math.floor(self:GetValue()*100+0.5)/100
-						crhSurvivalScale = scale
-						CatRotationFrameSetSurvivalScale()
-						CatRotationHelper_SldOptionsSurvScaleValue:SetText(scale)
-					</OnValueChanged>
-				</Scripts>
 			</Slider>
 		</Frames>
-		<Scripts>
-			<OnLoad>
-				local _,class = UnitClass("player");
-				if(class == "DRUID") then
-					self.name = "CatRotationHelper"
-					InterfaceOptions_AddCategory(self);
-
-					self:RegisterEvent("ADDON_LOADED")
-
-					CatRotationHelper_ChkOptionsCatText:SetText("Enable Cat Frames")
-
-					CatRotationHelper_ChkOptionsCatComboText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatComboText:SetText("Show Combo Points")
-
-					CatRotationHelper_ChkOptionsBearLacerateText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsBearLacerateText:SetText("Show Lacerate counter")
-
-					CatRotationHelper_ChkOptionsBearText:SetText("Enable Bear Frames")
-
-					CatRotationHelper_ChkOptionsClearcastText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsClearcastText:SetText("Show Clearcast procs")
-					CatRotationHelper_ChkOptionsClearcast.tooltipText = "Icons turn blue during a Clearcast proc"
-
-					CatRotationHelper_ChkOptionsCatBerserkText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatBerserkText:SetText("Berserk reminder")
-					CatRotationHelper_ChkOptionsCatBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
-
-					CatRotationHelper_ChkOptionsCatPredatorsText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatPredatorsText:SetText("Show Predator's Swiftness")
-					CatRotationHelper_ChkOptionsCatPredators.tooltipText = "Shows an icon in the Notification Frame during a Predator's Swiftness proc"
-
-					CatRotationHelper_ChkOptionsCatChargeText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatChargeText:SetText("Wild Charge reminder")
-					CatRotationHelper_ChkOptionsCatCharge.tooltipText = "Shows an icon in the Notification Frame when Wild Charge is ready"
-
-					CatRotationHelper_ChkOptionsCatSurvivalText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsCatSurvivalText:SetText("Show Survival Frame")
-					CatRotationHelper_ChkOptionsCatSurvival.tooltipText = "Show Survival Frame in Cat Form"
-
-					CatRotationHelper_ChkOptionsBearBerserkText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsBearBerserkText:SetText("Berserk reminder")
-					CatRotationHelper_ChkOptionsBearBerserk.tooltipText = "Shows an icon in the Notification Frame when Berserk is ready"
-
-					CatRotationHelper_ChkOptionsBearSurvivalText:SetTextColor(1,1,1)
-					CatRotationHelper_ChkOptionsBearSurvivalText:SetText("Show Survival Frame")
-					CatRotationHelper_ChkOptionsBearSurvival.tooltipText = "Show Survival Frame in Bear Form"
-
-					CatRotationHelper_SldOptionsMainScaleText:SetText("Main Frame scale")
-					CatRotationHelper_SldOptionsEnvtScaleText:SetText("Notification Frame scale")
-					CatRotationHelper_SldOptionsSurvScaleText:SetText("Survival Frame scale")
-				end
-			</OnLoad>
-			<OnEvent>
-				local arg1 = ...
-
-				if(arg1 ~= "CatRotationHelper") then
-					return
-				end
-
-				if(crhShowCat) then
-					CatRotationHelper_ChkOptionsCat:SetChecked(true)
-				else
-					CatRotationHelper_ChkOptionsCatCombo:Disable()
-					CatRotationHelper_ChkOptionsCatBerserk:Disable()
-					CatRotationHelper_ChkOptionsCatPredators:Disable()
-					CatRotationHelper_ChkOptionsCatCharge:Disable()
-					CatRotationHelper_ChkOptionsCatSurvival:Disable()
-				end
-
-				if(crhShowBear) then
-					CatRotationHelper_ChkOptionsBear:SetChecked(true)
-				else
-					CatRotationHelper_ChkOptionsBearLacerate:Disable()
-					CatRotationHelper_ChkOptionsBearBerserk:Disable()
-					CatRotationHelper_ChkOptionsBearSurvival:Disable()
-				end
-				
-				CatRotationHelper_ChkOptionsCatCombo:SetChecked(crhCp)
-				CatRotationHelper_ChkOptionsBearLacerate:SetChecked(crhLacCounter)
-				CatRotationHelper_ChkOptionsClearcast:SetChecked(crhEnableClearcast)
-
-				CatRotationHelper_ChkOptionsCatBerserk:SetChecked(crhShowCatBerserk)
-				CatRotationHelper_ChkOptionsCatPredators:SetChecked(crhShowPredatorsSwiftness)
-				CatRotationHelper_ChkOptionsCatCharge:SetChecked(crhShowFeralCharge)
-				CatRotationHelper_ChkOptionsBearBerserk:SetChecked(crhShowBearBerserk)
-				CatRotationHelper_ChkOptionsBearSurvival:SetChecked(crhShowBearSurvival)
-				CatRotationHelper_ChkOptionsCatSurvival:SetChecked(crhShowCatSurvival)
-
-				CatRotationHelper_SldOptionsMainScale:SetValue(crhScale)
-				CatRotationHelper_SldOptionsMainScaleValue:SetText(math.floor(crhScale*100+0.5)/100)
-				CatRotationHelper_SldOptionsEnvtScale:SetValue(crhEventScale)
-				CatRotationHelper_SldOptionsEnvtScaleValue:SetText(math.floor(crhEventScale*100+0.5)/100)
-				CatRotationHelper_SldOptionsSurvScale:SetValue(crhSurvivalScale)
-				CatRotationHelper_SldOptionsSurvScaleValue:SetText(math.floor(crhSurvivalScale*100+0.5)/100)
-			</OnEvent>
-		</Scripts>
 	</Frame>
 
 	<Frame name="CatRotationHelper_DlgMoveHint" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
@@ -636,7 +386,7 @@
 		<Color r="1.0" g="0.82" b="0"/>
 	</Font>
 
-	<Button name="CatRotationHelper_BoxEvnt" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+	<Button name="CatRotationHelper_BoxEvnt" frameStrata="LOW" parent="UIParent" hidden="true">
 		<Anchors>
 			<Anchor point="RIGHT" relativeTo="UIParent" relativePoint="CENTER">
 				<Offset>
@@ -658,14 +408,9 @@
 			</Layer>
 		</Layers>
 		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
-		<Scripts>
-			<OnDragStart>self:StartMoving()</OnDragStart>
-			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
-			<OnClick function="CatRotationHelper_BoxEvnt_OnClick"/>
-		</Scripts>
 	</Button>
 
-	<Button name="CatRotationHelper_BoxSurv" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+	<Button name="CatRotationHelper_BoxSurv" frameStrata="LOW" parent="UIParent" hidden="true">
 		<Anchors>
 			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
 				<Offset>
@@ -687,14 +432,9 @@
 			</Layer>
 		</Layers>
 		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
-		<Scripts>
-			<OnDragStart>self:StartMoving()</OnDragStart>
-			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
-			<OnClick function="CatRotationHelper_BoxSurv_OnClick"/>
-		</Scripts>
 	</Button>
 
-	<Button name="CatRotationHelper_BoxMain" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+	<Button name="CatRotationHelper_BoxMain" frameStrata="LOW" parent="UIParent" hidden="true">
 		<Anchors>
 			<Anchor point="TOP" relativeTo="UIParent" relativePoint="CENTER">
 				<Offset>
@@ -716,11 +456,6 @@
 			</Layer>
 		</Layers>
 		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
-		<Scripts>
-			<OnDragStart>self:StartMoving()</OnDragStart>
-			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
-			<OnClick function="CatRotationHelper_BoxMain_OnClick"/>
-		</Scripts>
 	</Button>
 
 	<Frame name="CatRotationHelper_TimerLacerate" hidden="true">

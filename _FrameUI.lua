@@ -246,6 +246,53 @@ function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
 	end
 end
 
+function g_Module.FrameBox_LoadSettings(a_FrameBox)
+	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
+	local frameList = g_Module.FrameLists[a_FrameBox.m_Index];
+
+	-- Location
+	a_FrameBox:ClearAllPoints();
+	a_FrameBox:SetPoint(settings.LocationFrmPoint, UIParent, settings.LocationScrPoint, settings.LocationX, settings.LocationY);
+	
+	-- Angle
+	g_Module.FramesSetPosition(frameList, a_FrameBox, settings.Angle);
+	
+	-- Scale
+	for _, frame in pairs(frameList) do
+		frame:SetScale(settings.Scale);
+	end
+
+	a_FrameBox:SetScale(settings.Scale);
+end
+
+function g_Module.FrameBox_SaveSettings(a_FrameBox)
+	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
+	
+	local locationFrmPoint, _, locationScrPoint, locationX, locationY = a_FrameBox:GetPoint();
+	settings.LocationX = locationX;
+	settings.LocationY = locationY;
+	settings.LocationFrmPoint = locationFrmPoint;
+	settings.LocationScrPoint = locationScrPoint;
+end
+
+function g_Module.FrameBoxes_LoadSettings()
+	for _, frameBox in pairs(g_Module.FrameBoxes) do
+		g_Module.FrameBox_LoadSettings(frameBox);
+	end
+end
+
+function g_Module.FrameBox_OnClick(a_FrameBox)
+	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
+
+	settings.Angle = (settings.Angle + 90) % 360;
+	g_Module.FrameBox_LoadSettings(a_FrameBox);
+end
+
+function g_Module.FrameBox_OnDragStop(a_FrameBox)
+	a_FrameBox:StopMovingOrSizing();
+	g_Module.FrameBox_SaveSettings(a_FrameBox);
+end
+
 function g_Module.FrameTimer_FormatTime(a_Time)
 	if (a_Time >= 60) then
 		return ceil(a_Time / 60) .. "m";

@@ -1,11 +1,12 @@
 ## Interface: 60100
 ## Title: CatRotationHelper
 ## Notes: Shows combo point and cooldown indicators for Cats and Bears
-## SavedVariablesPerCharacter: crhShowBearSurvival, crhShowCatSurvival, crhShowFeralCharge, crhEventAngle, crhSurvivalAngle, crhMainAngle, crhShowCatBerserk, crhShowBearBerserk, crhShowPredatorsSwiftness, crhScale, crhEventScale, crhSurvivalScale, crhCp, crhLacCounter, crhEnableClearcast, crhShowBear, crhShowCat, crhCounterStartTime
+## SavedVariables: CatRotationHelperSettings
 
 # Globals need to be initialized first
 _Module.lua
 _Constants.lua
+_Settings.lua
 
 # Addon's code
 _Helpers.lua
@@ -13,6 +14,7 @@ _FrameAlloc.lua
 _FrameCalc.lua
 _FrameLogic.lua
 _FrameUI.lua
+_SettingsUI.lua
 LogicDruid.lua
 PackageDruid.lua
 CatRotationHelper.lua
