@@ -1,5 +1,5 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = getfenv(0)[THIS_ADDON_NAME];
+local THIS_ADDON_NAME=...;
+local g_Addon = getfenv(0)[THIS_ADDON_NAME];
 
 function MakeConstTable(a_Table)
 	local metaTable =
@@ -17,7 +17,7 @@ function MakeConstTable(a_Table)
 	return a_Table;
 end
 
-g_Module.Constants = MakeConstTable
+g_Addon.Constants = MakeConstTable
 {
 	LOGIC_TYPE_SKILL	= 1,
 	LOGIC_TYPE_BUFF		= 2,

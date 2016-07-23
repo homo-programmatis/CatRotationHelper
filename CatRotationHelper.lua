@@ -1,6 +1,6 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = getfenv(0)[THIS_ADDON_NAME];
-local g_Consts = g_Module.Constants;
+local THIS_ADDON_NAME=...;
+local g_Addon = getfenv(0)[THIS_ADDON_NAME];
+local g_Consts = g_Addon.Constants;
 
 -- spellIDs
 local CRH_SPELLID_CLEARCAST				= 16870;
@@ -31,18 +31,18 @@ local function UpdateFrames(a_Type, a_ShowEffects)
 		return;
 	end
 	
-	for _, frameList in pairs(g_Module.FrameLists) do
+	for _, frameList in pairs(g_Addon.FrameLists) do
 		for _, frame in pairs(frameList) do
 			if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
-				g_Module.FrameUpdateFromLogic(frame, a_ShowEffects);
+				g_Addon.FrameUpdateFromLogic(frame, a_ShowEffects);
 			end
 		end
 	end
 end
 
 local function UpdateComboPoints()
-	local comboPoints = g_Module.ActivePackage.GetComboPoints();
-	CatRotationHelperSetCPEffects(g_Module.FrameLists[1], comboPoints);
+	local comboPoints = g_Addon.ActivePackage.GetComboPoints();
+	CatRotationHelperSetCPEffects(g_Addon.FrameLists[1], comboPoints);
 end
 
 local function UpdateClearcast()
@@ -50,14 +50,14 @@ local function UpdateClearcast()
 		return;
 	end
 
-	isBuffPresent = g_Module.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
+	isBuffPresent = g_Addon.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
 	if (1 == GetShapeshiftForm()) then
 		-- Ignore clearcast on bear (can happen when feral is shapeshifted to bear)
 		isBuffPresent = false;
 	end
 	
-	for _, frame in pairs(g_Module.FrameLists[1]) do
-		g_Module.FrameSetClearcast(frame, isBuffPresent);
+	for _, frame in pairs(g_Addon.FrameLists[1]) do
+		g_Addon.FrameSetClearcast(frame, isBuffPresent);
 	end
 end
 
@@ -67,9 +67,9 @@ local function UpdateEverything()
 	UpdateClearcast();
 end
 
-function g_Module.ShowAllFrames(a_IsShow)
+function g_Addon.ShowAllFrames(a_IsShow)
 	local frameCount = 0;
-	for _, frameList in pairs(g_Module.FrameLists) do
+	for _, frameList in pairs(g_Addon.FrameLists) do
 		for _, frame in pairs(frameList) do
 			frame:SetShown(a_IsShow);
 			frameCount = frameCount + 1;
@@ -85,33 +85,33 @@ function g_Module.ShowAllFrames(a_IsShow)
 	end
 end
 
-function g_Module.ReloadPackage(a_NoUpdate)
-	g_Module.FrameDeallocAll();
+function g_Addon.ReloadPackage(a_NoUpdate)
+	g_Addon.FrameDeallocAll();
 	g_IsActive = false;
 	g_LastShapeshiftForm = GetShapeshiftForm();
 
 	local playerClass = select(2, UnitClass("player"));
-	g_Module.ActivePackage = g_Module.GetPackage[playerClass]();
+	g_Addon.ActivePackage = g_Addon.GetPackage[playerClass]();
 	
-	for logicListIdx, logicList in pairs(g_Module.ActivePackage.LogicLists) do
+	for logicListIdx, logicList in pairs(g_Addon.ActivePackage.LogicLists) do
 		local frameList = {};
-		g_Module.FrameLists[logicListIdx] = frameList;
+		g_Addon.FrameLists[logicListIdx] = frameList;
 		
 		for logicIdx, logic in pairs(logicList) do
-			local frame = g_Module.FrameAlloc();
+			local frame = g_Addon.FrameAlloc();
 			frameList[logicIdx] = frame;
 			
 			frame.m_CrhLogic = logic;
-			g_Module.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
-			g_Module.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
+			g_Addon.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
+			g_Addon.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 		end
 	end
 	
-	g_Module.FrameBoxes_LoadSettings();
+	g_Addon.FrameBoxes_LoadSettings();
 
 	if (not a_NoUpdate) then
 		-- Simulate target switching to decide whether to show/update frames
-		g_Module.OnTargetSwitched();
+		g_Addon.OnTargetSwitched();
 	end
 end
 
@@ -131,33 +131,33 @@ local function IsEnemyTarget()
 	return true;
 end
 
-function g_Module.OnTargetSwitched()
+function g_Addon.OnTargetSwitched()
 	if (not IsEnemyTarget()) then
-		g_Module.ShowAllFrames(false);
+		g_Addon.ShowAllFrames(false);
 		-- FIXME: fix lacerate wearoff animation
 		-- CatRotationHelper_TimerLacerate:Hide();
 		return;
 	end
 
-	g_Module.ShowAllFrames(true);
+	g_Addon.ShowAllFrames(true);
 	UpdateEverything();
 end
 
-function g_Module.OnPackageChanged()
-	g_Module.ReloadPackage();
+function g_Addon.OnPackageChanged()
+	g_Addon.ReloadPackage();
 end
 
-function g_Module.OnShapeShift()
+function g_Addon.OnShapeShift()
 	if (g_LastShapeshiftForm == GetShapeshiftForm()) then
 		-- Casting "Predatory Swiftness" will send two UPDATE_SHAPESHIFT_FORM in WOW6.2 for some reason
 		return;
 	end
 	
-	g_Module.ReloadPackage();
+	g_Addon.ReloadPackage();
 end
 
 function CatRotationHelperUnlock()
-	for _, frameBox in pairs(g_Module.FrameBoxes) do
+	for _, frameBox in pairs(g_Addon.FrameBoxes) do
 		frameBox:Show();
 		frameBox:SetMovable(true);
 		frameBox:EnableMouse(true);
@@ -170,10 +170,10 @@ function CatRotationHelperUnlock()
 
 	-- Hide effects
 	CatRotationHelper_TimerLacerate:Hide();
-	CatRotationHelperSetCPEffects(g_Module.FrameLists[1], 0);
+	CatRotationHelperSetCPEffects(g_Addon.FrameLists[1], 0);
 
 	-- Show all frames in their default state, even if they should be currently hidden
-	g_Module.ReloadPackage(true);
+	g_Addon.ReloadPackage(true);
 end
 
 function CatRotationHelperLock()
@@ -181,7 +181,7 @@ function CatRotationHelperLock()
 		return
 	end
 
-	for _, frameBox in pairs(g_Module.FrameBoxes) do
+	for _, frameBox in pairs(g_Addon.FrameBoxes) do
 		frameBox:Hide();
 		frameBox:SetMovable(false);
 		frameBox:EnableMouse(false);
@@ -191,7 +191,7 @@ function CatRotationHelperLock()
 
 	unlocked = false;
 
-	g_Module.OnPackageChanged();
+	g_Addon.OnPackageChanged();
 end
 
 -- shows num combo point circles using frames in a_FrameList
@@ -199,7 +199,7 @@ function CatRotationHelperSetCPEffects(a_FrameList, num)
 	for i=1, #a_FrameList do
 		local frame = a_FrameList[i];
 		local isCombo = (i <= num);
-		g_Module.FrameSetCombo(frame, isCombo);
+		g_Addon.FrameSetCombo(frame, isCombo);
 	end
 end
 
@@ -209,7 +209,7 @@ end
 
 -- FIXME: Fix lacerate wearoff animation
 -- function crhUpdateLacerate()
--- 	local name, stacks, expTime = g_Module.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
+-- 	local name, stacks, expTime = g_Addon.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
 -- 	if (name == nil) then
 -- 		CatRotationHelper_TimerLacerate:Hide();
 -- 		CatRotationHelperSetBearCP(0);
@@ -243,16 +243,16 @@ function CatRotationHelper_EntryPoint_OnLoad(self)
 end
 
 local function InitializeAddon()
-	g_Module.Settings_Load();
+	g_Addon.Settings_Load();
 
-	g_Module.FrameBoxes =
+	g_Addon.FrameBoxes =
 	{
 		CatRotationHelper_BoxMain,
 		CatRotationHelper_BoxEvnt,
 		CatRotationHelper_BoxSurv,
 	};
 	
-	for index, frameBox in pairs(g_Module.FrameBoxes) do
+	for index, frameBox in pairs(g_Addon.FrameBoxes) do
 		frameBox.m_Index = index;
 	
 		frameBox:SetBackdropColor(0, 0, 0);
@@ -261,12 +261,12 @@ local function InitializeAddon()
 		frameBox:SetClampedToScreen(true);
 		
 		frameBox:SetScript("OnDragStart", frameBox.StartMoving);
-		frameBox:SetScript("OnDragStop", g_Module.FrameBox_OnDragStop);
-		frameBox:SetScript("OnClick", g_Module.FrameBox_OnClick);
+		frameBox:SetScript("OnDragStop", g_Addon.FrameBox_OnDragStop);
+		frameBox:SetScript("OnClick", g_Addon.FrameBox_OnClick);
 	end
 	
-	g_Module.SettingsUI_Initialize();
-	g_Module.SettingsUI_Load();
+	g_Addon.SettingsUI_Initialize();
+	g_Addon.SettingsUI_Load();
 end
 
 -- Event Handling
@@ -294,10 +294,10 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 		UpdateFrames(g_Consts.LOGIC_TYPE_SKILL, true);
 		UpdateFrames(g_Consts.LOGIC_TYPE_BURST, true);
 	elseif (event == "UPDATE_SHAPESHIFT_FORM") then
-		g_Module.OnShapeShift();
+		g_Addon.OnShapeShift();
 	elseif(event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_FACTION" and arg1 == "target")) then
 		-- checking UNIT_FACTION so starting a duel behaves like changing target
-		g_Module.OnTargetSwitched();
+		g_Addon.OnTargetSwitched();
 	elseif(event == "PLAYER_TALENT_UPDATE") then
 		self:RegisterEvent("UNIT_AURA");
 		self:RegisterEvent("PLAYER_TARGET_CHANGED");
@@ -309,7 +309,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
 			self:RegisterEvent("UNIT_POWER");
 		end
 
-		g_Module.OnPackageChanged();
+		g_Addon.OnPackageChanged();
 	elseif(event == "ADDON_LOADED" and arg1 == "CatRotationHelper") then
 		InitializeAddon();
 	end

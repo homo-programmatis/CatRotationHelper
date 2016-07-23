@@ -1,6 +1,6 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = getfenv(0)[THIS_ADDON_NAME];
-local g_Consts = g_Module.Constants;
+local THIS_ADDON_NAME=...;
+local g_Addon = getfenv(0)[THIS_ADDON_NAME];
+local g_Consts = g_Addon.Constants;
 
 local function GetPackage_DruidCat()
 	local newPackage =
@@ -21,29 +21,29 @@ local function GetPackage_DruidCat()
 	
 	-- Main box
 	logicList = newPackage.LogicLists[1];
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatTigersFury);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatSavageRoar);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatRake);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatLunarInspiration);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatRip);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatThrash);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatBrutalSlash);
-	g_Module.AddLogicUnused(logicList, 5);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatTigersFury);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatSavageRoar);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatRake);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatLunarInspiration);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatRip);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatThrash);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatBrutalSlash);
+	g_Addon.AddLogicUnused(logicList, 5);
 
 	-- Events box
 	logicList = newPackage.LogicLists[2];
-	g_Module.AddLogicFirstAvailable(logicList, g_Module.LogicDruidCatIncarnation, g_Module.LogicDruidBerserk, g_Module.LogicDruidBearIncarnation); -- BearIncarnation - In case of Guardian in cat form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatElunesGuidance);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidWildCharge);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatPredatorySwiftness);
+	g_Addon.AddLogicFirstAvailable(logicList, g_Addon.LogicDruidCatIncarnation, g_Addon.LogicDruidBerserk, g_Addon.LogicDruidBearIncarnation); -- BearIncarnation - In case of Guardian in cat form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatElunesGuidance);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidWildCharge);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatPredatorySwiftness);
 
 	-- Survival box
 	logicList = newPackage.LogicLists[3];
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidSurvivalInstincts);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBarkskin);           -- In case of Guardian in cat form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidRenewal);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearLunarBeam);          -- In case of Guardian in cat form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBristlingFur);       -- In case of Guardian in cat form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidSurvivalInstincts);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearBarkskin);           -- In case of Guardian in cat form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidRenewal);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearLunarBeam);          -- In case of Guardian in cat form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearBristlingFur);       -- In case of Guardian in cat form
 	
 	return newPackage;
 end
@@ -52,7 +52,7 @@ local function GetPackage_DruidBear()
 	local newPackage =
 	{
 		GetComboPoints = function()
-			local name, stacks, expTime = g_Module.GetTargetDebuffInfo(g_Module.LogicDruidBearThrash.SpellID, true);
+			local name, stacks, expTime = g_Addon.GetTargetDebuffInfo(g_Addon.LogicDruidBearThrash.SpellID, true);
 			if (name == nil) then
 				return 0;
 			end
@@ -72,25 +72,25 @@ local function GetPackage_DruidBear()
 	
 	-- Main box
 	logicList = newPackage.LogicLists[1];
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearMangle);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearThrash);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearPulverize);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearGalacticGuardian);
-	g_Module.AddLogicUnused(logicList, 3);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearMangle);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearThrash);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearPulverize);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearGalacticGuardian);
+	g_Addon.AddLogicUnused(logicList, 3);
 	
 	-- Events box
 	logicList = newPackage.LogicLists[2];
-	g_Module.AddLogicFirstAvailable(logicList, g_Module.LogicDruidBearIncarnation, g_Module.LogicDruidCatIncarnation, g_Module.LogicDruidBerserk);	-- CatIncarnation/Berserk - in case of Feral in bear form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidCatElunesGuidance);      -- In case of Feral in bear form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidWildCharge);
+	g_Addon.AddLogicFirstAvailable(logicList, g_Addon.LogicDruidBearIncarnation, g_Addon.LogicDruidCatIncarnation, g_Addon.LogicDruidBerserk);	-- CatIncarnation/Berserk - in case of Feral in bear form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidCatElunesGuidance);      -- In case of Feral in bear form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidWildCharge);
 
 	-- Survival box
 	logicList = newPackage.LogicLists[3];
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidSurvivalInstincts);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBarkskin);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidRenewal);                -- In case of Feral in bear form
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearLunarBeam);
-	g_Module.AddLogicIfAvailable(logicList, g_Module.LogicDruidBearBristlingFur);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidSurvivalInstincts);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearBarkskin);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidRenewal);                -- In case of Feral in bear form
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearLunarBeam);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.LogicDruidBearBristlingFur);
 	
 	return newPackage;
 end
@@ -113,7 +113,7 @@ local function GetPackage_DruidOther()
 	return newPackage;
 end
 
-g_Module.GetPackage["DRUID"] = function()
+g_Addon.GetPackage["DRUID"] = function()
 	local shapeshiftForm = GetShapeshiftForm();
 
 	if (1 == shapeshiftForm) then

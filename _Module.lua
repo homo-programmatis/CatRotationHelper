@@ -1,6 +1,6 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = {};
-getfenv(0)[THIS_ADDON_NAME] = g_Module;
+local THIS_ADDON_NAME=...;
+local g_Addon = {};
+getfenv(0)[THIS_ADDON_NAME] = g_Addon;
 
-g_Module.GetPackage = {};
-g_Module.FrameLists = {{}, {}, {}};
+g_Addon.GetPackage = {};
+g_Addon.FrameLists = {{}, {}, {}};

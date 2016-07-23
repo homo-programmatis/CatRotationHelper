@@ -1,16 +1,16 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = getfenv(0)[THIS_ADDON_NAME];
-local g_Consts = g_Module.Constants;
+local THIS_ADDON_NAME=...;
+local g_Addon = getfenv(0)[THIS_ADDON_NAME];
+local g_Consts = g_Addon.Constants;
 
-function g_Module.FrameCreateNew(a_FrameName)
+function g_Addon.FrameCreateNew(a_FrameName)
 	local newFrame = CreateFrame("Frame", a_FrameName, UIParent);
-	g_Module.FrameCreateComponents(newFrame, a_FrameName);
-	g_Module.FrameReset(newFrame);
+	g_Addon.FrameCreateComponents(newFrame, a_FrameName);
+	g_Addon.FrameReset(newFrame);
 
 	return newFrame;
 end
 
-function g_Module.FrameCreateComponents(a_Frame, a_FrameName)
+function g_Addon.FrameCreateComponents(a_Frame, a_FrameName)
 	a_Frame:SetSize(g_Consts.UI_SIZE_FRAME, g_Consts.UI_SIZE_FRAME);
 	a_Frame:Hide();
 
@@ -33,7 +33,7 @@ function g_Module.FrameCreateComponents(a_Frame, a_FrameName)
 	a_Frame.FrameOverlay:SetPoint("BOTTOMRIGHT", a_Frame, "BOTTOMRIGHT", overlayOffs, -overlayOffs);
 
 	a_Frame.FrameTimer = CreateFrame("Frame", a_FrameName .. "Timer", a_Frame);
-	a_Frame.FrameTimer:SetScript("OnUpdate", g_Module.FrameTimer_OnUpdate);
+	a_Frame.FrameTimer:SetScript("OnUpdate", g_Addon.FrameTimer_OnUpdate);
 
 	a_Frame.FrameTimer.TextTime = a_Frame.FrameTimer:CreateFontString(nil, "OVERLAY", "CatRotationHelper_Font_Normal");
 	a_Frame.FrameTimer.TextTime:SetPoint("CENTER", a_Frame, "CENTER", 0, 0);
@@ -42,7 +42,7 @@ function g_Module.FrameCreateComponents(a_Frame, a_FrameName)
 	a_Frame.FrameTimer.TextStar:SetText("*");
 end
 
-function g_Module.FrameReset(a_Frame)
+function g_Addon.FrameReset(a_Frame)
 	a_Frame.LastStatus     = nil;
 	a_Frame.LastExpiration = nil;
 
@@ -51,34 +51,34 @@ function g_Module.FrameReset(a_Frame)
 
 	a_Frame.FrameCombo:Hide();
 	a_Frame.FrameCombo:SetScript("OnUpdate", nil);
-	a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"));
+	a_Frame.FrameCombo.IconCombo:SetTexture(g_Addon.GetMyImage("Cp.tga"));
 	
 	a_Frame.FrameTimer:Hide();
 	a_Frame.FrameTimer.endTime = nil;
 
 	a_Frame.FrameTimer.TextTime:Hide();
 	a_Frame.FrameTimer.TextStar:Hide();
-	g_Module.FrameUpdateTimerColor(a_Frame, false, false);
+	g_Addon.FrameUpdateTimerColor(a_Frame, false, false);
 end
 
-function g_Module.FrameSetClearcast(a_Frame, a_IsClearcast)
+function g_Addon.FrameSetClearcast(a_Frame, a_IsClearcast)
 	if (a_Frame.m_IsClearcast == a_IsClearcast) then
 		return;
 	end
 	
 	a_Frame.m_IsClearcast = a_IsClearcast;
-	g_Module.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
+	g_Addon.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
 	
 	if (a_IsClearcast) then
-		a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp-Blue.tga"))
-		g_Module.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.TextureSpecial);
+		a_Frame.FrameCombo.IconCombo:SetTexture(g_Addon.GetMyImage("Cp-Blue.tga"))
+		g_Addon.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.TextureSpecial);
 	else
-		a_Frame.FrameCombo.IconCombo:SetTexture(g_Module.GetMyImage("Cp.tga"))
-		g_Module.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.Texture);
+		a_Frame.FrameCombo.IconCombo:SetTexture(g_Addon.GetMyImage("Cp.tga"))
+		g_Addon.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.Texture);
 	end
 end
 
-function g_Module.EffectComboPoint(a_FrameCombo)
+function g_Addon.EffectComboPoint(a_FrameCombo)
 	local elapsed = GetTime() - a_FrameCombo.m_EffectStartTime;
 
 	if (elapsed >= 0.4) then
@@ -101,16 +101,16 @@ function g_Module.EffectComboPoint(a_FrameCombo)
 	a_FrameCombo:SetAlpha(elapsed*2.5);
 end
 
-function g_Module.FrameSetCombo(a_Frame, a_IsCombo)
+function g_Addon.FrameSetCombo(a_Frame, a_IsCombo)
 	if (a_IsCombo == a_Frame.m_IsCombo) then
 		return;
 	end
 	
 	a_Frame.m_IsCombo = a_IsCombo;
 	
-	g_Module.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
+	g_Addon.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
 	
-	a_Frame.FrameCombo:SetScript("OnUpdate", g_Module.EffectComboPoint);
+	a_Frame.FrameCombo:SetScript("OnUpdate", g_Addon.EffectComboPoint);
 	a_Frame.FrameCombo.m_EffectStartTime = GetTime();
 	a_Frame.FrameCombo.m_EffectIsReverse = not a_IsCombo;
 	
@@ -119,7 +119,7 @@ function g_Module.FrameSetCombo(a_Frame, a_IsCombo)
 	end
 end
 
-function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
+function g_Addon.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	if (not a_Texture) then
 		a_Frame.IconSpell:SetTexture(nil);
 		a_Frame.FrameOverlay.IconSpell:SetTexture(nil);
@@ -135,7 +135,7 @@ function g_Module.FrameSetTexture(a_Frame, a_Texture, a_MakeRound)
 	end
 end
 
-function g_Module.FrameUpdateTimerColor(a_Frame, a_IsClearcast, a_IsCombo)
+function g_Addon.FrameUpdateTimerColor(a_Frame, a_IsClearcast, a_IsCombo)
 	if (a_IsClearcast) then
 		if (a_IsCombo) then
 			a_Frame.FrameTimer.TextTime:SetTextColor(0.40, 0.70, 0.95);
@@ -155,15 +155,15 @@ function g_Module.FrameUpdateTimerColor(a_Frame, a_IsClearcast, a_IsCombo)
 	end
 end
 
-function g_Module.FrameDrawInvisible(a_Frame)
+function g_Addon.FrameDrawInvisible(a_Frame)
 	a_Frame.IconSpell:SetVertexColor(0.00, 0.00, 0.00, 0.00);
 end
 
-function g_Module.FrameDrawFaded(a_Frame)
+function g_Addon.FrameDrawFaded(a_Frame)
 	a_Frame.IconSpell:SetVertexColor(0.35, 0.35, 0.35, 0.70);
 end
 
-function g_Module.FrameDrawActive(a_Frame)
+function g_Addon.FrameDrawActive(a_Frame)
 	a_Frame.IconSpell:SetVertexColor(1.00, 1.00, 1.00, 1.00);
 end
 
@@ -221,7 +221,7 @@ end
 -- \param a_Frames		- Frame list to reposition
 -- \param a_Box			- Group box for frames. Affects group position.
 -- \param a_Angle		- Angle, in degrees (0deg = 3hours, 90deg = 0hours, 180deg = 9hours, 270deg = 6hours)
-function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
+function g_Addon.FramesSetPosition(a_Frames, a_Box, a_Angle)
 	a_Angle = math.rad(a_Angle);
 
 	local framesCX = #a_Frames;
@@ -246,16 +246,16 @@ function g_Module.FramesSetPosition(a_Frames, a_Box, a_Angle)
 	end
 end
 
-function g_Module.FrameBox_LoadSettings(a_FrameBox)
-	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
-	local frameList = g_Module.FrameLists[a_FrameBox.m_Index];
+function g_Addon.FrameBox_LoadSettings(a_FrameBox)
+	local settings = g_Addon.Settings.Frames[a_FrameBox.m_Index];
+	local frameList = g_Addon.FrameLists[a_FrameBox.m_Index];
 
 	-- Location
 	a_FrameBox:ClearAllPoints();
 	a_FrameBox:SetPoint(settings.LocationFrmPoint, UIParent, settings.LocationScrPoint, settings.LocationX, settings.LocationY);
 	
 	-- Angle
-	g_Module.FramesSetPosition(frameList, a_FrameBox, settings.Angle);
+	g_Addon.FramesSetPosition(frameList, a_FrameBox, settings.Angle);
 	
 	-- Scale
 	for _, frame in pairs(frameList) do
@@ -265,8 +265,8 @@ function g_Module.FrameBox_LoadSettings(a_FrameBox)
 	a_FrameBox:SetScale(settings.Scale);
 end
 
-function g_Module.FrameBox_SaveSettings(a_FrameBox)
-	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
+function g_Addon.FrameBox_SaveSettings(a_FrameBox)
+	local settings = g_Addon.Settings.Frames[a_FrameBox.m_Index];
 	
 	local locationFrmPoint, _, locationScrPoint, locationX, locationY = a_FrameBox:GetPoint();
 	settings.LocationX = locationX;
@@ -275,25 +275,25 @@ function g_Module.FrameBox_SaveSettings(a_FrameBox)
 	settings.LocationScrPoint = locationScrPoint;
 end
 
-function g_Module.FrameBoxes_LoadSettings()
-	for _, frameBox in pairs(g_Module.FrameBoxes) do
-		g_Module.FrameBox_LoadSettings(frameBox);
+function g_Addon.FrameBoxes_LoadSettings()
+	for _, frameBox in pairs(g_Addon.FrameBoxes) do
+		g_Addon.FrameBox_LoadSettings(frameBox);
 	end
 end
 
-function g_Module.FrameBox_OnClick(a_FrameBox)
-	local settings = g_Module.Settings.Frames[a_FrameBox.m_Index];
+function g_Addon.FrameBox_OnClick(a_FrameBox)
+	local settings = g_Addon.Settings.Frames[a_FrameBox.m_Index];
 
 	settings.Angle = (settings.Angle + 90) % 360;
-	g_Module.FrameBox_LoadSettings(a_FrameBox);
+	g_Addon.FrameBox_LoadSettings(a_FrameBox);
 end
 
-function g_Module.FrameBox_OnDragStop(a_FrameBox)
+function g_Addon.FrameBox_OnDragStop(a_FrameBox)
 	a_FrameBox:StopMovingOrSizing();
-	g_Module.FrameBox_SaveSettings(a_FrameBox);
+	g_Addon.FrameBox_SaveSettings(a_FrameBox);
 end
 
-function g_Module.FrameTimer_FormatTime(a_Time)
+function g_Addon.FrameTimer_FormatTime(a_Time)
 	if (a_Time >= 60) then
 		return ceil(a_Time / 60) .. "m";
 	elseif (a_Time >= 1) then
@@ -303,13 +303,13 @@ function g_Module.FrameTimer_FormatTime(a_Time)
 	end
 end
 
-function g_Module.FrameTimer_OnUpdate(a_Frame)
+function g_Addon.FrameTimer_OnUpdate(a_Frame)
 	local remainingTime = a_Frame.endTime - GetTime();
 
 	if (remainingTime <= 0) then
-		g_Module.FrameSetStatus(a_Frame:GetParent(), g_Consts.STATUS_READY, nil, true);
+		g_Addon.FrameSetStatus(a_Frame:GetParent(), g_Consts.STATUS_READY, nil, true);
 	elseif (remainingTime <= crhCounterStartTime) then
-		a_Frame.TextTime:SetText(g_Module.FrameTimer_FormatTime(remainingTime));
+		a_Frame.TextTime:SetText(g_Addon.FrameTimer_FormatTime(remainingTime));
 		a_Frame.TextTime:Show();
 		a_Frame.TextStar:Hide();
 	else
@@ -318,7 +318,7 @@ function g_Module.FrameTimer_OnUpdate(a_Frame)
 	end
 end
 
-function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
+function g_Addon.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 	local logic = a_Frame.m_CrhLogic;
 	if (nil == logic.Type) then
 		-- Empty frame
@@ -330,7 +330,7 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 	end
 
 	if (g_Consts.STATUS_READY == a_Status) then
-		g_Module.FrameDrawFaded(a_Frame);
+		g_Addon.FrameDrawFaded(a_Frame);
 
 		a_Frame.FrameTimer:Hide();
 
@@ -338,27 +338,27 @@ function g_Module.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 			a_Frame.FrameOverlay.animOut:Play();
 		end
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
-		g_Module.FrameDrawActive(a_Frame);
+		g_Addon.FrameDrawActive(a_Frame);
 
 		a_Frame.FrameTimer.endTime = a_Expiration;
-		g_Module.FrameTimer_OnUpdate(a_Frame.FrameTimer);
+		g_Addon.FrameTimer_OnUpdate(a_Frame.FrameTimer);
 		a_Frame.FrameTimer:Show()
 
 		if (a_ShowEffects) then
 			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_BURSTING == a_Status) then
-		g_Module.FrameDrawFaded(a_Frame);
+		g_Addon.FrameDrawFaded(a_Frame);
 
 		a_Frame.FrameTimer.endTime = a_Expiration;
-		g_Module.FrameTimer_OnUpdate(a_Frame.FrameTimer);
+		g_Addon.FrameTimer_OnUpdate(a_Frame.FrameTimer);
 		a_Frame.FrameTimer:Show()
 
 		if (a_ShowEffects) then
 			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_WAITING == a_Status) then
-		g_Module.FrameDrawInvisible(a_Frame);
+		g_Addon.FrameDrawInvisible(a_Frame);
 
 		a_Frame.FrameTimer:Hide();
 	end

@@ -1,19 +1,19 @@
-local THIS_ADDON_NAME="CatRotationHelper";
-local g_Module = getfenv(0)[THIS_ADDON_NAME];
-local g_Consts = g_Module.Constants;
+local THIS_ADDON_NAME=...;
+local g_Addon = getfenv(0)[THIS_ADDON_NAME];
+local g_Consts = g_Addon.Constants;
 
-g_Module.LogicUnusedFrame =
+g_Addon.LogicUnusedFrame =
 {
 	Type			= nil,
 };
 
-function g_Module.IsLogicAvailable(a_Logic)
+function g_Addon.IsLogicAvailable(a_Logic)
 	if (nil ~= a_Logic.IsAvailable) then
 		return a_Logic.IsAvailable(a_Logic);
 	end
 	
 	if (nil ~= a_Logic.TalentID) then
-		return g_Module.IsTalentTaken(a_Logic.TalentID);
+		return g_Addon.IsTalentTaken(a_Logic.TalentID);
 	end
 	
 	if (nil ~= a_Logic.SkillID) then
@@ -27,25 +27,25 @@ function g_Module.IsLogicAvailable(a_Logic)
 	return false;
 end
 
-function g_Module.AddLogicIfAvailable(a_Table, a_Logic)
-	if (not g_Module.IsLogicAvailable(a_Logic)) then
+function g_Addon.AddLogicIfAvailable(a_Table, a_Logic)
+	if (not g_Addon.IsLogicAvailable(a_Logic)) then
 		return;
 	end
 	
 	table.insert(a_Table, a_Logic);
 end
 
-function g_Module.AddLogicFirstAvailable(a_Table, ...)
+function g_Addon.AddLogicFirstAvailable(a_Table, ...)
 	local logicList = {...};
 	for _, logic in pairs(logicList) do
-		if (g_Module.IsLogicAvailable(logic)) then
+		if (g_Addon.IsLogicAvailable(logic)) then
 			table.insert(a_Table, logic);
 			return;
 		end
 	end
 end
 
-function g_Module.AddLogicUnused(a_Table, a_MinCount)
+function g_Addon.AddLogicUnused(a_Table, a_MinCount)
 	local currentCount = #a_Table;
 	if (currentCount >= a_MinCount) then
 		return;
@@ -53,32 +53,32 @@ function g_Module.AddLogicUnused(a_Table, a_MinCount)
 	
 	local unusedSlots = a_MinCount - currentCount;
 	for i = 1, unusedSlots do
-		table.insert(a_Table, g_Module.LogicUnusedFrame);
+		table.insert(a_Table, g_Addon.LogicUnusedFrame);
 	end
 end
 
-function g_Module.FrameUpdateFromLogic(a_Frame, a_ShowEffects)
+function g_Addon.FrameUpdateFromLogic(a_Frame, a_ShowEffects)
 	local logic = a_Frame.m_CrhLogic;
 
 	if     (nil == logic.Type) then
 		-- Empty frame
 		return;
 	elseif (g_Consts.LOGIC_TYPE_SKILL == logic.Type) then
-		local status, expiration = g_Module.CalcFrameFromSkill(logic.SpellID);
-		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+		local status, expiration = g_Addon.CalcFrameFromSkill(logic.SpellID);
+		g_Addon.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	elseif (g_Consts.LOGIC_TYPE_BUFF == logic.Type) then
-		local status, expiration = g_Module.CalcFrameFromBuff(logic.SpellID);
-		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+		local status, expiration = g_Addon.CalcFrameFromBuff(logic.SpellID);
+		g_Addon.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	elseif (g_Consts.LOGIC_TYPE_DEBUFF == logic.Type) then
-		local status, expiration = g_Module.CalcFrameFromDebuff(logic.SpellID, logic.MinimumStacks, logic.CastByMe);
-		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+		local status, expiration = g_Addon.CalcFrameFromDebuff(logic.SpellID, logic.MinimumStacks, logic.CastByMe);
+		g_Addon.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	elseif (g_Consts.LOGIC_TYPE_BURST == logic.Type) then
-		local status, expiration = g_Module.CalcFrameFromBurst(logic.SpellID);
-		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+		local status, expiration = g_Addon.CalcFrameFromBurst(logic.SpellID);
+		g_Addon.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	elseif (g_Consts.LOGIC_TYPE_PROC == logic.Type) then
-		local status, expiration = g_Module.CalcFrameFromProc(logic.SpellID);
-		g_Module.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
+		local status, expiration = g_Addon.CalcFrameFromProc(logic.SpellID);
+		g_Addon.FrameSetStatus(a_Frame, status, expiration, a_ShowEffects);
 	else
-		g_Module.PrintToChat("Unknown frame logic Type: " .. logic.Type);
+		g_Addon.PrintToChat("Unknown frame logic Type: " .. logic.Type);
 	end
 end
