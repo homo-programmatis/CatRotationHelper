@@ -27,7 +27,7 @@ g_Module.LogicDruidCatThrash =
 	TextureSpecial	= g_Module.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 106830,
-	SkillID 		= 77758,
+	SkillID 		= 106832,
 	CastByMe		= true,
 };
 
@@ -58,6 +58,40 @@ g_Module.LogicDruidCatPredatorySwiftness =
 	SkillID			= 16974,
 };
 
+g_Module.LogicDruidCatLunarInspiration =
+{
+	Texture			= g_Module.GetMyImage("Moonfire.tga"),
+	TextureSpecial	= g_Module.GetMyImage("Moonfire-Blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
+	SpellID			= 155625,
+	TalentID		= 22365,
+};
+
+g_Module.LogicDruidCatIncarnation =
+{
+	Texture			= g_Module.GetMyImage("Incarnation.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 102543,
+	TalentID		= 21705,
+};
+
+g_Module.LogicDruidCatElunesGuidance =
+{
+	Texture			= g_Module.GetMyImage("ElunesGuidance.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 202060,
+	TalentID		= 22370,
+};
+
+g_Module.LogicDruidCatBrutalSlash =
+{
+	Texture			= g_Module.GetMyImage("BrutalSlash.tga"),
+	TextureSpecial	= g_Module.GetMyImage("BrutalSlash-Blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 202028,
+	TalentID		= 21646,
+};
+
 -----------------------------------
 -- Bear
 -----------------------------------
@@ -71,17 +105,24 @@ g_Module.LogicDruidBearMangle =
 g_Module.LogicDruidBearThrash =
 {
 	Texture			= g_Module.GetMyImage("Thrash.tga"),
-	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 77758,
-	CastByMe		= true,
+	SkillID			= 106832,
 };
 
-g_Module.LogicDruidBearLacerate =
+g_Module.LogicDruidBearGalacticGuardian =
 {
-	Texture			= g_Module.GetMyImage("Lacerate.tga"),
-	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
-	SpellID			= 33745,
-	CastByMe		= true,
+	Texture			= g_Module.GetMyImage("Moonfire.tga"),
+	Type			= g_Consts.LOGIC_TYPE_PROC,
+	SpellID			= 213708,
+	TalentID		= 22421,
+};
+
+g_Module.LogicDruidBearPulverize =
+{
+	Texture			= g_Module.GetMyImage("Pulverize.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BUFF,
+	SpellID			= 158792,
 };
 
 g_Module.LogicDruidBearBarkskin =
@@ -89,6 +130,30 @@ g_Module.LogicDruidBearBarkskin =
 	Texture			= g_Module.GetMyImage("Barkskin.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 22812,
+};
+
+g_Module.LogicDruidBearIncarnation =
+{
+	Texture			= g_Module.GetMyImage("Incarnation.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 102558,
+	TalentID		= 21706,
+};
+
+g_Module.LogicDruidBearLunarBeam =
+{
+	Texture			= g_Module.GetMyImage("LunarBeam.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 204066,
+	TalentID		= 22427,
+};
+
+g_Module.LogicDruidBearBristlingFur =
+{
+	Texture			= g_Module.GetMyImage("BristlingFur.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 155835,
+	TalentID		= 22425,
 };
 
 -----------------------------------
@@ -105,7 +170,7 @@ g_Module.LogicDruidBerserk =
 {
 	Texture			= g_Module.GetMyImage("Berserk.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
-	SpellID			= 106952,
+	SpellID			= 106951,
 };
 
 g_Module.LogicDruidWildCharge =
@@ -113,4 +178,12 @@ g_Module.LogicDruidWildCharge =
 	Texture			= g_Module.GetMyImage("FeralCharge.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 102401,
+};
+
+g_Module.LogicDruidRenewal =
+{
+	Texture			= g_Module.GetMyImage("Renewal.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 108238,
+	TalentID		= 19283,
 };
