@@ -21,7 +21,7 @@ g_Addon.Logics.Druid_BristlingFur =
 	Texture			= g_Addon.GetMyImage("BristlingFur.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 155835,
-	TalentID		= 22425,
+	TalentID		= 22418,
 };
 
 g_Addon.Logics.Druid_BrutalSlash =
