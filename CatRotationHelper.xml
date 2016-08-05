@@ -11,6 +11,16 @@
 						</Anchor>
 					</Anchors>
 				</FontString>
+
+				<FontString inherits="GameFontNormalLarge" text="Settings for specific icons will be available in future version of this addon">
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset>
+								<AbsDimension x="0" y="60"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
@@ -29,116 +39,6 @@
 					<OnClick function="CatRotationHelperUnlock"/>
 				</Scripts>
 			</Button>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCat" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="20" y="-120"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsClearcast" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-150"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCatCombo" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-180"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCatBerserk" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-210"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCatPredators" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-240"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCatCharge" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-270"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsCatSurvival" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="25" y="-300"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsBear" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="10" y="-120"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsBearLacerate" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-150"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsBearBerserk" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-180"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
-
-			<CheckButton name="CatRotationHelper_ChkOptionsBearSurvival" inherits="OptionsCheckButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOP">
-						<Offset>
-							<AbsDimension x="15" y="-210"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</CheckButton>
 
 			<Slider name="CatRotationHelper_SldOptionsMainScale" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
 				<Anchors>

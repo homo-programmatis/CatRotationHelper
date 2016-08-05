@@ -10,22 +10,6 @@ local g_IsMovingFrames = false;
 local g_IsActive = true;
 local g_LastShapeshiftForm = nil;
 
--- saved variables
-crhCp = true;
-crhLacCounter = true;
-crhEnableClearcast = true;
-crhShowBear = true;
-crhShowCat = true;
-crhShowCatSurvival = true;
-crhShowBearSurvival = true;
-crhCounterStartTime = 30;
-
--- FIXME: Settings not working
-crhShowCatBerserk = true;
-crhShowFeralCharge = true;
-crhShowBearBerserk = true;
-crhShowPredatorsSwiftness = true;
-
 local function UpdateFrames(a_Type, a_ShowEffects)
 	if (not g_IsActive) then
 		return;
@@ -46,10 +30,6 @@ local function UpdateComboPoints()
 end
 
 local function UpdateClearcast()
-	if (not crhEnableClearcast) then
-		return;
-	end
-
 	isBuffPresent = g_Addon.GetPlayerBuffInfo(CRH_SPELLID_CLEARCAST);
 	if (1 == GetShapeshiftForm()) then
 		-- Ignore clearcast on bear (can happen when feral is shapeshifted to bear)
@@ -311,10 +291,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
 		self:RegisterEvent("UNIT_FACTION");
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
-
-		if(crhCp) then
-			self:RegisterEvent("UNIT_POWER");
-		end
+		self:RegisterEvent("UNIT_POWER");
 
 		g_Addon.OnPackageChanged();
 	elseif(event == "ADDON_LOADED" and arg1 == "CatRotationHelper") then
