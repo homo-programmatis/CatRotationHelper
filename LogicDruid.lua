@@ -51,7 +51,7 @@ g_Addon.Logics.Druid_GalacticGuardian =
 g_Addon.Logics.Druid_Incarnation_Bear =
 {
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
-	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102558,
 	TalentID		= 21706,
 };
@@ -59,7 +59,7 @@ g_Addon.Logics.Druid_Incarnation_Bear =
 g_Addon.Logics.Druid_Incarnation_Cat =
 {
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
-	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102543,
 	TalentID		= 21705,
 };
