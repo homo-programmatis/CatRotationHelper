@@ -308,7 +308,7 @@ function g_Addon.FrameTimer_OnUpdate(a_FrameTimer)
 
 	if (remainingTime <= 0) then
 		g_Addon.FrameSetStatus(a_FrameTimer:GetParent(), g_Consts.STATUS_READY, nil, true);
-	elseif (remainingTime <= crhCounterStartTime) then
+	elseif (remainingTime <= g_Consts.MAX_TIMER_SECS) then
 		a_FrameTimer.TextTime:SetText(g_Addon.FrameTimer_FormatTime(remainingTime));
 		a_FrameTimer.TextTime:Show();
 		a_FrameTimer.TextStar:Hide();

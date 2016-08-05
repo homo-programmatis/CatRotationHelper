@@ -6,7 +6,7 @@ local g_Consts = g_Addon.Constants;
 local CRH_SPELLID_CLEARCAST				= 16870;
 
 -- state variables
-local unlocked = false;
+local g_IsMovingFrames = false;
 local g_IsActive = true;
 local g_LastShapeshiftForm = nil;
 
@@ -174,7 +174,7 @@ function CatRotationHelperUnlock()
 	CatRotationHelper_DlgMoveHint:Show();
 	
 	HideUIPanel(InterfaceOptionsFrame)
-	unlocked = true;
+	g_IsMovingFrames = true;
 
 	-- Hide effects
 	CatRotationHelper_TimerLacerate:Hide();
@@ -185,8 +185,10 @@ function CatRotationHelperUnlock()
 end
 
 function CatRotationHelperLock()
-	if(not unlocked) then
+	if (not g_IsMovingFrames) then
 		return
+	else
+		g_IsMovingFrames = false;
 	end
 
 	for _, frameBox in pairs(g_Addon.FrameBoxes) do
@@ -196,8 +198,6 @@ function CatRotationHelperLock()
 	end
 
 	CatRotationHelper_DlgMoveHint:Hide();
-
-	unlocked = false;
 
 	g_Addon.OnPackageChanged();
 end
@@ -278,9 +278,8 @@ local function InitializeAddon()
 end
 
 -- Event Handling
-function CatRotationHelper_EntryPoint_OnEvent(self, event, ...)
-	local arg1 = ...
-	if(unlocked) then
+function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
+	if (g_IsMovingFrames) then
 		return
 	end
 

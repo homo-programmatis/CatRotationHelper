@@ -43,6 +43,7 @@ g_Addon.Constants = MakeConstTable
 	-- UI constants
 	UI_SIZE_FRAME		= 30,
 	UI_SIZE_FRAME_MARGIN = 5,
+	MAX_TIMER_SECS      = 30,
 	
 	-- Various other constants
 	GCD_LENGTH			= 1.6,
