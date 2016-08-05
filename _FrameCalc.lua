@@ -94,7 +94,7 @@ function g_Addon.CalcFrameFromProc(a_SpellID)
 	local isBuffPresent, expTime = g_Addon.GetPlayerBuffInfo(a_SpellID);
 	if (isBuffPresent) then
 		-- Proc is up
-		return g_Consts.STATUS_COUNTING, expTime;
+		return g_Consts.STATUS_PROC, expTime;
 	end
 	
 	return g_Consts.STATUS_WAITING, nil;

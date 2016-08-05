@@ -29,6 +29,7 @@ g_Addon.Constants = MakeConstTable
 	STATUS_READY		= 2,
 	STATUS_BURSTING		= 3,
 	STATUS_WAITING		= 4,
+	STATUS_PROC         = 5,
 	
 	UI_SIZE_FRAME		= 30,
 	UI_SIZE_FRAME_MARGIN = 5,

@@ -303,19 +303,33 @@ function g_Addon.FrameTimer_FormatTime(a_Time)
 	end
 end
 
-function g_Addon.FrameTimer_OnUpdate(a_Frame)
-	local remainingTime = a_Frame.endTime - GetTime();
+function g_Addon.FrameTimer_OnUpdate(a_FrameTimer)
+	local remainingTime = a_FrameTimer.endTime - GetTime();
 
 	if (remainingTime <= 0) then
-		g_Addon.FrameSetStatus(a_Frame:GetParent(), g_Consts.STATUS_READY, nil, true);
+		g_Addon.FrameSetStatus(a_FrameTimer:GetParent(), g_Consts.STATUS_READY, nil, true);
 	elseif (remainingTime <= crhCounterStartTime) then
-		a_Frame.TextTime:SetText(g_Addon.FrameTimer_FormatTime(remainingTime));
-		a_Frame.TextTime:Show();
-		a_Frame.TextStar:Hide();
+		a_FrameTimer.TextTime:SetText(g_Addon.FrameTimer_FormatTime(remainingTime));
+		a_FrameTimer.TextTime:Show();
+		a_FrameTimer.TextStar:Hide();
 	else
-		a_Frame.TextTime:Hide();
-		a_Frame.TextStar:Show();
+		a_FrameTimer.TextTime:Hide();
+		a_FrameTimer.TextStar:Show();
 	end
+end
+
+function g_Addon.FrameShowTimer(a_Frame, a_Expiration)
+	a_Frame.FrameTimer.endTime = a_Expiration;
+	g_Addon.FrameTimer_OnUpdate(a_Frame.FrameTimer);
+	a_Frame.FrameTimer:SetScript("OnUpdate", g_Addon.FrameTimer_OnUpdate);
+	a_Frame.FrameTimer:Show();
+end
+
+function g_Addon.FrameShowText(a_Frame, a_Text)
+	a_Frame.FrameTimer.TextTime:SetText(a_Text);
+	a_Frame.FrameTimer.TextTime:Show();
+	a_Frame.FrameTimer:SetScript("OnUpdate", nil);
+	a_Frame.FrameTimer:Show();
 end
 
 function g_Addon.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
@@ -331,7 +345,6 @@ function g_Addon.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 
 	if (g_Consts.STATUS_READY == a_Status) then
 		g_Addon.FrameDrawFaded(a_Frame);
-
 		a_Frame.FrameTimer:Hide();
 
 		if (a_ShowEffects) then
@@ -339,28 +352,28 @@ function g_Addon.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 		end
 	elseif (g_Consts.STATUS_COUNTING == a_Status) then
 		g_Addon.FrameDrawActive(a_Frame);
-
-		a_Frame.FrameTimer.endTime = a_Expiration;
-		g_Addon.FrameTimer_OnUpdate(a_Frame.FrameTimer);
-		a_Frame.FrameTimer:Show()
+		g_Addon.FrameShowTimer(a_Frame, a_Expiration);
 
 		if (a_ShowEffects) then
 			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_BURSTING == a_Status) then
 		g_Addon.FrameDrawFaded(a_Frame);
-
-		a_Frame.FrameTimer.endTime = a_Expiration;
-		g_Addon.FrameTimer_OnUpdate(a_Frame.FrameTimer);
-		a_Frame.FrameTimer:Show()
+		g_Addon.FrameShowTimer(a_Frame, a_Expiration);
 
 		if (a_ShowEffects) then
 			a_Frame.FrameOverlay.animIn:Play();
 		end
 	elseif (g_Consts.STATUS_WAITING == a_Status) then
-		g_Addon.FrameDrawInvisible(a_Frame);
+		g_Addon.FrameDrawActive(a_Frame);
+		g_Addon.FrameShowText(a_Frame, "?");
+	elseif (g_Consts.STATUS_PROC == a_Status) then
+		g_Addon.FrameDrawFaded(a_Frame);
+		g_Addon.FrameShowTimer(a_Frame, a_Expiration);
 
-		a_Frame.FrameTimer:Hide();
+		if (a_ShowEffects) then
+			a_Frame.FrameOverlay.animIn:Play();
+		end
 	end
 
 	a_Frame.LastStatus = a_Status;
