@@ -282,16 +282,22 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 		UpdateFrames(g_Consts.LOGIC_TYPE_BURST, true);
 	elseif (event == "UPDATE_SHAPESHIFT_FORM") then
 		g_Addon.OnShapeShift();
+	elseif (event == "PLAYER_EQUIPMENT_CHANGED") then
+		if (INVSLOT_MAINHAND == arg1) then
+			-- Handle possible artifact swap
+			g_Addon.ReloadPackage();
+		end
 	elseif(event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_FACTION" and arg1 == "target")) then
 		-- checking UNIT_FACTION so starting a duel behaves like changing target
 		g_Addon.OnTargetSwitched();
 	elseif(event == "PLAYER_TALENT_UPDATE") then
-		self:RegisterEvent("UNIT_AURA");
+		self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 		self:RegisterEvent("PLAYER_TARGET_CHANGED");
-		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
-		self:RegisterEvent("UNIT_FACTION");
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
+		self:RegisterEvent("UNIT_AURA");
+		self:RegisterEvent("UNIT_FACTION");
 		self:RegisterEvent("UNIT_POWER");
+		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
 
 		g_Addon.OnPackageChanged();
 	elseif(event == "ADDON_LOADED" and arg1 == "CatRotationHelper") then

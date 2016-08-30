@@ -2,6 +2,13 @@ local THIS_ADDON_NAME=...;
 local g_Addon = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Addon.Constants;
 
+g_Addon.Logics.Druid_AshamanesFrenzy =
+{
+	Texture			= g_Addon.GetMyImage("AshamanesFrenzy.tga"),
+	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	SpellID			= 210722,
+};
+
 g_Addon.Logics.Druid_Barkskin =
 {
 	Texture			= g_Addon.GetMyImage("Barkskin.tga"),
@@ -101,6 +108,13 @@ g_Addon.Logics.Druid_Pulverize =
 	Texture			= g_Addon.GetMyImage("Pulverize.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BUFF,
 	SpellID			= 158792,
+};
+
+g_Addon.Logics.Druid_RageOfTheSleeper =
+{
+	Texture			= g_Addon.GetMyImage("RageOfTheSleeper.tga"),
+	Type			= g_Consts.LOGIC_TYPE_BURST,
+	SpellID			= 200851,
 };
 
 g_Addon.Logics.Druid_Rake =
