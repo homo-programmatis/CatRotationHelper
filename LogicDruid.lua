@@ -90,7 +90,7 @@ g_Addon.Logics.Druid_Mangle_Bear =
 
 g_Addon.Logics.Druid_PredatorySwiftness =
 {
-	Texture			= g_Addon.GetMyImage("PredatoryStrikes.tga"),
+	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
 	SkillID			= 16974,
