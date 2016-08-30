@@ -23,6 +23,15 @@ g_Addon.Logics.Druid_Berserk =
 	SpellID			= 106951,
 };
 
+g_Addon.Logics.Druid_Bloodtalons =
+{
+	Texture			= g_Addon.GetMyImage("Bloodtalons.tga"),
+	TextureSpecial	= g_Addon.GetMyImage("Bloodtalons-blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_PROC,
+	SpellID			= 145152,
+	TalentID		= 21649,
+};
+
 g_Addon.Logics.Druid_BristlingFur =
 {
 	Texture			= g_Addon.GetMyImage("BristlingFur.tga"),
@@ -101,6 +110,16 @@ g_Addon.Logics.Druid_PredatorySwiftness =
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
 	SkillID			= 16974,
+	IsAvailable		= function() return not g_Addon.IsTalentTaken(21649); end,
+};
+
+g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
+{
+	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
+	TextureSpecial	= g_Addon.GetMyImage("PredatorySwiftness-blue.tga"),
+	Type			= g_Consts.LOGIC_TYPE_PROC,
+	SpellID			= 69369,
+	TalentID		= 21649,
 };
 
 g_Addon.Logics.Druid_Pulverize =

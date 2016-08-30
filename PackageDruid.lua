@@ -26,6 +26,8 @@ local function GetPackage_DruidCat()
 	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_Rake);
 	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_LunarInspiration);
 	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_Rip);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons);
+	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_Bloodtalons);
 	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_Thrash_Cat);
 	g_Addon.AddLogicIfAvailable(logicList, g_Addon.Logics.Druid_BrutalSlash);
 	g_Addon.AddLogicUnused(logicList, 5);
