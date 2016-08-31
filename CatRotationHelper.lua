@@ -85,13 +85,21 @@ function g_Addon.ShowAllFrames(a_IsShow)
 	end
 end
 
-function g_Addon.ReloadPackage(a_NoUpdate)
+function g_Addon.ReloadPackage(a_Flags)
+	local isSettings = a_Flags and a_Flags.IsSettings;
+	
 	g_Addon.FrameDeallocAll();
 	g_IsActive = false;
-	g_LastShapeshiftForm = GetShapeshiftForm();
+	
+	if (isSettings) then
+		-- A different package can be loaded for the purposes of settings
+		g_LastShapeshiftForm = nil;
+	else
+		g_LastShapeshiftForm = GetShapeshiftForm();
+	end
 
 	local playerClass = select(2, UnitClass("player"));
-	g_Addon.ActivePackage = g_Addon.GetPackage[playerClass]();
+	g_Addon.ActivePackage = g_Addon.GetPackage[playerClass](a_Flags);
 	
 	for logicListIdx, logicList in pairs(g_Addon.ActivePackage.LogicLists) do
 		local frameList = {};
@@ -109,7 +117,7 @@ function g_Addon.ReloadPackage(a_NoUpdate)
 	
 	g_Addon.FrameBoxes_LoadSettings();
 
-	if (not a_NoUpdate) then
+	if (not isSettings) then
 		-- Simulate target switching to decide whether to show/update frames
 		g_Addon.OnTargetSwitched();
 	end
@@ -173,7 +181,7 @@ function CatRotationHelperUnlock()
 	CatRotationHelperSetCPEffects(g_Addon.FrameLists[1], 0);
 
 	-- Show all frames in their default state, even if they should be currently hidden
-	g_Addon.ReloadPackage(true);
+	g_Addon.ReloadPackage({IsSettings = true});
 end
 
 function CatRotationHelperLock()

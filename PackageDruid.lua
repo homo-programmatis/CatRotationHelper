@@ -113,12 +113,30 @@ local function GetPackage_DruidOther()
 	return newPackage;
 end
 
-g_Addon.GetPackage["DRUID"] = function()
-	local shapeshiftForm = GetShapeshiftForm();
+-- Figure which shapeshift icons to use for configuring frame positions
+local function GetSettingsShapeshift()
+	local spec = GetSpecialization();
+	
+	if (g_Consts.SPEC_DRUID_FERAL == spec) then
+		-- Feral's primary shapeshift is Cat
+		return g_Consts.SHAPE_DRUID_CAT;
+	elseif (g_Consts.SPEC_DRUID_GUARDIAN == spec) then
+		-- Guardian's primary shapeshift is Bear
+		return g_Consts.SHAPE_DRUID_BEAR;
+	end
 
-	if (1 == shapeshiftForm) then
+	return 0;
+end
+
+g_Addon.GetPackage["DRUID"] = function(a_Flags)
+	local shapeshiftForm = GetShapeshiftForm();
+	if (a_Flags and a_Flags.IsSettings) then
+		shapeshiftForm = GetSettingsShapeshift();
+	end
+
+	if (g_Consts.SHAPE_DRUID_BEAR == shapeshiftForm) then
 		return GetPackage_DruidBear();
-	elseif (2 == shapeshiftForm) then
+	elseif (g_Consts.SHAPE_DRUID_CAT == shapeshiftForm) then
 		return GetPackage_DruidCat();
 	else
 		return GetPackage_DruidOther();
