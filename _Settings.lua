@@ -22,7 +22,7 @@ end
 function g_Addon.Settings_ComposeDefaults()
 	local defaultSettings = {};
 
-	defaultSettings.Version = 1;
+	defaultSettings.Version = 2;
 	
 	defaultSettings.Frames =
 	{
@@ -30,13 +30,20 @@ function g_Addon.Settings_ComposeDefaults()
 		g_Addon.Settings_Frame_ComposeDefault("RIGHT", "CENTER", -100,    0, 270),
 		g_Addon.Settings_Frame_ComposeDefault("LEFT",  "CENTER",  100,    0, 270),
 	};
+	
+	defaultSettings.DisabledIcons = {};
 
 	return defaultSettings;
 end
 
 function g_Addon.Settings_Repair(a_Settings)
-	if (a_Settings.Version ~= 1) then
+	if (nil == a_Settings.Version) then
 		return false;
+	end
+	
+	if (1 == a_Settings.Version) then
+		a_Settings.DisabledIcons = {};
+		a_Settings.Version = 2;
 	end
 	
 	return true;

@@ -2,7 +2,7 @@ local THIS_ADDON_NAME=...;
 local g_Addon = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Addon.Constants;
 
-local function GetPackage_DruidCat()
+local function GetPackage_DruidCat(a_Flags)
 	local newPackage =
 	{
 		GetComboPoints = function()
@@ -21,38 +21,38 @@ local function GetPackage_DruidCat()
 	
 	-- Main box
 	logicList = newPackage.LogicLists[1];
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_TigersFury);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_SavageRoar);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Rake);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_LunarInspiration);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Rip);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Bloodtalons);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Thrash_Cat);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_BrutalSlash);
-	g_Addon.Logic_AddUnused(logicList, 5);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_TigersFury);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_SavageRoar);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Rake);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_LunarInspiration);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Rip);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Bloodtalons);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Thrash_Cat);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_BrutalSlash);
+	g_Addon.Logic_AddUnused   (logicList, a_Flags, 5);
 
 	-- Events box
 	logicList = newPackage.LogicLists[2];
-	g_Addon.Logic_AddFirstGood(logicList, g_Addon.Logics.Druid_Incarnation_Cat, g_Addon.Logics.Druid_Berserk, g_Addon.Logics.Druid_Incarnation_Bear); -- BearIncarnation - In case of Guardian in cat form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_AshamanesFrenzy);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_ElunesGuidance);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_WildCharge);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_PredatorySwiftness);
+	g_Addon.Logic_AddFirstGood(logicList, a_Flags, g_Addon.Logics.Druid_Incarnation_Cat, g_Addon.Logics.Druid_Berserk, g_Addon.Logics.Druid_Incarnation_Bear); -- BearIncarnation - In case of Guardian in cat form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_AshamanesFrenzy);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_ElunesGuidance);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_WildCharge);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_PredatorySwiftness);
 
 	-- Survival box
 	logicList = newPackage.LogicLists[3];
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_SurvivalInstincts);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_RageOfTheSleeper);   -- In case of Guardian in cat form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Barkskin);           -- In case of Guardian in cat form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Renewal);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_LunarBeam);          -- In case of Guardian in cat form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_BristlingFur);       -- In case of Guardian in cat form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_SurvivalInstincts);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_RageOfTheSleeper);   -- In case of Guardian in cat form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Barkskin);           -- In case of Guardian in cat form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Renewal);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_LunarBeam);          -- In case of Guardian in cat form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_BristlingFur);       -- In case of Guardian in cat form
 	
 	return newPackage;
 end
 
-local function GetPackage_DruidBear()
+local function GetPackage_DruidBear(a_Flags)
 	local newPackage =
 	{
 		GetComboPoints = function()
@@ -76,32 +76,32 @@ local function GetPackage_DruidBear()
 	
 	-- Main box
 	logicList = newPackage.LogicLists[1];
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Mangle_Bear);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Thrash_Bear);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Pulverize);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_GalacticGuardian);
-	g_Addon.Logic_AddUnused(logicList, 3);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Mangle_Bear);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Thrash_Bear);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Pulverize);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_GalacticGuardian);
+	g_Addon.Logic_AddUnused   (logicList, a_Flags, 3);
 	
 	-- Events box
 	logicList = newPackage.LogicLists[2];
-	g_Addon.Logic_AddFirstGood(logicList, g_Addon.Logics.Druid_Incarnation_Bear, g_Addon.Logics.Druid_Incarnation_Cat, g_Addon.Logics.Druid_Berserk);	-- CatIncarnation/Berserk - in case of Feral in bear form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_AshamanesFrenzy);     -- In case of Feral in bear form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_ElunesGuidance);      -- In case of Feral in bear form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_WildCharge);
+	g_Addon.Logic_AddFirstGood(logicList, a_Flags, g_Addon.Logics.Druid_Incarnation_Bear, g_Addon.Logics.Druid_Incarnation_Cat, g_Addon.Logics.Druid_Berserk);	-- CatIncarnation/Berserk - in case of Feral in bear form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_AshamanesFrenzy);     -- In case of Feral in bear form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_ElunesGuidance);      -- In case of Feral in bear form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_WildCharge);
 
 	-- Survival box
 	logicList = newPackage.LogicLists[3];
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_SurvivalInstincts);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_RageOfTheSleeper);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Barkskin);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_Renewal);                -- In case of Feral in bear form
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_LunarBeam);
-	g_Addon.Logic_AddIfItsGood(logicList, g_Addon.Logics.Druid_BristlingFur);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_SurvivalInstincts);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_RageOfTheSleeper);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Barkskin);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Renewal);                -- In case of Feral in bear form
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_LunarBeam);
+	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_BristlingFur);
 	
 	return newPackage;
 end
 
-local function GetPackage_DruidOther()
+local function GetPackage_DruidOther(a_Flags)
 	local newPackage =
 	{
 		GetComboPoints = function()
@@ -141,11 +141,11 @@ g_Addon.GetPackage["DRUID"] = function(a_Flags)
 	end
 
 	if (g_Consts.SHAPE_DRUID_BEAR == shapeshiftForm) then
-		return GetPackage_DruidBear();
+		return GetPackage_DruidBear(a_Flags);
 	elseif (g_Consts.SHAPE_DRUID_CAT == shapeshiftForm) then
-		return GetPackage_DruidCat();
+		return GetPackage_DruidCat(a_Flags);
 	else
-		return GetPackage_DruidOther();
+		return GetPackage_DruidOther(a_Flags);
 	end
 end
 

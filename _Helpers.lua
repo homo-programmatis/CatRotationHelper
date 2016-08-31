@@ -12,6 +12,7 @@ function g_Addon.GetSpellName(a_SpellID)
 	if (not spellName) then
 		-- Happens when abilities are removed in new patch
 		g_Addon.PrintToChat("Spell not found : " .. a_SpellID);
+		return "(UnknownSpell)";
 	end
 
 	return spellName;

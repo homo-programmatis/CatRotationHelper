@@ -27,25 +27,39 @@ function g_Addon.Logic_IsAvailable(a_Logic)
 	return false;
 end
 
-function g_Addon.Logic_AddIfItsGood(a_Table, a_Logic)
+function g_Addon.Logic_IsGood(a_Flags, a_Logic)
 	if (not g_Addon.Logic_IsAvailable(a_Logic)) then
+		return false;
+	end
+	
+	local showDisabled = a_Flags and a_Flags.ShowDisabled;
+	local isDisabled = g_Addon.Settings.DisabledIcons[a_Logic.ID];
+	if ((not showDisabled) and isDisabled) then
+		return false;
+	end
+	
+	return true;
+end
+
+function g_Addon.Logic_AddIfItsGood(a_Table, a_Flags, a_Logic)
+	if (not g_Addon.Logic_IsGood(a_Flags, a_Logic)) then
 		return;
 	end
 	
 	table.insert(a_Table, a_Logic);
 end
 
-function g_Addon.Logic_AddFirstGood(a_Table, ...)
+function g_Addon.Logic_AddFirstGood(a_Table, a_Flags, ...)
 	local logicList = {...};
 	for _, logic in pairs(logicList) do
-		if (g_Addon.Logic_IsAvailable(logic)) then
+		if (g_Addon.Logic_IsGood(a_Flags, logic)) then
 			table.insert(a_Table, logic);
 			return;
 		end
 	end
 end
 
-function g_Addon.Logic_AddUnused(a_Table, a_MinCount)
+function g_Addon.Logic_AddUnused(a_Table, a_Flags, a_MinCount)
 	local currentCount = #a_Table;
 	if (currentCount >= a_MinCount) then
 		return;

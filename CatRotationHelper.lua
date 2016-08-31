@@ -254,7 +254,6 @@ local function InitializeAddon()
 	end
 	
 	g_Addon.SettingsUI_Initialize();
-	g_Addon.SettingsUI_Load();
 end
 
 -- Event Handling

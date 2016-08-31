@@ -4,6 +4,7 @@ local g_Consts = g_Addon.Constants;
 
 g_Addon.Logics.Druid_AshamanesFrenzy =
 {
+	ID				= "Druid|Ashamane's Frenzy",
 	Texture			= g_Addon.GetMyImage("AshamanesFrenzy.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 210722,
@@ -11,6 +12,7 @@ g_Addon.Logics.Druid_AshamanesFrenzy =
 
 g_Addon.Logics.Druid_Barkskin =
 {
+	ID				= "Druid|Barkskin",
 	Texture			= g_Addon.GetMyImage("Barkskin.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 22812,
@@ -18,6 +20,7 @@ g_Addon.Logics.Druid_Barkskin =
 
 g_Addon.Logics.Druid_Berserk =
 {
+	ID				= "Druid|Berserk",
 	Texture			= g_Addon.GetMyImage("Berserk.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 106951,
@@ -25,6 +28,7 @@ g_Addon.Logics.Druid_Berserk =
 
 g_Addon.Logics.Druid_Bloodtalons =
 {
+	ID				= "Druid|Bloodtalons",
 	Texture			= g_Addon.GetMyImage("Bloodtalons.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Bloodtalons-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
@@ -34,6 +38,7 @@ g_Addon.Logics.Druid_Bloodtalons =
 
 g_Addon.Logics.Druid_BristlingFur =
 {
+	ID				= "Druid|Bristling Fur",
 	Texture			= g_Addon.GetMyImage("BristlingFur.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 155835,
@@ -42,6 +47,7 @@ g_Addon.Logics.Druid_BristlingFur =
 
 g_Addon.Logics.Druid_BrutalSlash =
 {
+	ID				= "Druid|Brutal Slash",
 	Texture			= g_Addon.GetMyImage("BrutalSlash.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("BrutalSlash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
@@ -51,6 +57,7 @@ g_Addon.Logics.Druid_BrutalSlash =
 
 g_Addon.Logics.Druid_ElunesGuidance =
 {
+	ID				= "Druid|Elune's Guidance",
 	Texture			= g_Addon.GetMyImage("ElunesGuidance.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 202060,
@@ -58,6 +65,7 @@ g_Addon.Logics.Druid_ElunesGuidance =
 };
 g_Addon.Logics.Druid_GalacticGuardian =
 {
+	ID				= "Druid|Galactic Guardian",
 	Texture			= g_Addon.GetMyImage("Moonfire.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 213708,
@@ -66,6 +74,7 @@ g_Addon.Logics.Druid_GalacticGuardian =
 
 g_Addon.Logics.Druid_Incarnation_Bear =
 {
+	ID				= "Druid|Incarnation: Guardian of Ursoc",
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102558,
@@ -74,6 +83,7 @@ g_Addon.Logics.Druid_Incarnation_Bear =
 
 g_Addon.Logics.Druid_Incarnation_Cat =
 {
+	ID				= "Druid|Incarnation: King of the Jungle",
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102543,
@@ -82,6 +92,7 @@ g_Addon.Logics.Druid_Incarnation_Cat =
 
 g_Addon.Logics.Druid_LunarBeam =
 {
+	ID				= "Druid|Lunar Beam",
 	Texture			= g_Addon.GetMyImage("LunarBeam.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 204066,
@@ -90,6 +101,7 @@ g_Addon.Logics.Druid_LunarBeam =
 
 g_Addon.Logics.Druid_LunarInspiration =
 {
+	ID				= "Druid|Lunar Inspiration",
 	Texture			= g_Addon.GetMyImage("Moonfire.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Moonfire-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
@@ -99,6 +111,7 @@ g_Addon.Logics.Druid_LunarInspiration =
 
 g_Addon.Logics.Druid_Mangle_Bear =
 {
+	ID				= "Druid|Mangle (bear)",
 	Texture			= g_Addon.GetMyImage("Mangle.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 33917,
@@ -106,6 +119,7 @@ g_Addon.Logics.Druid_Mangle_Bear =
 
 g_Addon.Logics.Druid_PredatorySwiftness =
 {
+	ID				= "Druid|Predatory Swiftness",
 	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
@@ -115,6 +129,7 @@ g_Addon.Logics.Druid_PredatorySwiftness =
 
 g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
 {
+	ID				= "Druid|Predatory Swiftness (Bloodtalons)",
 	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("PredatorySwiftness-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
@@ -124,6 +139,7 @@ g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
 
 g_Addon.Logics.Druid_Pulverize =
 {
+	ID				= "Druid|Pulverize",
 	Texture			= g_Addon.GetMyImage("Pulverize.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BUFF,
 	SpellID			= 158792,
@@ -131,6 +147,7 @@ g_Addon.Logics.Druid_Pulverize =
 
 g_Addon.Logics.Druid_RageOfTheSleeper =
 {
+	ID				= "Druid|Rage of the Sleeper",
 	Texture			= g_Addon.GetMyImage("RageOfTheSleeper.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 200851,
@@ -138,6 +155,7 @@ g_Addon.Logics.Druid_RageOfTheSleeper =
 
 g_Addon.Logics.Druid_Rake =
 {
+	ID				= "Druid|Rake",
 	Texture			= g_Addon.GetMyImage("Rake.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Rake-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
@@ -148,6 +166,7 @@ g_Addon.Logics.Druid_Rake =
 
 g_Addon.Logics.Druid_Renewal =
 {
+	ID				= "Druid|Renewal",
 	Texture			= g_Addon.GetMyImage("Renewal.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 108238,
@@ -156,6 +175,7 @@ g_Addon.Logics.Druid_Renewal =
 
 g_Addon.Logics.Druid_Rip =
 {
+	ID				= "Druid|Rip",
 	Texture			= g_Addon.GetMyImage("Rip.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Rip-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
@@ -165,6 +185,7 @@ g_Addon.Logics.Druid_Rip =
 
 g_Addon.Logics.Druid_SavageRoar =
 {
+	ID				= "Druid|Savage Roar",
 	Texture			= g_Addon.GetMyImage("SavageRoar.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("SavageRoar-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BUFF,
@@ -173,6 +194,7 @@ g_Addon.Logics.Druid_SavageRoar =
 
 g_Addon.Logics.Druid_SurvivalInstincts =
 {
+	ID				= "Druid|Survival Instincts",
 	Texture			= g_Addon.GetMyImage("SurvivalInstincts.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 61336,
@@ -180,6 +202,7 @@ g_Addon.Logics.Druid_SurvivalInstincts =
 
 g_Addon.Logics.Druid_TigersFury =
 {
+	ID				= "Druid|Tiger's Fury",
 	Texture			= g_Addon.GetMyImage("TigersFury.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("TigersFury-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
@@ -188,6 +211,7 @@ g_Addon.Logics.Druid_TigersFury =
 
 g_Addon.Logics.Druid_Thrash_Bear =
 {
+	ID				= "Druid|Thrash (bear)",
 	Texture			= g_Addon.GetMyImage("Thrash.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 77758,
@@ -196,6 +220,7 @@ g_Addon.Logics.Druid_Thrash_Bear =
 
 g_Addon.Logics.Druid_Thrash_Cat =
 {
+	ID				= "Druid|Thrash (cat)",
 	Texture			= g_Addon.GetMyImage("Thrash.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
@@ -206,6 +231,7 @@ g_Addon.Logics.Druid_Thrash_Cat =
 
 g_Addon.Logics.Druid_WildCharge =
 {
+	ID				= "Druid|Wild Charge",
 	Texture			= g_Addon.GetMyImage("FeralCharge.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 102401,
