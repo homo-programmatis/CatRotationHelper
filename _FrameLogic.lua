@@ -7,7 +7,7 @@ g_Addon.LogicUnusedFrame =
 	Type			= nil,
 };
 
-function g_Addon.IsLogicAvailable(a_Logic)
+function g_Addon.Logic_IsAvailable(a_Logic)
 	if (nil ~= a_Logic.IsAvailable) then
 		return a_Logic.IsAvailable(a_Logic);
 	end
@@ -27,25 +27,25 @@ function g_Addon.IsLogicAvailable(a_Logic)
 	return false;
 end
 
-function g_Addon.AddLogicIfAvailable(a_Table, a_Logic)
-	if (not g_Addon.IsLogicAvailable(a_Logic)) then
+function g_Addon.Logic_AddIfItsGood(a_Table, a_Logic)
+	if (not g_Addon.Logic_IsAvailable(a_Logic)) then
 		return;
 	end
 	
 	table.insert(a_Table, a_Logic);
 end
 
-function g_Addon.AddLogicFirstAvailable(a_Table, ...)
+function g_Addon.Logic_AddFirstGood(a_Table, ...)
 	local logicList = {...};
 	for _, logic in pairs(logicList) do
-		if (g_Addon.IsLogicAvailable(logic)) then
+		if (g_Addon.Logic_IsAvailable(logic)) then
 			table.insert(a_Table, logic);
 			return;
 		end
 	end
 end
 
-function g_Addon.AddLogicUnused(a_Table, a_MinCount)
+function g_Addon.Logic_AddUnused(a_Table, a_MinCount)
 	local currentCount = #a_Table;
 	if (currentCount >= a_MinCount) then
 		return;
