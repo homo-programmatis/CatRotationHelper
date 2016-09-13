@@ -40,7 +40,7 @@ g_Addon.Logics.Druid_BristlingFur =
 {
 	ID				= "Druid|Bristling Fur",
 	Texture			= g_Addon.GetMyImage("BristlingFur.tga"),
-	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 155835,
 	TalentID		= 22418,
 };
@@ -107,6 +107,7 @@ g_Addon.Logics.Druid_LunarInspiration =
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 155625,
 	TalentID		= 22365,
+	CastByMe		= true,
 };
 
 g_Addon.Logics.Druid_Mangle_Bear =
@@ -205,7 +206,7 @@ g_Addon.Logics.Druid_TigersFury =
 	ID				= "Druid|Tiger's Fury",
 	Texture			= g_Addon.GetMyImage("TigersFury.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("TigersFury-Blue.tga"),
-	Type			= g_Consts.LOGIC_TYPE_SKILL,
+	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 5217,
 };
 
