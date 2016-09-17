@@ -220,9 +220,9 @@ end
 -- end
 
 function CatRotationHelper_EntryPoint_OnLoad(self)
-	-- load addon on druids only
-	local class = select(2, UnitClass("player"))
-	if(class ~= "DRUID") then
+	local playerClass = select(2, UnitClass("player"))
+	if (nil == g_Addon.GetPackage[playerClass]) then
+		-- This class is not supported, do not load addon at all
 		return;
 	end
 
