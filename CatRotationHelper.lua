@@ -304,6 +304,35 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 	end
 end
 
+function g_Addon.OnShowChatCommandsHelp()
+	g_Addon.PrintToChat("'" .. SLASH_CATROTATIONHELPER1 .. " reset' - resets settings for this addon");
+	g_Addon.PrintToChat("'" .. SLASH_CATROTATIONHELPER1 .. " restore' - swaps active and backup settings (settings backed up on 'reset'). Will not work after UI reload / logout.");
+end
+
+function g_Addon.OnDebugTest()
+	
+end
+
+SLASH_CATROTATIONHELPER1 = '/catrotationhelper';
+SLASH_CATROTATIONHELPER2 = '/crh';
+function SlashCmdList.CATROTATIONHELPER(a_CommandLine, a_TextBox)
+	local command, args = a_CommandLine:match("^(%S*)%s*(.-)$");
+	
+	if     (command == "") then
+		g_Addon.OnShowChatCommandsHelp();
+	elseif (command == "reset") then
+		g_Addon.Settings_Reset();
+		g_Addon.ReloadPackage(); -- Reload everything to apply settings
+	elseif (command == "restore") then
+		g_Addon.Settings_UndoReset();
+		g_Addon.ReloadPackage(); -- Reload everything to apply settings
+	elseif (command == "test") then
+		g_Addon.OnDebugTest(args);
+	else
+		g_Addon.PrintToChat("Unknown slash command: " .. command);
+	end
+end
+
 ----------------------
 -- Effect Functions --
 ----------------------

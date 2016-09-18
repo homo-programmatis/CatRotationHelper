@@ -49,13 +49,34 @@ function g_Addon.Settings_Repair(a_Settings)
 	return true;
 end
 
-function g_Addon.Settings_Load()
+function g_Addon.Settings_Load(a_Settings)
+	a_Settings = a_Settings or CatRotationHelperSettings;
+
 	-- Create defaults if user has bad settings (or doesn't have any at all)
-	if (not g_Addon.Settings_Repair(CatRotationHelperSettings)) then
+	if (not g_Addon.Settings_Repair(a_Settings)) then
 		g_Addon.PrintToChat("Creating default settings");
-		CatRotationHelperSettings = g_Addon.Settings_ComposeDefaults();
+		a_Settings = g_Addon.Settings_ComposeDefaults();
 	end
 
-	-- Store a reference to loaded settings
-	g_Addon.Settings = CatRotationHelperSettings;
+	-- Store references to loaded settings
+	CatRotationHelperSettings = a_Settings;
+	g_Addon.Settings = a_Settings;
+end
+
+function g_Addon.Settings_Reset()
+	g_Addon.SettingsBackup = g_Addon.Settings;
+	g_Addon.Settings_Load(g_Addon.Settings_ComposeDefaults());
+	g_Addon.PrintToChat("Settings have been reset");
+end
+
+function g_Addon.Settings_UndoReset()
+	if (g_Addon.SettingsBackup) then
+		-- swap active and backup settings
+		local backup = g_Addon.SettingsBackup;
+		g_Addon.SettingsBackup = g_Addon.Settings;
+		g_Addon.Settings_Load(backup);
+		g_Addon.PrintToChat("Restored settings from backup");
+	else
+		g_Addon.PrintToChat("No settings backup to restore");
+	end
 end
