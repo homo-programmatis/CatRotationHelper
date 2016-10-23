@@ -11,6 +11,8 @@ end
 function g_Addon.SettingsUI_PageRoot_Create()
 	local frmPage   = CreateFrame("Frame", "CatRotationHelper_DlgOptions", UIParent)
 	frmPage.name    = THIS_ADDON_NAME;
+	frmPage.okay    = g_Addon.SettingsUI_PageRoot_Okay;
+	frmPage.cancel  = g_Addon.SettingsUI_PageRoot_Cancel;
 	InterfaceOptions_AddCategory(frmPage);
 	
 	frmPage.m_LblHint = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge');
@@ -18,6 +20,14 @@ function g_Addon.SettingsUI_PageRoot_Create()
 	frmPage.m_LblHint:SetText("<<< See settings subcategories");
 	
 	return frmPage;
+end
+
+function g_Addon.SettingsUI_PageRoot_Okay()
+	g_Addon.ReloadPackage();
+end
+
+function g_Addon.SettingsUI_PageRoot_Cancel()
+	g_Addon.ReloadPackage();
 end
 
 function g_Addon.SettingsUI_PageFrames_Create(a_FrmParent)
@@ -149,7 +159,7 @@ function g_Addon.SettingsUI_PageIcons_ChkIcon_OnClick(a_ChkIcon)
 		g_Addon.Settings.DisabledIcons[iconLogic.ID] = true;
 	end
 	
-	g_Addon.ReloadPackage();
+	g_Addon.ReloadPackage({IsSettings = true});
 end
 
 function g_Addon.SettingsUI_PageIcons_ChkIcon_OnEnter(a_ChkIcon)
