@@ -160,7 +160,7 @@ g_Addon.Logics.Druid_Rake =
 	Texture			= g_Addon.GetMyImage("Rake.tga"),
 	TextureSpecial	= g_Addon.GetMyImage("Rake-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
-	SpellID			= 59881,
+	SpellID			= 155722,
 	SkillID			= 1822,
 	CastByMe		= true,
 };
