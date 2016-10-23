@@ -22,7 +22,7 @@ end
 function g_Addon.Settings_ComposeDefaults()
 	local defaultSettings = {};
 
-	defaultSettings.Version = 2;
+	defaultSettings.Version = 3;
 	
 	defaultSettings.Frames =
 	{
@@ -32,6 +32,7 @@ function g_Addon.Settings_ComposeDefaults()
 	};
 	
 	defaultSettings.DisabledIcons = {};
+	defaultSettings.ShowWhen = g_Consts.UI_SHOWWHEN_COMBAT_OR_TARGET;
 
 	return defaultSettings;
 end
@@ -44,6 +45,16 @@ function g_Addon.Settings_Repair(a_Settings)
 	if (1 == a_Settings.Version) then
 		a_Settings.DisabledIcons = {};
 		a_Settings.Version = 2;
+	end
+	
+	if (2 == a_Settings.Version) then
+		-- If user already had addon, keep the old behavior
+		a_Settings.ShowWhen = g_Consts.UI_SHOWWHEN_TARGET;
+		a_Settings.Version = 3;
+	end
+	
+	if (("number" ~= type(a_Settings.ShowWhen)) or (a_Settings.ShowWhen < g_Consts.UI_SHOWWHEN_FIRST) or (a_Settings.ShowWhen > g_Consts.UI_SHOWWHEN_LAST)) then
+		a_Settings.ShowWhen = g_Consts.UI_SHOWWHEN_COMBAT_OR_TARGET;
 	end
 	
 	return true;

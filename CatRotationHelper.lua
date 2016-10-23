@@ -98,9 +98,12 @@ function g_Addon.ReloadPackage(a_Flags)
 	g_Addon.FrameBoxes_LoadSettings();
 
 	if (not isSettings) then
-		-- Simulate target switching to decide whether to show/update frames
-		g_Addon.OnTargetSwitched();
+		g_Addon.DecideShowHideFrames();
 	end
+end
+
+local function IsCombat()
+	return UnitAffectingCombat("player");
 end
 
 local function IsEnemyTarget()
@@ -119,8 +122,26 @@ local function IsEnemyTarget()
 	return true;
 end
 
-function g_Addon.OnTargetSwitched()
-	if (not IsEnemyTarget()) then
+function g_Addon.IsShallShowFrames()
+	local showWhen = g_Addon.Settings.ShowWhen;
+
+	if     (g_Consts.UI_SHOWWHEN_ALWAYS == showWhen) then
+		return true;
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT == showWhen) then
+		return IsCombat();
+	elseif (g_Consts.UI_SHOWWHEN_TARGET == showWhen) then
+		return IsEnemyTarget();
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT_OR_TARGET == showWhen) then
+		return (IsCombat() or IsEnemyTarget());
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT_AND_TARGET == showWhen) then
+		return (IsCombat() and IsEnemyTarget());
+	else
+		error("Invalid settings value", 2);
+	end
+end
+
+function g_Addon.DecideShowHideFrames()
+	if (not g_Addon.IsShallShowFrames()) then
 		g_Addon.ShowAllFrames(false);
 		-- FIXME: fix lacerate wearoff animation
 		-- CatRotationHelper_TimerLacerate:Hide();
@@ -286,11 +307,16 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 			-- Handle possible artifact swap
 			g_Addon.ReloadPackage();
 		end
+	elseif ((event == "PLAYER_REGEN_DISABLED") or (event == "PLAYER_REGEN_ENABLED")) then
+		-- Actually means entering/leaving combat
+		g_Addon.DecideShowHideFrames();
 	elseif(event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_FACTION" and arg1 == "target")) then
 		-- checking UNIT_FACTION so starting a duel behaves like changing target
-		g_Addon.OnTargetSwitched();
+		g_Addon.DecideShowHideFrames();
 	elseif(event == "PLAYER_TALENT_UPDATE") then
 		self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
+		self:RegisterEvent("PLAYER_REGEN_DISABLED");
+		self:RegisterEvent("PLAYER_REGEN_ENABLED");
 		self:RegisterEvent("PLAYER_TARGET_CHANGED");
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 		self:RegisterEvent("UNIT_AURA");

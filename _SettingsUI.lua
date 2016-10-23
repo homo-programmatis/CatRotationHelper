@@ -43,22 +43,101 @@ function g_Addon.SettingsUI_PageFrames_Create(a_FrmParent)
 
 	frmPage.m_LblPageDesc = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall');
 	frmPage.m_LblPageDesc:SetPoint('TOPLEFT', frmPage.m_LblPageTitle, 'BOTTOMLEFT', 0, -8);
-	frmPage.m_LblPageDesc:SetText("You can set sizes and positions for your frames here.");
+	frmPage.m_LblPageDesc:SetText("On this page, you can configure how frames are shown.");
+
+	--------------------------------------------------------------------------------
 	
+	frmPage.m_LblHintShow = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontNormal');
+	frmPage.m_LblHintShow:SetPoint('TOPLEFT', frmPage.m_LblPageDesc, 'BOTTOMLEFT', 0, -20);
+	frmPage.m_LblHintShow:SetText("When frames are shown :");
+
+	local comboBoxPadding = 15;
+	frmPage.m_CmbShowWhen = g_Addon.SettingsUI_PageFrames_CmbShowWhen_Create(frmPage);
+	frmPage.m_CmbShowWhen:SetPoint('TOPLEFT', frmPage.m_LblHintShow, 'BOTTOMLEFT', -comboBoxPadding, -5);
+	
+	--------------------------------------------------------------------------------
+	
+	frmPage.m_LblHintMove = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontNormal');
+	frmPage.m_LblHintMove:SetPoint('TOPLEFT', frmPage.m_CmbShowWhen, 'BOTTOMLEFT', comboBoxPadding, -20);
+	frmPage.m_LblHintMove:SetText("Frame placement :");
+
 	frmPage.m_BtnMoveFrames = CreateFrame("Button", frmPage:GetName() .. "_BtnMoveFrames", frmPage, "OptionsButtonTemplate");
 	frmPage.m_BtnMoveFrames:SetText("Move/Rotate Frames");
-	frmPage.m_BtnMoveFrames:SetPoint('TOPLEFT', frmPage.m_LblPageDesc, 'BOTTOMLEFT', 0, -20);
+	frmPage.m_BtnMoveFrames:SetPoint('TOPLEFT', frmPage.m_LblHintMove, 'BOTTOMLEFT', 0, -5);
 	frmPage.m_BtnMoveFrames:SetSize(150, 20);
 	frmPage.m_BtnMoveFrames:SetScript("OnClick", CatRotationHelperUnlock);
 	
+	--------------------------------------------------------------------------------
+	
+	frmPage.m_LblHintSize = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontNormal');
+	frmPage.m_LblHintSize:SetPoint('TOPLEFT', frmPage.m_BtnMoveFrames, 'BOTTOMLEFT', 0, -20);
+	frmPage.m_LblHintSize:SetText("Frame sizes :");
+
 	frmPage.m_SldMainScale = g_Addon.SettingsUI_PageFrames_SldScale_Create(frmPage, 1, "Main Frame scale");
-	frmPage.m_SldMainScale:SetPoint('TOPLEFT', frmPage.m_BtnMoveFrames, 'BOTTOMLEFT', 0, -40);
+	frmPage.m_SldMainScale:SetPoint('TOPLEFT', frmPage.m_LblHintSize, 'BOTTOMLEFT', 0, -20);
 	
 	frmPage.m_SldEvntScale = g_Addon.SettingsUI_PageFrames_SldScale_Create(frmPage, 2, "Notification Frame scale");
 	frmPage.m_SldEvntScale:SetPoint('TOPLEFT', frmPage.m_SldMainScale, 'BOTTOMLEFT', 0, -40);
 
 	frmPage.m_SldSurvScale = g_Addon.SettingsUI_PageFrames_SldScale_Create(frmPage, 3, "Survival Frame scale");
 	frmPage.m_SldSurvScale:SetPoint('TOPLEFT', frmPage.m_SldEvntScale, 'BOTTOMLEFT', 0, -40);
+end
+
+function g_Addon.SettingsUI_PageFrames_CmbShowWhen_ComposeText(a_Setting)
+	if     (g_Consts.UI_SHOWWHEN_ALWAYS == a_Setting) then
+		return "Always show";
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT == a_Setting) then
+		return "Show when in combat";
+	elseif (g_Consts.UI_SHOWWHEN_TARGET == a_Setting) then
+		return "Show when enemy is targeted";
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT_OR_TARGET == a_Setting) then
+		return "Show when in combat OR enemy is targeted";
+	elseif (g_Consts.UI_SHOWWHEN_COMBAT_AND_TARGET == a_Setting) then
+		return "Show when in combat AND enemy is targeted";
+	else
+		error("Invalid settings value", 2);
+	end
+end
+
+function g_Addon.SettingsUI_PageFrames_CmbShowWhen_Create(a_FrmPage)
+	local comboBox = CreateFrame('Button', a_FrmPage:GetName() .. "_CmbShowWhen", a_FrmPage, "UIDropDownMenuTemplate");
+	g_Addon.SettingsUI_PageFrames_CmbShowWhen_Refresh(comboBox);
+	
+	local initializeComboBox = function(a_ComboBox, a_Level)
+		if (1 ~= a_Level) then
+			return;
+		end
+		
+		for currItem = g_Consts.UI_SHOWWHEN_FIRST, g_Consts.UI_SHOWWHEN_LAST do
+			local itemInfo =
+			{
+				text         = g_Addon.SettingsUI_PageFrames_CmbShowWhen_ComposeText(currItem),
+				notCheckable = true,
+				checked      = false,
+				arg1         = comboBox,
+				arg2         = currItem,
+				func         = g_Addon.SettingsUI_PageFrames_CmbShowWhen_OnSelectionChanged,
+			};
+			
+			UIDropDownMenu_AddButton(itemInfo, a_Level);
+		end
+	end
+
+	UIDropDownMenu_Initialize(comboBox, initializeComboBox);
+	UIDropDownMenu_JustifyText(comboBox, "LEFT");
+	UIDropDownMenu_SetWidth(comboBox, 300);
+
+	return comboBox;
+end
+
+function g_Addon.SettingsUI_PageFrames_CmbShowWhen_Refresh(a_ComboBox)
+	local itemText = g_Addon.SettingsUI_PageFrames_CmbShowWhen_ComposeText(g_Addon.Settings.ShowWhen);
+	_G[a_ComboBox:GetName() .. 'Text']:SetText(itemText);
+end
+
+function g_Addon.SettingsUI_PageFrames_CmbShowWhen_OnSelectionChanged(a_Button, a_ComboBox, a_Item)
+	g_Addon.Settings.ShowWhen = a_Item;
+	g_Addon.SettingsUI_PageFrames_CmbShowWhen_Refresh(a_ComboBox);
 end
 
 function g_Addon.SettingsUI_PageFrames_SldScale_Create(a_FrmPage, a_FrameBox, a_Label)
@@ -106,6 +185,7 @@ function g_Addon.SettingsUI_PageFrames_SldScale_Refresh(a_SldScale)
 end
 
 function g_Addon.SettingsUI_PageFrames_Refresh(a_FrmPage)
+	g_Addon.SettingsUI_PageFrames_CmbShowWhen_Refresh(a_FrmPage.m_CmbShowWhen);
 	g_Addon.SettingsUI_PageFrames_SldScale_Refresh(a_FrmPage.m_SldMainScale);
 	g_Addon.SettingsUI_PageFrames_SldScale_Refresh(a_FrmPage.m_SldEvntScale);
 	g_Addon.SettingsUI_PageFrames_SldScale_Refresh(a_FrmPage.m_SldSurvScale);
@@ -124,7 +204,7 @@ function g_Addon.SettingsUI_PageIcons_Create(a_FrmParent)
 
 	frmPage.m_LblPageDesc = frmPage:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall');
 	frmPage.m_LblPageDesc:SetPoint('TOPLEFT', frmPage.m_LblPageTitle, 'BOTTOMLEFT', 0, -8);
-	frmPage.m_LblPageDesc:SetText("You can enable/disable icons here. Only icons for your current spec/talents/shape are configurable.");
+	frmPage.m_LblPageDesc:SetText("On this page, you can enable/disable icons. Only icons for your current spec/talents/shape are configurable.");
 
 	frmPage.m_ChkIcon = {};
 	
