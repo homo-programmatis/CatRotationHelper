@@ -143,8 +143,6 @@ end
 function g_Addon.DecideShowHideFrames()
 	if (not g_Addon.IsShallShowFrames()) then
 		g_Addon.ShowAllFrames(false);
-		-- FIXME: fix lacerate wearoff animation
-		-- CatRotationHelper_TimerLacerate:Hide();
 		return;
 	end
 
@@ -178,7 +176,6 @@ function CatRotationHelperUnlock()
 	g_IsMovingFrames = true;
 
 	-- Hide effects
-	CatRotationHelper_TimerLacerate:Hide();
 	CatRotationHelperSetCPEffects(g_Addon.FrameLists[1], 0);
 
 	-- Show all frames in their default state, even if they should be currently hidden
@@ -211,34 +208,6 @@ function CatRotationHelperSetCPEffects(a_FrameList, num)
 		g_Addon.FrameSetCombo(frame, isCombo);
 	end
 end
-
-------------------------------
--- Bear - Main Frame Checks --
-------------------------------
-
--- FIXME: Fix lacerate wearoff animation
--- function crhUpdateLacerate()
--- 	local name, stacks, expTime = g_Addon.GetTargetDebuffInfo(CRH_SPELLID_LACERATE, true);
--- 	if (name == nil) then
--- 		CatRotationHelper_TimerLacerate:Hide();
--- 		CatRotationHelperSetBearCP(0);
--- 		return;
--- 	end
--- 	
--- 	-- stop possible cp animation when lacerate is refreshed
--- 	local i = 1;
--- 	for i=1, #g_FramesBear do
--- 		g_FramesBear[i].FrameCombo:SetAlpha(1)
--- 		g_FramesBear[i].FrameCombo:SetScale(1)
--- 	end
--- 
--- 	-- setup lacerate warning
--- 	CatRotationHelper_TimerLacerate:Show()
--- 	CatRotationHelper_TimerLacerate.expTime = expTime
--- 
--- 	-- set cp effects
--- 	CatRotationHelperSetBearCP(stacks);
--- end
 
 function CatRotationHelper_EntryPoint_OnLoad(self)
 	local playerClass = select(2, UnitClass("player"))
@@ -356,35 +325,5 @@ function SlashCmdList.CATROTATIONHELPER(a_CommandLine, a_TextBox)
 		g_Addon.OnDebugTest(args);
 	else
 		g_Addon.PrintToChat("Unknown slash command: " .. command);
-	end
-end
-
-----------------------
--- Effect Functions --
-----------------------
-
--- combo point animation when lacerate is about to expire
-function CatRotationHelper_TimerLacerate_OnUpdate(self)
-	local remaining = self.expTime - GetTime()
-
-	if(remaining > 3.0) then
-		return
-	elseif(remaining <= 0) then
-		self:Hide()
-		return
-	end
-
-	local t = mod(remaining,1)
-
-	if(t <= 0.5) then
-		for i=1, #g_FramesBear do
-			g_FramesBear[i].FrameCombo:SetAlpha(1.0-t)
-			g_FramesBear[i].FrameCombo:SetScale(1.0+0.3*t)
-		end
-	else
-		for i=1, #g_FramesBear do
-			g_FramesBear[i].FrameCombo:SetAlpha(t)
-			g_FramesBear[i].FrameCombo:SetScale(1.3-0.3*t)
-		end
 	end
 end

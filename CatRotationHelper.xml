@@ -246,12 +246,6 @@
 		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
 	</Button>
 
-	<Frame name="CatRotationHelper_TimerLacerate" hidden="true">
-		<Scripts>
-			<OnUpdate function="CatRotationHelper_TimerLacerate_OnUpdate"/>
-		</Scripts>
-	</Frame>
-
 	<Frame name="CatRotationHelper_EntryPoint" hidden="true">
 		<Scripts>
 			<OnLoad function="CatRotationHelper_EntryPoint_OnLoad"/>
