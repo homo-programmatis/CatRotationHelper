@@ -56,8 +56,8 @@ local function GetPackage_DruidBear(a_Flags)
 	local newPackage =
 	{
 		GetComboPoints = function()
-			local name, stacks, expTime = g_Addon.GetTargetDebuffInfo(g_Addon.Logics.Druid_Thrash_Bear.SpellID, true);
-			if (name == nil) then
+			local stacks, expTime = g_Addon.GetTargetDebuffInfo(g_Addon.Logics.Druid_Thrash_Bear_Debuff.SpellID, true);
+			if (stacks == nil) then
 				return 0;
 			end
 			

@@ -219,6 +219,15 @@ g_Addon.Logics.Druid_Thrash_Bear =
 	SkillID			= 106832,
 };
 
+g_Addon.Logics.Druid_Thrash_Bear_Debuff =
+{
+	ID				= "Druid|Thrash (bear, debuff)",
+	Texture			= g_Addon.GetMyImage("Thrash.tga"),
+	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
+	SpellID			= 192090,
+	CastByMe		= true,
+};
+
 g_Addon.Logics.Druid_Thrash_Cat =
 {
 	ID				= "Druid|Thrash (cat)",
