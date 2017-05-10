@@ -6,7 +6,7 @@ local function GetPackage_DruidCat(a_Flags)
 	local newPackage =
 	{
 		GetComboPoints = function()
-			return UnitPower("player", SPELL_POWER_COMBO_POINTS);
+			return UnitPower("player", Enum.PowerType.ComboPoints);
 		end,
 		
 		LogicLists = 
