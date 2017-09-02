@@ -52,7 +52,6 @@ g_Addon.Logics.Druid_BrutalSlash =
 	TextureSpecial	= g_Addon.GetMyImage("BrutalSlash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 202028,
-	TalentID		= 21646,
 };
 
 g_Addon.Logics.Druid_ElunesGuidance =
@@ -61,8 +60,8 @@ g_Addon.Logics.Druid_ElunesGuidance =
 	Texture			= g_Addon.GetMyImage("ElunesGuidance.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 202060,
-	TalentID		= 22370,
 };
+
 g_Addon.Logics.Druid_GalacticGuardian =
 {
 	ID				= "Druid|Galactic Guardian",
