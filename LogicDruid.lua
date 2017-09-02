@@ -124,8 +124,24 @@ g_Addon.Logics.Druid_PredatorySwiftness =
 	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
-	SkillID			= 16974,
-	IsAvailable		= function() return not g_Addon.IsTalentTaken(21649); end,
+	
+	-- IsAvailable is used to figure whether the icon should be present, because:
+	-- * Condition is rather complex, see comments below.
+	IsAvailable		= function()
+		if (not IsPlayerSpell(16974)) then
+			-- Player does not have 'Predatory Swiftness' passive.
+			-- For example, Balance spec in cat form.
+			return false;
+		end
+		
+		if (g_Addon.IsTalentTaken(21649)) then
+			-- "Predatory Swiftness" shows an utility icon on Events bar using this logic only when player didn't take "Bloodtalons" talent.
+			-- With "Bloodtalons" talent, Druid_PredatorySwiftness_Bloodtalons is used to show icon on Main bar.
+			return false;
+		end
+	
+		return true;
+	end,
 };
 
 g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
