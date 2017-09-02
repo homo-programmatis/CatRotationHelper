@@ -33,6 +33,9 @@ g_Addon.Logics.Druid_Bloodtalons =
 	TextureSpecial	= g_Addon.GetMyImage("Bloodtalons-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 145152,
+	
+	-- TalentID is used to figure whether the icon should be present, because:
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 21649,
 };
 
@@ -42,7 +45,6 @@ g_Addon.Logics.Druid_BristlingFur =
 	Texture			= g_Addon.GetMyImage("BristlingFur.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 155835,
-	TalentID		= 22418,
 };
 
 g_Addon.Logics.Druid_BrutalSlash =
@@ -68,6 +70,9 @@ g_Addon.Logics.Druid_GalacticGuardian =
 	Texture			= g_Addon.GetMyImage("Moonfire.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 213708,
+	
+	-- TalentID is used to figure whether the icon should be present, because:
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 22421,
 };
 
@@ -77,7 +82,6 @@ g_Addon.Logics.Druid_Incarnation_Bear =
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102558,
-	TalentID		= 21706,
 };
 
 g_Addon.Logics.Druid_Incarnation_Cat =
@@ -86,7 +90,6 @@ g_Addon.Logics.Druid_Incarnation_Cat =
 	Texture			= g_Addon.GetMyImage("Incarnation.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BURST,
 	SpellID			= 102543,
-	TalentID		= 21705,
 };
 
 g_Addon.Logics.Druid_LunarBeam =
@@ -95,7 +98,6 @@ g_Addon.Logics.Druid_LunarBeam =
 	Texture			= g_Addon.GetMyImage("LunarBeam.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 204066,
-	TalentID		= 22427,
 };
 
 g_Addon.Logics.Druid_LunarInspiration =
@@ -105,7 +107,13 @@ g_Addon.Logics.Druid_LunarInspiration =
 	TextureSpecial	= g_Addon.GetMyImage("Moonfire-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 155625,
+	
+	-- TalentID is used to figure whether the icon should be present, because:
+	-- * Moonfire is available to all cats.
+	-- * IsPlayerSpell() won't work on debuff's SpellID.
 	TalentID		= 22365,
+	
+	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
 
@@ -150,6 +158,12 @@ g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
 	TextureSpecial	= g_Addon.GetMyImage("PredatorySwiftness-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
+	
+	-- TalentID is used to figure whether the icon should be present, because:
+	-- * Predatory Swiftness is available to all cats.
+	-- * With "Bloodtalons" talent, "Predatory Swiftness" becomes part of rotation and shows an icon on Main bar using this logic.
+	-- * Without "Bloodtalons" talent, Druid_PredatorySwiftness logic is used to show icon on Events bar.
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 21649,
 };
 
@@ -176,7 +190,13 @@ g_Addon.Logics.Druid_Rake =
 	TextureSpecial	= g_Addon.GetMyImage("Rake-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 155722,
+
+	-- SkillID is used to figure whether the icon should be present, because:
+	-- * Debuff's SpellID and skill's SpellID are different.
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	SkillID			= 1822,
+
+	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
 
@@ -186,7 +206,6 @@ g_Addon.Logics.Druid_Renewal =
 	Texture			= g_Addon.GetMyImage("Renewal.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 108238,
-	TalentID		= 19283,
 };
 
 g_Addon.Logics.Druid_Rip =
@@ -196,6 +215,8 @@ g_Addon.Logics.Druid_Rip =
 	TextureSpecial	= g_Addon.GetMyImage("Rip-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 1079,
+
+	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
 
@@ -231,6 +252,10 @@ g_Addon.Logics.Druid_Thrash_Bear =
 	Texture			= g_Addon.GetMyImage("Thrash.tga"),
 	Type			= g_Consts.LOGIC_TYPE_SKILL,
 	SpellID			= 77758,
+
+	-- SkillID is used to figure whether the icon should be present, because:
+	-- * Debuff's SpellID and skill's SpellID are different.
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	SkillID			= 106832,
 };
 
@@ -240,6 +265,8 @@ g_Addon.Logics.Druid_Thrash_Bear_Debuff =
 	Texture			= g_Addon.GetMyImage("Thrash.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 192090,
+
+	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
 
@@ -250,7 +277,13 @@ g_Addon.Logics.Druid_Thrash_Cat =
 	TextureSpecial	= g_Addon.GetMyImage("Thrash-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 106830,
+
+	-- SkillID is used to figure whether the icon should be present, because:
+	-- * Debuff's SpellID and skill's SpellID are different.
+	-- * IsPlayerSpell() won't work on buff's SpellID.
 	SkillID 		= 106832,
+
+	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
 
