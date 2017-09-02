@@ -173,6 +173,10 @@ g_Addon.Logics.Druid_Pulverize =
 	Texture			= g_Addon.GetMyImage("Pulverize.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BUFF,
 	SpellID			= 158792,
+	
+	-- TalentID is used to figure whether the icon should be present, because:
+	-- * IsPlayerSpell() won't work on buff's SpellID.
+	TalentID		= 22425,
 };
 
 g_Addon.Logics.Druid_RageOfTheSleeper =
