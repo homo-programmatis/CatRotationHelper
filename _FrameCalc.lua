@@ -28,7 +28,7 @@ function g_Addon.GetTargetDebuffInfo(a_SpellID, a_CastByMe)
 
 	local iAura = 1;
 	while true do
-		local _, _, _, stacks, _, _, expTime, _, _, _, spellID = UnitDebuff("target", iAura, filter);
+		local _, _, stacks, _, _, expTime, _, _, _, spellID = UnitDebuff("target", iAura, filter);
 		if (not spellID) then
 			break;
 		end
@@ -46,12 +46,21 @@ end
 -- Get information about player's buff 
 -- \return  IsBuffPresent, ExpirationTime
 function g_Addon.GetPlayerBuffInfo(a_SpellID)
-	local name, rank, icon, stacks, debuffType, duration, expTime = UnitBuff("player", g_Addon.GetSpellName(a_SpellID));
-	if (not name) then
-		return false;
+	local iAura = 1;
+	while true do
+		local _, _, stacks, _, _, expTime, _, _, _, spellID = UnitBuff("player", iAura);
+		if (not spellID) then
+			break;
+		end
+		
+		if (spellID == a_SpellID) then
+			return true, expTime;
+		end
+		
+		iAura = iAura + 1;
 	end
 	
-	return true, expTime;
+	return false;
 end
 
 function g_Addon.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)

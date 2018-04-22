@@ -262,7 +262,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 			UpdateFrames(g_Consts.LOGIC_TYPE_DEBUFF, true);
 			UpdateComboPoints(); -- Bear "combo points"
 		end
-	elseif(event == "UNIT_POWER") then
+	elseif(event == "UNIT_POWER_UPDATE") then
 		if(arg1 == "player") then
 			UpdateComboPoints();
 		end
@@ -290,7 +290,7 @@ function CatRotationHelper_EntryPoint_OnEvent(self, event, arg1, ...)
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 		self:RegisterEvent("UNIT_AURA");
 		self:RegisterEvent("UNIT_FACTION");
-		self:RegisterEvent("UNIT_POWER");
+		self:RegisterEvent("UNIT_POWER_UPDATE");
 		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
 
 		g_Addon.OnPackageChanged();
