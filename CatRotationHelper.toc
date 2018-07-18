@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: CatRotationHelper
 ## Notes: Shows combo point and cooldown indicators for Cats and Bears
 ## SavedVariables: CatRotationHelperSettings
