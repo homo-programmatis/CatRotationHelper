@@ -3,7 +3,7 @@ local g_Addon = getfenv(0)[THIS_ADDON_NAME];
 local g_Consts = g_Addon.Constants;
 
 -- spellIDs
-local CRH_SPELLID_CLEARCAST				= 16870;
+local CRH_SPELLID_CLEARCAST				= 135700;
 
 -- state variables
 local g_IsMovingFrames = false;
