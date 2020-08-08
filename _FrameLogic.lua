@@ -11,11 +11,11 @@ function g_Addon.Logic_IsAvailable(a_Logic)
 	if (nil ~= a_Logic.IsAvailable) then
 		return a_Logic.IsAvailable(a_Logic);
 	end
-	
+
 	if (nil ~= a_Logic.TalentID) then
 		return g_Addon.IsTalentTaken(a_Logic.TalentID);
 	end
-	
+
 	if (nil ~= a_Logic.SkillID) then
 		return IsPlayerSpell(a_Logic.SkillID);
 	end
@@ -31,13 +31,13 @@ function g_Addon.Logic_IsGood(a_Flags, a_Logic)
 	if (not g_Addon.Logic_IsAvailable(a_Logic)) then
 		return false;
 	end
-	
+
 	local showDisabled = a_Flags and a_Flags.ShowDisabled;
 	local isDisabled = g_Addon.Settings.DisabledIcons[a_Logic.ID];
 	if ((not showDisabled) and isDisabled) then
 		return false;
 	end
-	
+
 	return true;
 end
 
@@ -45,7 +45,7 @@ function g_Addon.Logic_AddIfItsGood(a_Table, a_Flags, a_Logic)
 	if (not g_Addon.Logic_IsGood(a_Flags, a_Logic)) then
 		return;
 	end
-	
+
 	table.insert(a_Table, a_Logic);
 end
 
@@ -64,7 +64,7 @@ function g_Addon.Logic_AddUnused(a_Table, a_Flags, a_MinCount)
 	if (currentCount >= a_MinCount) then
 		return;
 	end
-	
+
 	local unusedSlots = a_MinCount - currentCount;
 	for i = 1, unusedSlots do
 		table.insert(a_Table, g_Addon.LogicUnusedFrame);

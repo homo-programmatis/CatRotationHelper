@@ -33,6 +33,6 @@ function g_Addon.GetGlobalCooldown()
 	if (spellStart == nil) then
 		return 0;
 	end
-	
+
 	return duration;
 end

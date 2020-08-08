@@ -32,18 +32,18 @@ function g_Addon.GetTargetDebuffInfo(a_SpellID, a_CastByMe)
 		if (not spellID) then
 			break;
 		end
-		
+
 		if (spellID == a_SpellID) then
 			return stacks, expTime;
 		end
-		
+
 		iAura = iAura + 1;
 	end
-	
+
 	return nil;
 end
 
--- Get information about player's buff 
+-- Get information about player's buff
 -- \return  IsBuffPresent, ExpirationTime
 function g_Addon.GetPlayerBuffInfo(a_SpellID)
 	local iAura = 1;
@@ -52,14 +52,14 @@ function g_Addon.GetPlayerBuffInfo(a_SpellID)
 		if (not spellID) then
 			break;
 		end
-		
+
 		if (spellID == a_SpellID) then
 			return true, expTime;
 		end
-		
+
 		iAura = iAura + 1;
 	end
-	
+
 	return false;
 end
 
@@ -68,11 +68,11 @@ function g_Addon.CalcFrameFromDebuff(a_SpellID, a_MinimumStacks, a_CastByMe)
 	if (not stacks) then
 		return g_Consts.STATUS_READY, nil;
 	end
-	
+
 	if (a_MinimumStacks and (stacks < a_MinimumStacks)) then
 		return g_Consts.STATUS_READY, nil;
 	end
-	
+
 	return g_Consts.STATUS_COUNTING, expTime;
 end
 
@@ -81,13 +81,13 @@ function g_Addon.CalcFrameFromBuff(a_SpellID)
 	if (not isBuffPresent) then
 		return g_Consts.STATUS_READY, nil;
 	end
-	
+
 	return g_Consts.STATUS_COUNTING, expTime;
 end
 
 function g_Addon.CalcFrameFromSkill(a_SpellID)
 	local spellStart, spellDuration = GetSpellCooldown(a_SpellID);
-	
+
 	if (spellStart == 0) then
 		-- No cooldown
 		return g_Consts.STATUS_READY, nil;
@@ -97,7 +97,7 @@ function g_Addon.CalcFrameFromSkill(a_SpellID)
 		-- Unknown legacy safety code
 		return g_Consts.STATUS_READY, nil;
 	end
-	
+
 	if (spellDuration < g_Consts.GCD_LENGTH) then
 		-- If spell's full cooldown is less then GCD, then it's not
 		-- on cooldown really, it's on GCD. Returning 0 here
@@ -127,6 +127,6 @@ function g_Addon.CalcFrameFromProc(a_SpellID)
 		-- Proc is up
 		return g_Consts.STATUS_PROC, expTime;
 	end
-	
+
 	return g_Consts.STATUS_WAITING, nil;
 end

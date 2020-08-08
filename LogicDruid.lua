@@ -33,7 +33,7 @@ g_Addon.Logics.Druid_Bloodtalons =
 	TextureSpecial	= g_Addon.GetMyImage("Bloodtalons-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 145152,
-	
+
 	-- TalentID is used to figure whether the icon should be present, because:
 	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 21649,
@@ -70,7 +70,7 @@ g_Addon.Logics.Druid_GalacticGuardian =
 	Texture			= g_Addon.GetMyImage("Moonfire.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 213708,
-	
+
 	-- TalentID is used to figure whether the icon should be present, because:
 	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 22421,
@@ -107,12 +107,12 @@ g_Addon.Logics.Druid_LunarInspiration =
 	TextureSpecial	= g_Addon.GetMyImage("Moonfire-Blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_DEBUFF,
 	SpellID			= 155625,
-	
+
 	-- TalentID is used to figure whether the icon should be present, because:
 	-- * Moonfire is available to all cats.
 	-- * IsPlayerSpell() won't work on debuff's SpellID.
 	TalentID		= 22365,
-	
+
 	-- Not interested in dots applied by other players.
 	CastByMe		= true,
 };
@@ -131,7 +131,7 @@ g_Addon.Logics.Druid_PredatorySwiftness =
 	Texture			= g_Addon.GetMyImage("PredatorySwiftness.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
-	
+
 	-- IsAvailable is used to figure whether the icon should be present, because:
 	-- * Condition is rather complex, see comments below.
 	IsAvailable		= function()
@@ -140,13 +140,13 @@ g_Addon.Logics.Druid_PredatorySwiftness =
 			-- For example, Balance spec in cat form.
 			return false;
 		end
-		
+
 		if (g_Addon.IsTalentTaken(21649)) then
 			-- "Predatory Swiftness" shows an utility icon on Events bar using this logic only when player didn't take "Bloodtalons" talent.
 			-- With "Bloodtalons" talent, Druid_PredatorySwiftness_Bloodtalons is used to show icon on Main bar.
 			return false;
 		end
-	
+
 		return true;
 	end,
 };
@@ -158,7 +158,7 @@ g_Addon.Logics.Druid_PredatorySwiftness_Bloodtalons =
 	TextureSpecial	= g_Addon.GetMyImage("PredatorySwiftness-blue.tga"),
 	Type			= g_Consts.LOGIC_TYPE_PROC,
 	SpellID			= 69369,
-	
+
 	-- TalentID is used to figure whether the icon should be present, because:
 	-- * Predatory Swiftness is available to all cats.
 	-- * With "Bloodtalons" talent, "Predatory Swiftness" becomes part of rotation and shows an icon on Main bar using this logic.
@@ -173,7 +173,7 @@ g_Addon.Logics.Druid_Pulverize =
 	Texture			= g_Addon.GetMyImage("Pulverize.tga"),
 	Type			= g_Consts.LOGIC_TYPE_BUFF,
 	SpellID			= 158792,
-	
+
 	-- TalentID is used to figure whether the icon should be present, because:
 	-- * IsPlayerSpell() won't work on buff's SpellID.
 	TalentID		= 22425,

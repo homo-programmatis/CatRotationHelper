@@ -18,7 +18,7 @@ function g_Addon.FrameAlloc()
 			return frame;
 		end
 	end
-	
+
 	local newFrame = g_Addon.FrameCreateNew(THIS_ADDON_NAME .. #g_Addon.FrameCache);
 	table.insert(g_Addon.FrameCache, newFrame);
 	newFrame:Show();

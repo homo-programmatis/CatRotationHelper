@@ -14,7 +14,7 @@ local function UpdateFrames(a_Type, a_ShowEffects)
 	if (not g_IsActive) then
 		return;
 	end
-	
+
 	for _, frameList in pairs(g_Addon.FrameLists) do
 		for _, frame in pairs(frameList) do
 			if ((not a_Type) or (frame.m_CrhLogic.Type == a_Type)) then
@@ -35,7 +35,7 @@ local function UpdateClearcast()
 		-- Ignore clearcast on bear (can happen when feral is shapeshifted to bear)
 		isBuffPresent = false;
 	end
-	
+
 	for _, frame in pairs(g_Addon.FrameLists[1]) do
 		g_Addon.FrameSetClearcast(frame, isBuffPresent);
 	end
@@ -67,10 +67,10 @@ end
 
 function g_Addon.ReloadPackage(a_Flags)
 	local isSettings = a_Flags and a_Flags.IsSettings;
-	
+
 	g_Addon.FrameDeallocAll();
 	g_IsActive = false;
-	
+
 	if (isSettings) then
 		-- A different package can be loaded for the purposes of settings
 		g_LastShapeshiftForm = nil;
@@ -80,21 +80,21 @@ function g_Addon.ReloadPackage(a_Flags)
 
 	local playerClass = select(2, UnitClass("player"));
 	g_Addon.ActivePackage = g_Addon.GetPackage[playerClass](a_Flags);
-	
+
 	for logicListIdx, logicList in pairs(g_Addon.ActivePackage.LogicLists) do
 		local frameList = {};
 		g_Addon.FrameLists[logicListIdx] = frameList;
-		
+
 		for logicIdx, logic in pairs(logicList) do
 			local frame = g_Addon.FrameAlloc();
 			frameList[logicIdx] = frame;
-			
+
 			frame.m_CrhLogic = logic;
 			g_Addon.FrameSetStatus(frame, g_Consts.STATUS_READY, nil, false);
 			g_Addon.FrameSetTexture(frame, frame.m_CrhLogic.Texture, frame.m_CrhLogic.MakeRoundIcon);
 		end
 	end
-	
+
 	g_Addon.FrameBoxes_LoadSettings();
 
 	if (not isSettings) then
@@ -114,11 +114,11 @@ local function IsEnemyTarget()
 	if (not UnitCanAttack("player", "target")) then
 		return false;
 	end
-	
+
 	if (UnitIsDead("target")) then
 		return false;
 	end
-	
+
 	return true;
 end
 
@@ -159,7 +159,7 @@ function g_Addon.OnShapeShift()
 		-- Casting "Predatory Swiftness" will send two UPDATE_SHAPESHIFT_FORM in WOW6.2 for some reason
 		return;
 	end
-	
+
 	g_Addon.ReloadPackage();
 end
 
@@ -169,9 +169,9 @@ function CatRotationHelperUnlock()
 		frameBox:SetMovable(true);
 		frameBox:EnableMouse(true);
 	end
-	
+
 	CatRotationHelper_DlgMoveHint:Show();
-	
+
 	HideUIPanel(InterfaceOptionsFrame)
 	g_IsMovingFrames = true;
 
@@ -229,20 +229,20 @@ local function InitializeAddon()
 		CatRotationHelper_BoxEvnt,
 		CatRotationHelper_BoxSurv,
 	};
-	
+
 	for index, frameBox in pairs(g_Addon.FrameBoxes) do
 		frameBox.m_Index = index;
-	
+
 		frameBox:SetBackdropColor(0, 0, 0);
 		frameBox:RegisterForClicks("RightButtonUp");
 		frameBox:RegisterForDrag("LeftButton");
 		frameBox:SetClampedToScreen(true);
-		
+
 		frameBox:SetScript("OnDragStart", frameBox.StartMoving);
 		frameBox:SetScript("OnDragStop", g_Addon.FrameBox_OnDragStop);
 		frameBox:SetScript("OnClick", g_Addon.FrameBox_OnClick);
 	end
-	
+
 	g_Addon.SettingsUI_Initialize();
 end
 
@@ -305,14 +305,14 @@ function g_Addon.OnShowChatCommandsHelp()
 end
 
 function g_Addon.OnDebugTest()
-	
+
 end
 
 SLASH_CATROTATIONHELPER1 = '/catrotationhelper';
 SLASH_CATROTATIONHELPER2 = '/crh';
 function SlashCmdList.CATROTATIONHELPER(a_CommandLine, a_TextBox)
 	local command, args = a_CommandLine:match("^(%S*)%s*(.-)$");
-	
+
 	if     (command == "") then
 		g_Addon.OnShowChatCommandsHelp();
 	elseif (command == "reset") then

@@ -7,12 +7,12 @@ function MakeConstTable(a_Table)
 		__index = function(a_Table, a_Key)
 			error("Error: ConstTable: attempt to access nonexistent key " .. a_Key, 2);
 		end,
-		
+
 		__newindex = function(a_Table, a_Key, a_NewValue)
 			error("Error: ConstTable: attempt to modify key " .. a_Key, 2);
 		end,
 	}
-	
+
 	setmetatable(a_Table, metaTable);
 	return a_Table;
 end
@@ -25,14 +25,14 @@ g_Addon.Constants = MakeConstTable
 	LOGIC_TYPE_DEBUFF	= 3,
 	LOGIC_TYPE_BURST	= 4,
 	LOGIC_TYPE_PROC		= 5,
-	
+
 	-- Frame states
 	STATUS_COUNTING		= 1,
 	STATUS_READY		= 2,
 	STATUS_BURSTING		= 3,
 	STATUS_WAITING		= 4,
 	STATUS_PROC         = 5,
-	
+
 	-- Classes
 	SHAPE_DRUID_BEAR    = 1,
 	SHAPE_DRUID_CAT     = 2,
@@ -48,11 +48,11 @@ g_Addon.Constants = MakeConstTable
 	UI_SHOWWHEN_COMBAT_OR_TARGET  = 4,
 	UI_SHOWWHEN_COMBAT_AND_TARGET = 5,
 	UI_SHOWWHEN_LAST    = 5,
-	
+
 	UI_SIZE_FRAME		= 30,
 	UI_SIZE_FRAME_MARGIN = 5,
 	MAX_TIMER_SECS      = 30,
-	
+
 	-- Various other constants
 	GCD_LENGTH			= 1.6,
 };

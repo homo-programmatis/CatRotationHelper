@@ -8,17 +8,17 @@ local function GetPackage_DruidCat(a_Flags)
 		GetComboPoints = function()
 			return UnitPower("player", Enum.PowerType.ComboPoints);
 		end,
-		
-		LogicLists = 
+
+		LogicLists =
 		{
 			{},
 			{},
 			{},
 		},
 	};
-	
+
 	local logicList;
-	
+
 	-- Main box
 	logicList = newPackage.LogicLists[1];
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_TigersFury);
@@ -48,7 +48,7 @@ local function GetPackage_DruidCat(a_Flags)
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Renewal);
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_LunarBeam);          -- In case of Guardian in cat form
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_BristlingFur);       -- In case of Guardian in cat form
-	
+
 	return newPackage;
 end
 
@@ -60,20 +60,20 @@ local function GetPackage_DruidBear(a_Flags)
 			if (stacks == nil) then
 				return 0;
 			end
-			
+
 			return stacks;
 		end,
-		
-		LogicLists = 
+
+		LogicLists =
 		{
 			{},
 			{},
 			{},
 		},
 	};
-	
+
 	local logicList;
-	
+
 	-- Main box
 	logicList = newPackage.LogicLists[1];
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Mangle_Bear);
@@ -81,7 +81,7 @@ local function GetPackage_DruidBear(a_Flags)
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Pulverize);
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_GalacticGuardian);
 	g_Addon.Logic_AddUnused   (logicList, a_Flags, 3);
-	
+
 	-- Events box
 	logicList = newPackage.LogicLists[2];
 	g_Addon.Logic_AddFirstGood(logicList, a_Flags, g_Addon.Logics.Druid_Incarnation_Bear, g_Addon.Logics.Druid_Incarnation_Cat, g_Addon.Logics.Druid_Berserk);	-- CatIncarnation/Berserk - in case of Feral in bear form
@@ -97,7 +97,7 @@ local function GetPackage_DruidBear(a_Flags)
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_Renewal);                -- In case of Feral in bear form
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_LunarBeam);
 	g_Addon.Logic_AddIfItsGood(logicList, a_Flags, g_Addon.Logics.Druid_BristlingFur);
-	
+
 	return newPackage;
 end
 
@@ -107,22 +107,22 @@ local function GetPackage_DruidOther(a_Flags)
 		GetComboPoints = function()
 			return 0;
 		end,
-		
-		LogicLists = 
+
+		LogicLists =
 		{
 			{},
 			{},
 			{},
 		},
 	};
-	
+
 	return newPackage;
 end
 
 -- Figure which shapeshift icons to use for configuring frame positions
 local function GetSettingsShapeshift()
 	local spec = GetSpecialization();
-	
+
 	if (g_Consts.SPEC_DRUID_FERAL == spec) then
 		-- Feral's primary shapeshift is Cat
 		return g_Consts.SHAPE_DRUID_CAT;

@@ -52,7 +52,7 @@ function g_Addon.FrameReset(a_Frame)
 	a_Frame.FrameCombo:Hide();
 	a_Frame.FrameCombo:SetScript("OnUpdate", nil);
 	a_Frame.FrameCombo.IconCombo:SetTexture(g_Addon.GetMyImage("Cp.tga"));
-	
+
 	a_Frame.FrameTimer:Hide();
 	a_Frame.FrameTimer.endTime = nil;
 
@@ -65,10 +65,10 @@ function g_Addon.FrameSetClearcast(a_Frame, a_IsClearcast)
 	if (a_Frame.m_IsClearcast == a_IsClearcast) then
 		return;
 	end
-	
+
 	a_Frame.m_IsClearcast = a_IsClearcast;
 	g_Addon.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
-	
+
 	if (a_IsClearcast) then
 		a_Frame.FrameCombo.IconCombo:SetTexture(g_Addon.GetMyImage("Cp-Blue.tga"))
 		g_Addon.FrameSetTexture(a_Frame, a_Frame.m_CrhLogic.TextureSpecial);
@@ -89,7 +89,7 @@ function g_Addon.EffectComboPoint(a_FrameCombo)
 			a_FrameCombo:SetAlpha(1);
 			a_FrameCombo:SetScript("OnUpdate", nil);
 		end
-		
+
 		return;
 	end
 
@@ -105,15 +105,15 @@ function g_Addon.FrameSetCombo(a_Frame, a_IsCombo)
 	if (a_IsCombo == a_Frame.m_IsCombo) then
 		return;
 	end
-	
+
 	a_Frame.m_IsCombo = a_IsCombo;
-	
+
 	g_Addon.FrameUpdateTimerColor(a_Frame, a_Frame.m_IsClearcast, a_Frame.m_IsCombo);
-	
+
 	a_Frame.FrameCombo:SetScript("OnUpdate", g_Addon.EffectComboPoint);
 	a_Frame.FrameCombo.m_EffectStartTime = GetTime();
 	a_Frame.FrameCombo.m_EffectIsReverse = not a_IsCombo;
-	
+
 	if (a_IsCombo) then
 		a_Frame.FrameCombo:Show();
 	end
@@ -177,7 +177,7 @@ end
 local function RotateVector(a_X, a_Y, a_Angle)
 	local radius  = math.sqrt(a_X*a_X + a_Y*a_Y);
 	local angle   = math.atan2(a_Y, a_X);
-	
+
 	local newX    = radius * math.cos(angle + a_Angle);
 	local newY    = radius * math.sin(angle + a_Angle);
 
@@ -195,7 +195,7 @@ local function GetFrameCoords(a_FrameX, a_FramesCX, a_FrameY, a_FramesCY, a_Angl
 
 	local cxTotal2 = wowFrameOff * (a_FramesCX-1) / 2;
 	local cyTotal2 = wowFrameOff * (a_FramesCY-1) / 2;
-	
+
 	local x_0deg   =  ((a_FrameX * wowFrameOff) - cxTotal2);
 	local y_0deg   = -((a_FrameY * wowFrameOff) - cyTotal2);
 
@@ -213,7 +213,7 @@ local function BoxSetPosition(a_Box, a_FramesCX, a_FramesCY, a_Angle)
 	local cx, cy = RotateVector(x_0deg, y_0deg, a_Angle);
 	cx = MathRound(math.abs(cx), 0);
 	cy = MathRound(math.abs(cy), 0);
-	
+
 	a_Box:SetWidth (cx);
 	a_Box:SetHeight(cy);
 end
@@ -226,7 +226,7 @@ function g_Addon.FramesSetPosition(a_Frames, a_Box, a_Angle)
 
 	local framesCX = #a_Frames;
 	local framesCY = 1;
-	
+
 	-- Set group size
 	BoxSetPosition(a_Box, framesCX, framesCY, a_Angle);
 
@@ -236,7 +236,7 @@ function g_Addon.FramesSetPosition(a_Frames, a_Box, a_Angle)
 
 		local frameAlongX = i - 1;
 		local frameAlongY = 0;
-		
+
 		local x, y = GetFrameCoords(frameAlongX, framesCX, frameAlongY, framesCY, a_Angle);
 		x = MathRound(x, 0);
 		y = MathRound(y, 0);
@@ -253,10 +253,10 @@ function g_Addon.FrameBox_LoadSettings(a_FrameBox)
 	-- Location
 	a_FrameBox:ClearAllPoints();
 	a_FrameBox:SetPoint(settings.LocationFrmPoint, UIParent, settings.LocationScrPoint, settings.LocationX, settings.LocationY);
-	
+
 	-- Angle
 	g_Addon.FramesSetPosition(frameList, a_FrameBox, settings.Angle);
-	
+
 	-- Scale
 	for _, frame in pairs(frameList) do
 		frame:SetScale(settings.Scale);
@@ -267,7 +267,7 @@ end
 
 function g_Addon.FrameBox_SaveSettings(a_FrameBox)
 	local settings = g_Addon.Settings.Frames[a_FrameBox.m_Index];
-	
+
 	local locationFrmPoint, _, locationScrPoint, locationX, locationY = a_FrameBox:GetPoint();
 	settings.LocationX = locationX;
 	settings.LocationY = locationY;
@@ -338,7 +338,7 @@ function g_Addon.FrameSetStatus(a_Frame, a_Status, a_Expiration, a_ShowEffects)
 		-- Empty frame
 		return;
 	end
-	
+
 	if ((a_Frame.LastStatus == a_Status) and (a_Frame.LastExpiration == a_Expiration)) then
 		return;
 	end
