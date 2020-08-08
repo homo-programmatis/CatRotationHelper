@@ -233,7 +233,6 @@ local function InitializeAddon()
 	for index, frameBox in pairs(g_Addon.FrameBoxes) do
 		frameBox.m_Index = index;
 
-		frameBox:SetBackdropColor(0, 0, 0);
 		frameBox:RegisterForClicks("RightButtonUp");
 		frameBox:RegisterForDrag("LeftButton");
 		frameBox:SetClampedToScreen(true);
